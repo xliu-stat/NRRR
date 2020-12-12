@@ -1,12 +1,13 @@
-#' NRRR/NRRS with cross validation to select ranks
+#' NRRR with cross validation to select ranks
 #'
-#' This function based on the proposed blockwise coordinate descent algorithm
-#'  to select the optimal (r, rx, ry) with cross validation.
+#' This function applies Cross-Validation
+#'  to select the optimal (r, rx, ry) with
+#'  the blockwise coordinate descent algorithm.
 #'
 #' @param Y Response matrix.
 #' @param X Design matrix.
 #' @param nfold Number of folds, default is 10.
-#' @param norder Assign samples to folds for cross validation.
+#' @param norder Assign samples to multiple folds for cross validation.
 #' @param Ag0 Initial estimator of U, if NULL then generate it by
 #'           function \code{NestRRRini()}.
 #' @param Bg0 Initial estimator of V, if NULL then generate it by
