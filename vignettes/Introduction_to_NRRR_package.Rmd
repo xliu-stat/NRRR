@@ -1,0 +1,118 @@
+---
+title: "Introduction to NRRR package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction_to_NRRR_package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Install the package
+```{r setup}
+library(NRRR)
+```
+
+# Nested reduced-rank regression
+### Generate data
+```{r}
+# dimension
+n <- 100
+p <- 10
+d <- 10
+
+# functional setting
+ns <- 60
+nt <- 60
+jx <- 8
+jy <- 8
+
+# true model size
+r <- 5
+rx <- 3
+ry <- 3
+
+# signal and noise setting
+s2n <- 1
+rho_X <- 0.1
+rho_E <- 0
+Sigma <- CorrAR
+
+# generate data
+mydata <- nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
+                   s2n, rho_X, rho_E, Sigma)
+Y <- mydata$Yest
+X <- mydata$Xest
+```
+
+## Nested reduced-rank regression
+### BIC rank selection
+```{r}
+# BIC tuning
+fit_nrrr1 <- NestRRR.select(Y, X, NULL, NULL, jx, jy, p, d, n, 
+                            maxiter = 300, conv = 1e-2,
+                            quietly = TRUE, method = 'RRR', ic = "BIC")
+fit_nrrr1$rank
+fit_nrrr1$rx
+fit_nrrr1$ry
+```
+
+### Cross-Validation rank selection
+```{r}
+# CV tuning
+fit_nrrr2 <- NestRRR.cv.select(Y, X, nfold = 10, norder = NULL, NULL, NULL,
+                          jx, jy, p, d, n, maxiter = 300, conv = 1e-2, 
+                          quietly = TRUE, method = 'RRR', ic = "BIC")
+fit_nrrr2$rank
+fit_nrrr2$rx
+fit_nrrr2$ry
+```
+
+
+## Nested reduced-rank ridge regression
+We first obtain a reference tuning level from a cross-validation tuned reduced-rank ridge regression:
+```{r}
+# Reduced-rank ridge regression
+xr <- sum(svd(X)$d > 1e-2)
+rankmax <- min(xr, d * jy, 20) 
+fit_rrs <- RRRR.cv(Y, X, rankmax = rankmax, nfold = 10, nlam = 20, 
+                   lambda = seq(0, 1, length = 20), norder = NULL)
+lambda <- fit_rrs$lam
+```
+
+### BIC rank selection
+```{r}
+fit_nrrs1 <- NestRRR.select(Y, X, NULL, NULL, jx, jy, p, d, n, 
+                            maxiter = 300, conv = 1e-2,
+                            quietly = TRUE, method = 'RRS', 
+                            lambda = lambda)
+fit_nrrs1$rank
+fit_nrrs1$rx
+fit_nrrs1$ry
+```
+
+### Cross-Validation rank selection
+```{r}
+fit_nrrs2 <- NestRRR.cv.select(Y, X, nfold = 10, norder = NULL,
+                               NULL, NULL, jx, jy, p, d, n,
+                               maxiter = 300, conv = 1e-2, quietly = TRUE, 
+                               method = 'RRS', lambda = lambda)
+fit_nrrs2$rank
+fit_nrrs2$rx
+fit_nrrs2$ry
+```
+
+
+# Prediction
+```{r}
+Ypred_nrrr <- NestRRR.prediction(mydata$tseq, mydata$X, mydata$sseq,
+                                 fit_nrrr1$Ag, fit_nrrr1$Bg, fit_nrrr1$Al, 
+                                 fit_nrrr1$Bl, mydata$phi)
+```
+
