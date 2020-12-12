@@ -6,8 +6,7 @@
 \alias{NRRR-package}
 \title{NRRR: Nested Reduced-Rank Regression}
 \description{
-An implementation of the nested reduced-rank regression (NRRR). 
-    It includes the functions to do estimation, model selection and prediction.
+An implementation of the nested reduced-rank regression (NRRR).
 }
 \details{
 A package to implement Nested reduced-rank regression.
