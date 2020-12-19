@@ -59,11 +59,7 @@
 #'                               method=c('RRR','RRS')[1],lambda=0,
 #'                               ic=c("BIC","BICP","AIC","GCV")[1],
 #'                               dimred = c(TRUE,TRUE,TRUE),rankfix=NULL))
-NestRRR.select <- function(Y,X,Ag0=NULL,Bg0=NULL,jx,jy,p,d,n,maxiter=300,
-                           conv=1e-4,quietly=FALSE,method=c('RRR','RRS')[1],
-                           lambda=0,ic=c("BIC","BICP","AIC","GCV")[1],
-                           ##if do not do rank reduction, then use rankfix
-                           dimred = c(TRUE,TRUE,TRUE),rankfix=NULL
+NestRRR.select <- function(Y,X,Ag0=NULL,Bg0=NULL,jx,jy,p,d,n,maxiter=300,conv=1e-4,quietly=FALSE,method=c('RRR','RRS')[1],lambda=0,ic=c("BIC","BICP","AIC","GCV")[1],dimred = c(TRUE,TRUE,TRUE),rankfix=NULL
 ){
   #require(rrpack)
   # compute rank(X)
