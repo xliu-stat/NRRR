@@ -29,7 +29,7 @@ del_rows <- function(X, e) {
     .Call(`_NRRR_del_rows`, X, e)
 }
 
-nrrr_cv_my <- function(Y, X, norder, nfold, xr, rfit, xrankfix, yrankfix, jx, jy, p, d, n, ic, maxiter, method, dimred1, dimred2, dimred3, conv, lambda) {
-    .Call(`_NRRR_nrrr_cv_my`, Y, X, norder, nfold, xr, rfit, xrankfix, yrankfix, jx, jy, p, d, n, ic, maxiter, method, dimred1, dimred2, dimred3, conv, lambda)
+nrrr_cv_my <- function(Y, X, norder, nfold, xr, rfit, xrankfix, yrankfix, jx, jy, p, d, n, maxiter, method, dimred1, dimred2, dimred3, conv, lambda) {
+    .Call(`_NRRR_nrrr_cv_my`, Y, X, norder, nfold, xr, rfit, xrankfix, yrankfix, jx, jy, p, d, n, maxiter, method, dimred1, dimred2, dimred3, conv, lambda)
 }
 

@@ -2,49 +2,44 @@
 % Please edit documentation in R/RRRRcv_NRRR.r
 \name{RRRR.cv}
 \alias{RRRR.cv}
-\title{RRS with cross validation to select rank and tuning parameter}
+\title{Reduced-rank ridge regression with cross validation to select rank and tuning parameter}
 \usage{
-RRRR.cv(
-  Y,
-  X,
-  nfold = 10,
-  rankmax = min(dim(Y), dim(X)),
-  nlam = 100,
-  lambda = seq(0, 100, length = nlam),
-  norder = NULL,
-  nest.tune = FALSE,
-  fold.drop = 0
-)
+RRRR.cv(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
+        lambda = seq(0, 100, length = nlam), norder = NULL,
+        nest.tune = FALSE, fold.drop = 0)
 }
 \arguments{
-\item{Y}{Response matrix.}
+\item{Y}{response matrix.}
 
-\item{X}{Design matrix.}
+\item{X}{design matrix.}
 
-\item{nfold}{Number of folds.}
+\item{nfold}{the number of folds used in cross validation. Default is 10.}
 
-\item{rankmax}{The maximum rank.}
+\item{rankmax}{the maximum rank allowed.}
 
-\item{nlam}{Number of tuning parameters.}
+\item{nlam}{the number of tuning parameter candidates. Default is 100.}
 
-\item{lambda}{Tuning sequence.}
+\item{lambda}{the tuning sequence of length \code{nlam}.}
 
-\item{norder}{Assign samples into different folds.}
+\item{norder}{a vector of length n that assigns samples to multiple folds
+for cross validation. Default is NULL and then it will be
+generated randomly.}
 
-\item{nest.tune}{Whether tune the rank and lambda in a nested way.}
+\item{nest.tune}{a logical value to specify whether tune the rank and lambda
+in a nested way. Default is FALSE.}
 
-\item{fold.drop}{Number of folds to drop.}
+\item{fold.drop}{the number of folds to drop. Default is 0.}
 }
 \value{
-The returned results containing
-  \item{cr_path}{a matrix display the path of model selection.}
+The function returns a list:
+  \item{cr_path}{a matrix displays the path of model selection.}
   \item{C}{the estimated low-rank coefficient matrix.}
-  \item{rank}{the selected rank value.}
+  \item{rank}{the selected rank.}
   \item{lam}{the selected tuning parameter for ridge penalty.}
 }
 \description{
-This function performs reduced rank ridge regression with model selected by
- cross validation.
+This function performs reduced-rank ridge regression with the rank and the
+tuning parameter selected by cross validation.
 }
 \references{
 Mukherjee, A., & Zhu, J. (2011).

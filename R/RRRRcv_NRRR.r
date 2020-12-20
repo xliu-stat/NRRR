@@ -1,26 +1,40 @@
-#' RRS with cross validation to select rank and tuning parameter
+#' @title
+#' Reduced-rank ridge regression with cross validation to select rank and tuning parameter
 #'
-#' This function performs reduced rank ridge regression with model selected by
-#'  cross validation.
+#' @description
+#' This function performs reduced-rank ridge regression with the rank and the
+#' tuning parameter selected by cross validation.
 #'
-#' @param Y Response matrix.
-#' @param X Design matrix.
-#' @param nfold Number of folds.
-#' @param rankmax The maximum rank.
-#' @param nlam Number of tuning parameters.
-#' @param lambda Tuning sequence.
-#' @param norder Assign samples into different folds.
-#' @param nest.tune Whether tune the rank and lambda in a nested way.
-#' @param fold.drop Number of folds to drop.
-#' @return The returned results containing
-#'   \item{cr_path}{a matrix display the path of model selection.}
+#' @usage
+#' RRRR.cv(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
+#'         lambda = seq(0, 100, length = nlam), norder = NULL,
+#'         nest.tune = FALSE, fold.drop = 0)
+#'
+#' @param Y response matrix.
+#' @param X design matrix.
+#' @param nfold the number of folds used in cross validation. Default is 10.
+#' @param rankmax the maximum rank allowed.
+#' @param nlam the number of tuning parameter candidates. Default is 100.
+#' @param lambda the tuning sequence of length \code{nlam}.
+#' @param norder a vector of length n that assigns samples to multiple folds
+#'               for cross validation. Default is NULL and then it will be
+#'               generated randomly.
+#' @param nest.tune a logical value to specify whether tune the rank and lambda
+#'                  in a nested way. Default is FALSE.
+#' @param fold.drop the number of folds to drop. Default is 0.
+#'
+#'
+#' @return The function returns a list:
+#'   \item{cr_path}{a matrix displays the path of model selection.}
 #'   \item{C}{the estimated low-rank coefficient matrix.}
-#'   \item{rank}{the selected rank value.}
+#'   \item{rank}{the selected rank.}
 #'   \item{lam}{the selected tuning parameter for ridge penalty.}
+#'
 #' @references Mukherjee, A., & Zhu, J. (2011).
 #' Reduced Rank Ridge Regression and Its Kernel Extensions.
 #' Statistical analysis and data mining,
 #' 4(6), 612–622.
+#'
 #' @importFrom rrpack rrs.fit
 #' @export
 RRRR.cv<-function(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,

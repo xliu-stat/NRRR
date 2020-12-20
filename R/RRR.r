@@ -1,18 +1,31 @@
-#' RRR with fixed rank
+#' @title
+#' Reduced-rank regression with a given rank
 #'
-#' This function computes reduced rank regression estimator with a given rank.
+#' @description
+#' This function provides the reduced-rank regression estimator with a given rank.
 #'
-#' @param Y Response matrix.
-#' @param X Design matrix.
-#' @param nrank The given rank.
-#' @param weight If TRUE, then weighted criterion is performed.
-#' @param Gamma A weight matrix.
-#' @param ypy.svd If TRUE, svd function is used.
-#' @param c.svd If TRUE, output the svd of the coefficient matrix.
-#' @return The returned results containing
-#'   \item{C}{the estimated matrix C.}
+#' @usage
+#' RRR(Y, X, nrank = 1, weight = FALSE, Gamma = diag(ncol(Y)),
+#'     ypy.svd = TRUE, c.svd = FALSE)
+#'
+#' @param Y response matrix.
+#' @param X design matrix.
+#' @param nrank the given rank. Default is 1.
+#' @param weight a logical value. If TRUE, then weighted criterion is performed.
+#'               Default is FALSE.
+#' @param Gamma a weight matrix. Default is an identity matrix.
+#' @param ypy.svd a logical value. If TRUE, svd function is used. Default is FALSE.
+#' @param c.svd a logical value. If TRUE, output the svd of the coefficient
+#'              matrix. Default is FALSE.
+#'
+#' @return The function returns a list:
+#'   \item{C}{the reduced-rank estimator C.}
 #'   \item{C_ls}{the least square estimator.}
 #'   \item{rank}{the rank value.}
+#'
+#' @references
+#' Velu, R., & Reinsel, G. C. (2013). Multivariate reduced-rank regression:
+#' theory and applications (Vol. 136). Springer Science & Business Media.
 #' @importFrom MASS ginv
 #' @export
 RRR <- function(Y, X, nrank = 1, weight = FALSE, Gamma = diag(ncol(Y)),

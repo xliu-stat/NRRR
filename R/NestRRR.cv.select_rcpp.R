@@ -1,59 +1,89 @@
-#' NRRR with cross validation to select ranks (Rcpp)
+#' @title
+#' Select ranks with cross validation (Rcpp)
 #'
-#' This function applies Cross-Validation
-#'  to select the optimal (r, rx, ry) with
-#'  the blockwise coordinate descent algorithm.
+#' @description
+#' This function selects the optimal ranks \code{(r, rx, ry)} using a cross
+#' validation procedure. The blockwise coordinate descent algorithm is used to fit
+#' the model with any combinations of \code{(r, rx, ry)}.
 #'
-#' @param Y Response matrix.
-#' @param X Design matrix.
-#' @param nfold Number of folds, default is 10.
-#' @param norder Assign samples to multiple folds for cross validation.
-#' @param jx Number of basis functions to expand x(s).
-#' @param jy Number of basis functions to expand y(t).
-#' @param p Number of predictors.
-#' @param d Number of responses.
-#' @param n Sample size.
-#' @param maxiter Maximum iteration number, Default 300.
-#' @param conv Tolerance level to control convergence, default 1e-4.
-#' @param method RRR (default) no ridge penalty; RRS use ridge penalty.
-#' @param lambda Tuning parameter for the ridge penalty, only used when
-#'           method='RRS', default=0.
-#' @param ic Information criterion, selected from BIC, BICP, AIC, GCV.
-#' @param dimred A vector to decide whether do dimension reduction on certain
-#'           dimensions, with c(TRUE,TRUE,TRUE) corresponding to c(r,rx,ry),
-#'           TRUE (default) do dimension reduction; FALSE do not.
-#'           If dimred[1]=FALSE, r is provided by rankfix or min(jx*p,jy*d,rank(X));
-#'           If dimred[2]=FALSE, rx is provided by xrankfix or p;
-#'           If dimred[3]=FALSE, ry is provided by yrankfix or d.
-#' @param rankfix Provide a value for r when dimred[1]=FALSE, default is NULL
-#'           which leads to min(jx*p,jy*d,rank(X)).
-#' @param xrankfix Provide a value for rx when dimred[2]=FALSE, default is NULL
-#'           which leads to p.
-#' @param yrankfix Provide a value for ry when dimred[3]=FALSE, default is NULL
-#'           which leads to d.
-#' @return The returned items are
-#'   \item{Ag}{estimated matrix U.}
-#'   \item{Bg}{estimated matrix V.}
-#'   \item{Al}{estimated matrix A.}
-#'   \item{Bl}{estimated matrix B.}
-#'   \item{C}{estimated matrix C.}
-#'   \item{df}{a scalar, estimated degrees of freedom of the selected model.}
-#'   \item{sse}{a scalar, the sum of squared errors of the selected model.}
-#'   \item{ic}{a vector contains values of BIC,BICP,AIC,GCV of the selected model.}
-#'   \item{obj}{a vector contains all objective function (sse) values along
-#'           iterations of the selected model.}
+#' @usage
+#' NestRRR.cv.select(Y, X, nfold = 10, norder = NULL,
+#'                   jx, jy, p, d, n,
+#'                   maxiter = 300, conv = 1e-4,
+#'                   method = c('RRR','RRS')[1], lambda=0,
+#                   ic=c("BIC","BICP","AIC","GCV")[1],
+#'                   dimred = c(TRUE,TRUE,TRUE),
+#'                   rankfix = NULL, xrankfix = NULL, yrankfix = NULL)
+#'
+#' @param Y the response matrix of dimension n-by-jy*d.
+#' @param X the design matrix of dimension n-by-jx*p.
+#' @param nfold the number of folds used in cross validation. Default is 10.
+#' @param norder a vector of length n that assigns samples to multiple folds for cross validation.
+#' @param jx the number of basis functions to expand functional predictor.
+#' @param jy the number of basis functions to expand functional response.
+#' @param p the number of predictors.
+#' @param d the number of responses.
+#' @param n the sample size.
+#' @param maxiter the maximum iteration number of the
+#'                blockwise coordinate descent algorithm. Default is 300.
+#' @param conv the tolerance level used to control the convergence of the
+#'             blockwise coordinate descent algorithm. Default is 1e-4.
+#' @param method 'RRR' (default): no additional ridge penalty; 'RRS': add an
+#'               additional ridge penalty.
+#' @param lambda the tuning parameter to control the amount of ridge
+#'               penalization. It is only used when \code{method = 'RRS'}.
+#'               Default is 0.
+# @param ic the user-specified information criterion. Four options are available,
+#'           including BIC, BICP, AIC, GCV.
+#' @param dimred a vector of logical values to decide whether use cross validation
+#'               do rank selection on certain dimension. TRUE (default): yes; FALSE: no.
+#'               If \code{dimred[1]=FALSE}, r is provided by \code{rankfix}
+#'               or \eqn{min(jx*p,jy*d, rank(X))};
+#'               If \code{dimred[2]=FALSE}, rx equals to \code{xrankfix} or p; If \code{dimred[3]=FALSE},
+#'               ry equals to \code{yrankfix} or d. Default is \code{c(TRUE,TRUE,TRUE)}.
+#' @param rankfix a user-provided value of r when \code{dimred[1]=FALSE}. Default is NULL
+#'                which leads to \eqn{r=min(jx*p,jy*d,rank(X))}.
+#' @param xrankfix a user-provided value of rx when \code{dimred[2]=FALSE}. Default is NULL
+#'                 which leads to \code{rx=p}.
+#' @param yrankfix a user-provided value of ry when \code{dimred[3]=FALSE}. Default is NULL
+#'                 which leads to \code{ry=d}.
+#'
+#'
+#' @return The function returns a list:
+#'   \item{Ag}{the estimated U.}
+#'   \item{Bg}{the estimated V.}
+#'   \item{Al}{the estimated A.}
+#'   \item{Bl}{the estimated B.}
+#'   \item{C}{the estimated coefficient matrix C.}
+#'   \item{df}{the estimated degrees of freedom of the selected model.}
+#'   \item{sse}{the sum of squared errors of the selected model.}
+#'   \item{ic}{a vector containing values of BIC, BICP, AIC, GCV of the selected model.}
 #'   \item{rx_path}{a matrix displays the path of selecting rx with cross validation.}
 #'   \item{ry_path}{a matrix displays the path of selecting ry with cross validation.}
 #'   \item{r_path}{a matrix displays the path of selecting r with cross validation.}
-#'   \item{rank}{a scalar, the estimated r.}
-#'   \item{rx}{a scalar, the estimated rx.}
-#'   \item{ry}{a scalar, the estimated ry.}
-#'   \item{rxErrmat}{a matrix displays errors in the path of selecting rx.
+#'   \item{rank}{the estimated r.}
+#'   \item{rx}{the estimated rx.}
+#'   \item{ry}{the estimated ry.}
+#   \item{obj}{a vector contains all objective function (sse) values along
+#           iterations of the selected model.}
+#'   \item{rxErrmat}{a matrix of error flags of the path of selecting rx.
 #'                   For each element, 0 indicates no error.}
-#'   \item{ryErrmat}{a matrix displays errors in the path of selecting ry.
+#'   \item{ryErrmat}{a matrix of error flags of the path of selecting ry.
 #'                   For each element, 0 indicates no error.}
-#'   \item{rErrmat}{a matrix displays errors in the path of selecting r.
+#'   \item{rErrmat}{a matrix of error flags of the path of selecting r.
 #'                   For each element, 0 indicates no error.}
+#'
+#' @details
+#' A three-dimensional grid search procedure of the rank
+#' values is performed, and the best model is chosen as the one with the
+#' smallest prediction error. Instead of a nested rank selection method, we apply a
+#' one-at-a-time selection approach. We first set \eqn{rx = p, ry = d}, and
+#' select the best local rank \eqn{\hat r} among the models with
+#' \eqn{1 \le r \le min(rank(X), Jy*d)}. We then fix the local rank at
+#' \eqn{\hat r}, and repeat the similar procedure to determine \eqn{\hat rx}
+#' and \eqn{\hat ry}, one at a time. Finally, with fixed \eqn{\hat rx} and \eqn{\hat ry},
+#' we refine the estimation of r.
+#'
 #' @references Liu, X., Ma, S., & Chen, K. (2020).
 #' Multivariate Functional Regression via Nested Reduced-Rank Regularization.
 #' arXiv: Methodology.
@@ -69,12 +99,12 @@
 #'                               jx=8,jy=8,p=10,d=10,n=100,
 #'                               maxiter=300,conv=1e-4,
 #'                               method=c('RRR','RRS')[1],lambda=0,
-#'                               ic=c("BIC","BICP","AIC","GCV")[1],
+#                               ic=c("BIC","BICP","AIC","GCV")[1],
 #'                               dimred = c(TRUE,TRUE,TRUE),
 #'                               rankfix=NULL,xrankfix=NULL,yrankfix=NULL))
 NestRRR.cv.select_rcpp <- function(Y,X,nfold=10,norder=NULL,jx,jy,p,d,n,
                               maxiter=300,conv=1e-4,method=c('RRR','RRS')[1],lambda=0,
-                              ic=c("BIC","BICP","AIC","GCV")[1],
+                              #ic=c("BIC","BICP","AIC","GCV")[1],
                               dimred = c(TRUE,TRUE,TRUE),
                               rankfix=NULL,xrankfix=NULL,yrankfix=NULL
 ){
@@ -101,17 +131,6 @@ NestRRR.cv.select_rcpp <- function(Y,X,nfold=10,norder=NULL,jx,jy,p,d,n,
   rfit <- rest
 
 
-  if (ic == 'BIC'){
-    ic_num <- 0
-  } else if (ic == 'BICP'){
-    ic_num <- 1
-  } else if (ic == 'AIC'){
-    ic_num <- 2
-  } else {
-    ic_num <- 3
-  }
-
-
   method <- ifelse(method == 'RRR', 1, 2)
 
   dimred1 <- ifelse(dimred[1],1,0)
@@ -124,7 +143,7 @@ NestRRR.cv.select_rcpp <- function(Y,X,nfold=10,norder=NULL,jx,jy,p,d,n,
   norder <- norder - 1
 
   fit <- nrrr_cv_my(Y, X, norder, nfold, xr, rfit, xrankfix, yrankfix,
-                    jx, jy, p, d, n, ic_num, maxiter, method,
+                    jx, jy, p, d, n, maxiter, method,
                     dimred1, dimred2, dimred3, conv, lambda)
 
   return(list(Ag=fit$Ag,Bg=fit$Bg,Al=fit$Al,Bl=fit$Bl,C=fit$C,df=fit$df,

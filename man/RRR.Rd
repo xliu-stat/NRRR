@@ -2,39 +2,38 @@
 % Please edit documentation in R/RRR.r
 \name{RRR}
 \alias{RRR}
-\title{RRR with fixed rank}
+\title{Reduced-rank regression with a given rank}
 \usage{
-RRR(
-  Y,
-  X,
-  nrank = 1,
-  weight = FALSE,
-  Gamma = diag(ncol(Y)),
-  ypy.svd = TRUE,
-  c.svd = FALSE
-)
+RRR(Y, X, nrank = 1, weight = FALSE, Gamma = diag(ncol(Y)),
+    ypy.svd = TRUE, c.svd = FALSE)
 }
 \arguments{
-\item{Y}{Response matrix.}
+\item{Y}{response matrix.}
 
-\item{X}{Design matrix.}
+\item{X}{design matrix.}
 
-\item{nrank}{The given rank.}
+\item{nrank}{the given rank. Default is 1.}
 
-\item{weight}{If TRUE, then weighted criterion is performed.}
+\item{weight}{a logical value. If TRUE, then weighted criterion is performed.
+Default is FALSE.}
 
-\item{Gamma}{A weight matrix.}
+\item{Gamma}{a weight matrix. Default is an identity matrix.}
 
-\item{ypy.svd}{If TRUE, svd function is used.}
+\item{ypy.svd}{a logical value. If TRUE, svd function is used. Default is FALSE.}
 
-\item{c.svd}{If TRUE, output the svd of the coefficient matrix.}
+\item{c.svd}{a logical value. If TRUE, output the svd of the coefficient
+matrix. Default is FALSE.}
 }
 \value{
-The returned results containing
-  \item{C}{the estimated matrix C.}
+The function returns a list:
+  \item{C}{the reduced-rank estimator C.}
   \item{C_ls}{the least square estimator.}
   \item{rank}{the rank value.}
 }
 \description{
-This function computes reduced rank regression estimator with a given rank.
+This function provides the reduced-rank regression estimator with a given rank.
+}
+\references{
+Velu, R., & Reinsel, G. C. (2013). Multivariate reduced-rank regression:
+theory and applications (Vol. 136). Springer Science & Business Media.
 }

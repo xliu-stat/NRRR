@@ -1,46 +1,86 @@
+#' @title
 #' Select ranks with information criterion
 #'
-#' This function select the optimal (r, rx, ry) with a specified information criterion
-#' based on the proposed blockwise coordinate descent algorithm.
+#' @description
+#' This function selects the optimal ranks \code{(r, rx, ry)} using a user-specified
+#' information criterion. The degrees of freedom is estimated by the number of
+#' free parameters in the model. The blockwise coordinate descent algorithm is used to fit
+#' the model with any combinations of \code{(r, rx, ry)}.
 #'
-#' @param Y Response matrix with n rows and jy*d columns.
-#' @param X Design matrix with n rows and jx*p columns.
-#' @param Ag0 Initial estimator of U, if NULL then generate it by
-#'           function \code{NestRRRini()}.
-#' @param Bg0 Initial estimator of V, if NULL then generate it by
-#'           function \code{NestRRRini()}.
-#' @param jx Number of basis functions to expand x(s).
-#' @param jy Number of basis functions to expand y(t).
-#' @param p Number of predictors.
-#' @param d Number of responses.
-#' @param n Sample size.
-#' @param maxiter Maximum iteration number of the blockwise coordinate descent algorithm, default 300.
-#' @param conv Tolerance level to control convergence, default 1e-4.
-#' @param quietly FALSE (default) show the rank selection process, if TRUE then not.
-#' @param method RRR (default) no ridge penalty; RRS use ridge penalty.
-#' @param lambda Tuning parameter for the ridge penalty, only used when method='RRS', default=0.
-#' @param ic Information criterion, selected from BIC, BICP, AIC, GCV.
-#' @param dimred Vector to decide whether do dimension reduction on certain
-#'           dimensions, with c(TRUE,TRUE,TRUE) corresponding to c(r,rx,ry),
-#'           TRUE (default) do dimension reduction; FALSE do not.
-#'           If dimred[1]=FALSE, r is provided by rankfix or min(jx*p,jy*d, rank(X));
-#'           If dimred[2]=FALSE, rx equals to p;
-#'           If dimred[3]=FALSE, ry equals to d.
-#' @param rankfix Provide a value for r when dimred[1]=FALSE, default is NULL
-#'           which leads to min(jx*p,jy*d,rank(X))
-#' @return The returned results containing
-#'   \item{Ag}{the global low-dimensional structure U, a d by ry matrix of rank ry.}
-#'   \item{Bg}{the global low-dimensional structure V, a p by rx matrix of rank rx.}
-#'   \item{Al}{the local low-dimensional structure A.}
-#'   \item{Bl}{the local low-dimensional structure B.}
-#'   \item{C}{the NRRR estimator of the coefficient matrix C.}
-#'   \item{df}{a scalar, the estimated degrees of freedom of the NRRR model.}
-#'   \item{sse}{a scalar, the sum of squared errors of the selected model.}
-#'   \item{ic}{a vector contains values of BIC,BICP,AIC,GCV of the selected model.}
-#'   \item{obj}{ a vector contains all objective function (sse) values along iterations of the selected model.}
-#'   \item{rank}{a scalar, the estimated r.}
-#'   \item{rx}{a scalar, the estimated rx.}
-#'   \item{ry}{a scalar, the estimated ry.}
+#' @usage
+#' NestRRR.select(Y, X, Ag0=NULL, Bg0=NULL,
+#'                jx, jy, p, d, n, maxiter = 300, conv = 1e-4,
+#'                quietly = FALSE, method = c('RRR','RRS')[1],
+#'                lambda = 0, ic = c("BIC","BICP","AIC","GCV")[1],
+#'                dimred = c(TRUE,TRUE,TRUE), rankfix = NULL)
+#'
+#' @param Y the response matrix of dimension n-by-jy*d.
+#' @param X the design matrix of dimension n-by-jx*p.
+#' @param Ag0 an initial estimator of matrix U. If NULL then generate it
+#'            by \code{\link{NestRRRini}}. Default is NULL.
+#' @param Bg0 an initial estimator of matrix V, if NULL then generate it
+#'            by \code{\link{NestRRRini}}. Default is NULL.
+#' @param jx the number of basis functions to expand functional predictor.
+#' @param jy the number of basis functions to expand functional response.
+#' @param p the number of predictors.
+#' @param d the number of responses.
+#' @param n the sample size.
+#' @param maxiter the maximum iteration number of the
+#'                blockwise coordinate descent algorithm. Default is 300.
+#' @param conv the tolerance level used to control the convergence of the
+#'             blockwise coordinate descent algorithm. Default is 1e-4.
+#' @param quietly a logical value with two options. FALSE (default): show the
+#'                rank selection process; TRUE: do not show the process.
+#' @param method 'RRR' (default): no additional ridge penalty; 'RRS': add an
+#'               additional ridge penalty.
+#' @param lambda the tuning parameter to control the amount of ridge
+#'               penalization. It is only used when \code{method = 'RRS'}.
+#'               Default is 0.
+#' @param ic the user-specified information criterion. Four options are available,
+#'           including BIC, BICP, AIC, GCV.
+#' @param dimred a vector of logical values to decide whether do dimension
+#'               reduction on certain dimension. TRUE means the rank is selected
+#'               by the selected information criterion. If \code{dimred[1]=FALSE}, r is
+#'               provided by \code{rankfix} or \eqn{min(jx*p,jy*d, rank(X))};
+#'               If \code{dimred[2]=FALSE}, rx equals to p; If \code{dimred[3]=FALSE},
+#'               ry equals to d. Default is \code{c(TRUE,TRUE,TRUE)}.
+#' @param rankfix a user-provided value of r when \code{dimred[1]=FALSE}. Default is NULL
+#'                which leads to \eqn{r=min(jx*p,jy*d,rank(X))}.
+#' @return The function returns a list:
+#'   \item{Ag}{the estimated U.}
+#'   \item{Bg}{the estimated V.}
+#'   \item{Al}{the estimated A.}
+#'   \item{Bl}{the estimated B.}
+#'   \item{C}{the estimated coefficient matrix C.}
+#'   \item{df}{the estimated degrees of freedom of the NRRR model.}
+#'   \item{sse}{the sum of squared errors of the selected model.}
+#'   \item{ic}{a vector containing values of BIC,BICP,AIC,GCV of the selected model.}
+#'   \item{rank}{the estimated r.}
+#'   \item{rx}{the estimated rx.}
+#'   \item{ry}{the estimated ry.}
+#'
+#'
+#' @details
+#' Denote \eqn{\hat C(r, rx, ry)} as the estimator of the coefficient matrix
+#' with the rank values fixed at some \eqn{(r, rx, ry)} and write the sum of
+#' squared errors as \eqn{SSE(r, rx, ry)=||Y - X\hat C(r, rx, ry)||_F^2}. We
+#' define
+#' \deqn{BIC(r, rx, ry) = n*d*jy*log(SSE(r, rx, ry)/(n*d*jy)) + log(n*d*jy)*df(r, rx, ry),}
+#' where \eqn{df(r, rx, ry)} is the effective degrees of freedom and is estimated
+#' by the number of free parameters
+#' \deqn{\hat df(r, rx, ry) = rx*(rank(X)/jx - rx) + ry*(d - ry) + (jy*ry + jx*rx - r)*r.}
+#' Similarly, we can define the other information criteria. With the defined BIC,
+#' a three-dimensional grid search procedure of the rank
+#' values is performed, and the best model is chosen as the one with the
+#' smallest BIC value. Instead of a nested rank selection method, we apply a
+#' one-at-a-time selection approach. We first set \eqn{rx = p, ry = d}, and
+#' select the best local rank \eqn{\hat r} among the models with
+#' \eqn{1 \le r \le min(rank(X), Jy*d)}. We then fix the local rank at
+#' \eqn{\hat r}, and repeat the similar procedure to determine \eqn{\hat rx}
+#' and \eqn{\hat ry}, one at a time. Finally, with fixed \eqn{\hat rx} and \eqn{\hat ry},
+#' we refine the estimation of r.
+#'
+#'
 #' @references Liu, X., Ma, S., & Chen, K. (2020).
 #' Multivariate Functional Regression via Nested Reduced-Rank Regularization.
 #' arXiv: Methodology.
@@ -59,7 +99,11 @@
 #'                               method=c('RRR','RRS')[1],lambda=0,
 #'                               ic=c("BIC","BICP","AIC","GCV")[1],
 #'                               dimred = c(TRUE,TRUE,TRUE),rankfix=NULL))
-NestRRR.select <- function(Y,X,Ag0=NULL,Bg0=NULL,jx,jy,p,d,n,maxiter=300,conv=1e-4,quietly=FALSE,method=c('RRR','RRS')[1],lambda=0,ic=c("BIC","BICP","AIC","GCV")[1],dimred = c(TRUE,TRUE,TRUE),rankfix=NULL
+NestRRR.select <- function(Y,X,Ag0=NULL,Bg0=NULL,
+                           jx,jy,p,d,n,maxiter=300,conv=1e-4,
+                           quietly=FALSE,method=c('RRR','RRS')[1],
+                           lambda=0,ic=c("BIC","BICP","AIC","GCV")[1],
+                           dimred = c(TRUE,TRUE,TRUE),rankfix=NULL
 ){
   #require(rrpack)
   # compute rank(X)

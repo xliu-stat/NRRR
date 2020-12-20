@@ -2,38 +2,43 @@
 % Please edit documentation in R/pred_NRRR.r
 \name{NestRRR.prediction}
 \alias{NestRRR.prediction}
-\title{Generate prediction of response curves}
+\title{Predict the response trajectory}
 \usage{
 NestRRR.prediction(tseq, X, sseq, Ag, Bg, Al, Bl, phi)
 }
 \arguments{
-\item{tseq}{A sequence of the prediction time points of y(t).}
+\item{tseq}{a sequence of time points at which the prediction of response
+trajectory is obtained.}
 
-\item{X}{X(s), an array of observed predictor curves.}
+\item{X}{an array of dimension \code{c(n, p, length(sseq))} where n is
+the sample size and p is the number of components in the
+multivariate predictor. It is the predictor trajectory observed at
+discrete time points \code{sseq}.}
 
-\item{sseq}{A sequence of the observed time points of x(s).}
+\item{sseq}{a sequence of time points at which the predictor trajectory is observed.}
 
-\item{Ag}{Global low-dimensional structure U, a d by ry matrix of rank ry.}
+\item{Ag}{a d-by-ry matrix of rank ry, i.e., the matrix U in NRRR paper.}
 
-\item{Bg}{Global low-dimensional structure V, a p by rx matrix of rank rx.}
+\item{Bg}{a p-by-rx matrix of rank rx, i.e., the matrix V in NRRR paper.}
 
-\item{Al}{Local low-dimensional structure A, a jy*ry by r matrix of rank r.}
+\item{Al}{a jy*ry-by-r matrix of rank r, i.e., the matrix A in NRRR paper.}
 
-\item{Bl}{Local low-dimensional structure B, a jx*rx by r matrix of rank r.}
+\item{Bl}{a jx*rx-by-r matrix of rank r, i.e., the matrix B in NRRR paper.}
 
-\item{phi}{The set of basis functions to expand x(s).}
+\item{phi}{a matrix of dimension \code{length(sseq)}-by-jx. It is the set of
+basis functions to expand the predictor trajectory.}
 }
 \value{
-The returned items
-  \item{Cstar}{\eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T}, the coefficient matrix
-          in equation (7).}
-  \item{Jpsihalf}{psi is the set of basis functions to expand y(t); Jpsi is
-          the covariance matrix of psi, and Jpsihalf is (Jpsi)^(1/2).}
-  \item{Ypred}{the predicted response curves Ypred(t), an array of
-          dimension (n, d, nt).}
+This function returns a list:
+  \item{Cstar}{the estimated coefficient matrix in equation (7) of NRRR paper,
+               i.e., \eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T}.}
+  \item{Ypred}{the predicted response trajectory which is an array of
+          dimension \code{c(n, d, length(tseq)}}
 }
 \description{
-This function generates prediction of response curves.
+This function generates prediction of the functional response based on the fitting
+results of the NRRR model and the given predictor trajectory. The functional
+response is predicted at a given sequence of time points \code{tseq}.
 }
 \examples{
 library(NRRR)
@@ -49,7 +54,8 @@ fit_nrrr <- with(simDat, NestRRR.select(Yest,Xest,Ag0=NULL,Bg0=NULL,
                               ic=c("BIC","BICP","AIC","GCV")[1],
                               dimred = c(TRUE,TRUE,TRUE),rankfix=NULL))
 Ypred_nrrr <- NestRRR.prediction(simDat$tseq,simDat$X,simDat$sseq,
-                                 fit_nrrr$Ag,fit_nrrr$Bg,fit_nrrr$Al,fit_nrrr$Bl,
+                                 fit_nrrr$Ag,fit_nrrr$Bg,
+                                 fit_nrrr$Al,fit_nrrr$Bl,
                                  simDat$phi)
 }
 \references{

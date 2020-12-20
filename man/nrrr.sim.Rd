@@ -4,67 +4,71 @@
 \alias{nrrr.sim}
 \title{Generate simulation data}
 \usage{
-nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d, s2n, rho_X, rho_E, Sigma = CorrAR)
+nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
+         s2n, rho_X, rho_E, Sigma = CorrAR)
 }
 \arguments{
-\item{n}{Sample size.}
+\item{n}{sample size.}
 
-\item{ns}{Number of discrete observations of x(s).}
+\item{ns}{the number of time points at which the predictor trajectory is observed.}
 
-\item{nt}{Number of discrete observations of y(t).}
+\item{nt}{the number of time points at which the response trajectory is observed.}
 
-\item{r}{Rank.}
+\item{r}{rank.}
 
-\item{rx}{Number of latent predictors.}
+\item{rx}{the number of latent predictors.}
 
-\item{ry}{Number of latent responses.}
+\item{ry}{the number of latent responses.}
 
-\item{jx}{Number of basis functions to expand x(s).}
+\item{jx}{the number of basis functions to expand the predictor trajectory.}
 
-\item{jy}{Number of basis functions to expand y(t).}
+\item{jy}{the number of basis functions to expand the response trajectory.}
 
-\item{p}{Number of predictors.}
+\item{p}{the number of predictors.}
 
-\item{d}{Number of responses.}
+\item{d}{the number of responses.}
 
-\item{s2n}{Signal-to-noise ratio.}
+\item{s2n}{a positive number to specify the signal to noise ratio.}
 
-\item{rho_X}{The correlation strength among columns of X,
-a scalar between 0 and 1.}
+\item{rho_X}{a scalar between 0 and 1 to specify the correlation strength among covariates.}
 
-\item{rho_E}{The correlation strength among columns of E,
-a scalar between 0 and 1.}
+\item{rho_E}{a scalar between 0 and 1 to specify the correlation strength among components of the random error.}
 
-\item{Sigma}{The correlation structure, select from
-CorrAR and CorrCS.}
+\item{Sigma}{the correlation structure of random errors. Two options are available,
+CorrAR: autoregressive,
+CorrCS: compound symmetry.}
 }
 \value{
-The generated data containing
-  \item{Ag}{the global low-dimensional structure U, a d by ry matrix of rank ry.}
-  \item{Bg}{the global low-dimensional structure V, a p by rx matrix of rank rx.}
-  \item{Al}{the local low-dimensional structure A, a (jy*ry) by r matrix of rank r.}
-  \item{Bl}{the local low-dimensional structure B, a (jx*rx) by r matrix of rank r.}
+The function returns a list:
+  \item{Ag}{the matrix U.}
+  \item{Bg}{the matrix V.}
+  \item{Al}{the matrix A.}
+  \item{Bl}{the matrix B.}
   \item{C}{the coefficient matrix C.}
   \item{Alstar}{A* in equation (7).}
   \item{Blstar}{B* in equation (7).}
-  \item{Cstar}{\eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T} in equation (7), the coefficient matrix
-           used in data generation.}
-  \item{tseq}{a sequence of the observed time points of y(t) of length nt.}
-  \item{psi}{the set of basis functions to expand y(t).}
-  \item{Jpsi}{the correlation matrix of psi, and Jpsihalf is (Jpsi)^(1/2).}
-  \item{sseq}{a sequence of the observed time points of x(s) of length ns.}
-  \item{phi}{the set of basis functions to expand x(s).}
+  \item{Cstar}{\eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T} in equation (7).}
+  \item{tseq}{a sequence of time points at which the response trajectory is observed.}
+  \item{psi}{the set of basis functions to expand the response trajectory.}
+  \item{Jpsi}{the correlation matrix of psi. Jpsihalf is (Jpsi)^(1/2).}
+  \item{sseq}{a sequence of time points at which the predictor trajectory is observed.}
+  \item{phi}{the set of basis functions to expand the predictor trajectory.}
   \item{Jphi}{the correlation matrix of phi.}
   \item{E}{the random error matrix.}
-  \item{Y}{Y(t), an array of dimension (n, d, nt), with random error.}
-  \item{X}{X(s), an array of dimension (n, p, ns).}
-  \item{Ytrue}{Ytrue(t), an array of fimension (n, d, nt), without random error.}
-  \item{Yest}{response matrix of dimension n by (jy*d), used in estimation.}
-  \item{Xest}{design matrix of dimension n by (jx*p), used in estimation.}
+  \item{Y}{an array of dimension \code{(n, d, nt)}, i.e., the generated response observations.}
+  \item{X}{an array of dimension \code{(n, p, ns)}, i.e., the generated predictor observations.}
+  \item{Ytrue}{an array of \code{dimension (n, d, nt)}. The response observations without random error.}
+  \item{Yest}{the response matrix of dimension n-by-jy*d and is used in estimation.}
+  \item{Xest}{the design matrix of dimension n-by-jx*p and is used in estimation.}
 }
 \description{
 This function generates simulation data for the nested reduced-rank
-functional regression model.
+regression under the multivariate functional regression scenario.
+With user-specified dimensions and model ranks,
+this function first generates functional multivariate predictors and
+responses and then transform the functional regression problem into a
+conventional finite-dimensional regression problem through basis expansion
+and truncation.
 }
 \examples{
 library(NRRR)

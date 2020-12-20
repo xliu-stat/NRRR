@@ -18,6 +18,8 @@ Imports:
     rrpack,
     splines,
     stats,
+    reshape2,
+    ggplot2,
     Rcpp
 LinkingTo: 
     Rcpp,

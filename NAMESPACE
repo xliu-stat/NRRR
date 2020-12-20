@@ -2,6 +2,7 @@
 
 export(CorrAR)
 export(CorrCS)
+export(NRRR.plot.Pred)
 export(NRRR.plot.RegSurface)
 export(NestRRR)
 export(NestRRR.cv.select)

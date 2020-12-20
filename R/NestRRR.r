@@ -1,39 +1,85 @@
-#' Obtain NRRR estimator with given rank
+#' @title
+#' Nested reduced-rank regression with a given rank
 #'
-#' This function uses the proposed blockwise coordinate descent algorithm
-#'  to get the NRRR estimator with given rank (r, rx, ry).
+#' @description
+#' This function uses a blockwise coordinate descent algorithm
+#' to get the nested reduced-rank regression estimator with a
+#' given \code{(r, rx, ry)}.
 #'
-#' @param Y Response matrix with n rows and jy*d columns.
-#' @param X Design matrix with n rows and jx*p columns.
-#' @param Ag0 Initial estimator of U, if NULL then generate it by
-#'           function NestRRRini.
-#' @param Bg0 Initial estimator of V, if NULL then generate it by
-#'           function NestRRRini.
-#' @param rini,r Rank of the local reduced-rank structure. \emph{rini} is used
-#'               in \code{NestRRRinit()} to get the initial estimator of U and V.
-#' @param rx Number of latent predictors.
-#' @param ry Number of latent responses.
-#' @param jx Number of basis functions to expand x(s).
-#' @param jy Number of basis functions to expand y(t).
-#' @param p Number of predictors.
-#' @param d Number of responses.
-#' @param n Sample size.
-#' @param maxiter Maximum iteration number, default 100.
-#' @param conv Tolerance level to control convergence, default 1E-4.
-#' @param quietly FALSE show the final fitting information (SSE, BIC, df), if TRUE (default) then not show.
-#' @param method RRR (default) no ridge penalty; if RRS then use ridge penalty.
-#' @param lambda Tuning parameter for the ridge penalty, only used when method='RRS', default=0.
-#' @return The returned items
-#'   \item{Ag}{the global low-dimensional structure U, a d by ry matrix of rank ry.}
-#'   \item{Bg}{the global low-dimensional structure V, a p by rx matrix of rank rx.}
-#'   \item{Al}{the local low-dimensional structure A.}
-#'   \item{Bl}{the local low-dimensional structure B.}
-#'   \item{C}{the NRRR estimator of the coefficient matrix C.}
-#'   \item{df}{a scalar, the estimated degrees of freedom of the NRRR model.}
-#'   \item{sse}{a scalar, the objective function value.}
-#'   \item{ic}{a vector contains values of BIC,BICP,AIC,GCV.}
-#'   \item{obj}{ a vector contains all objective function (sse) values along iteration.}
-#'   \item{iter}{a scalar, number of iterations to converge.}
+#' @usage
+#' NestRRR(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d, n,
+#'         maxiter = 100, conv = 1e-4, quietly = TRUE,
+#'         method = c("RRR", "RRS")[1], lambda = 0)
+#'
+#'
+#' @param Y the response matrix of dimension n-by-jy*d.
+#' @param X the design matrix of dimension n-by-jx*p.
+#' @param Ag0 an initial estimator of matrix U. If NULL then generate it
+#'            by \code{\link{NestRRRini}}. Default is NULL.
+#' @param Bg0 an initial estimator of matrix V, if NULL then generate it
+#'            by \code{\link{NestRRRini}}. Default is NULL.
+#' @param rini,r rank of the local reduced-rank structure. \code{rini} is used
+#'               in \code{\link{NestRRRini}} to get the initial
+#'               estimator of U and V.
+#' @param rx the number of latent predictors.
+#' @param ry the number of latent responses.
+#' @param jx the number of basis functions to expand functional predictor.
+#' @param jy the number of basis functions to expand functional response.
+#' @param p the number of predictors.
+#' @param d the number of responses.
+#' @param n the sample size.
+#' @param maxiter the maximum iteration number of the
+#'                blockwise coordinate descent algorithm. Default is 100.
+#' @param conv the tolerance level used to control the convergence of the
+#'             blockwise coordinate descent algorithm. Default is 1e-4.
+#' @param quietly a logical value. FALSE: show the
+#'                final fitting information (sse and df);
+#'                TRUE (default): do not show the results.
+#' @param method 'RRR' (default): no additional ridge penalty; 'RRS': add an
+#'               additional ridge penalty.
+#' @param lambda the tuning parameter to control the amount of ridge
+#'               penalization. It is only used when \code{method = 'RRS'}.
+#'               Default is 0.
+#'
+#' @return The function returns a list:
+#'   \item{Ag}{the estimated U.}
+#'   \item{Bg}{the estimated V.}
+#'   \item{Al}{the estimated A.}
+#'   \item{Bl}{the estimated B.}
+#'   \item{C}{the estimated coefficient matrix C.}
+#'   \item{df}{degrees of freedom of the model.}
+#'   \item{sse}{the sum of squared errors.}
+#'   \item{ic}{a vector containing values of BIC, BICP, AIC, GCV.}
+#   \item{obj}{a vector contains all objective function (sse) values along iteration.}
+#'   \item{iter}{the number of iterations to converge.}
+#'
+#' @details
+#' The \emph{nested reduced-rank regression (NRRR)} is first motivated to solve
+#' a multivariate functional linear regression problem where both the response and
+#' predictor are multivariate and functional (i.e., \eqn{Y(t)=(y_1(t),...,y_d(t))^T}
+#' and \eqn{X(s)=(x_1(s),...,y_p(s))^T}). To control the complexity of the
+#' problem, NRRR proposes a nested reduced-rank structure on the regression
+#' surface \eqn{C(s,t)}. Specifically, a global dimension reduction makes use of the
+#' correlation within the components of multivariate response and multivariate
+#' predictor. Matrices U (d-by-ry) and V (p-by-rx) provides weights to form latent
+#' functional responses and latent functional predictors. Dimension reduction is achieved
+#' once \eqn{ry \le d} or \eqn{rx \le p}. Then, a local dimension reduction is
+#' conducted by restricting the latent regression surface \eqn{C^*(s,t)} to be of low-rank.
+#' After basis expansion and truncation, also by applying proper rearrangement to
+#' columns and rows of the resulting data matrices and coefficient matrices, we
+#' have the nested reduced-rank problem:
+#' \deqn{ \min_{C} || Y - XC ||_F^2, s.t., C = (I_{jx} \otimes V) BA^T (I_{jy} \otimes U)^T,}
+#' where \eqn{BA^T} is a full-rank decomposition structure to control the local
+#' rank and \eqn{jx, jy} are the number of basis functions. Beyond the functional
+#' setup, this structure can also be applied in multiple scenarios, including
+#' multivariate time series autoregression analysis and tensor-on-tensor regression.
+#' This problem is non-convex and has no explicit solution, thus we use a
+#' blockwise coordinate descent algorithm to find a local solution.
+#'
+#'
+#'
+#'
+#'
 #' @references Liu, X., Ma, S., & Chen, K. (2020).
 #' Multivariate Functional Regression via Nested Reduced-Rank Regularization.
 #' arXiv: Methodology.
@@ -170,7 +216,7 @@ NestRRR <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d,
   if (method == "RRS") sse <- sse - lambda * sum(Objiter$C^2)
 
   if (!quietly) {
-    cat("SSE = ", sse, "   BIC = ", BIC, "   DF = ", df, "\n", sep = "")
+    cat("SSE = ", sse, "DF = ", df, "\n", sep = "")
   }
   return(list(
     Ag = Ag1, Bg = Bg1, Al = as.matrix(Al1), Bl = as.matrix(Bl1), C = C, df = df,

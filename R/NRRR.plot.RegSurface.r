@@ -26,9 +26,9 @@
 #' @param rx the number of latent predictors.
 #' @param ry the number of latent responses.
 #' @param sseq a sequence of the observed time points of x(s).
-#' @param phi a ns by jx matrix which is the set of basis functions to expand x(s).
+#' @param phi a ns-by-jx matrix which is the set of basis functions to expand x(s).
 #' @param tseq a sequence of the observed time points of y(t).
-#' @param psi a nt by jy matrix which is the set of basis functions to expand y(t).
+#' @param psi a nt-by-jy matrix which is the set of basis functions to expand y(t).
 #' @param x_ind,y_ind two indexes to locate the regression surface for which the heat map is to be drawn.
 #'                    If \code{method = "original"}, \eqn{0 < x_ind <= p, 0 < y_ind <= d}
 #'                    and the function plots \eqn{C_{x_ind,y_ind}(s,t)} in Eq. (1) of the NRRR paper.
@@ -37,9 +37,9 @@
 #'                    If \code{method = "y_original"}, \eqn{0 < x_ind <= rx, 0 < y_ind <= d}.
 #'                    If \code{method = "x_original"}, \eqn{0 < x_ind <= p, 0 < y_ind <= ry}.
 #' @param x_lab,y_lab the user-specified x-axis and y-axis label,
-#'                    and it should be given as a string, e.g., x_lab = "temperature".
+#'                    and it should be given as a character string, e.g., x_lab = "temperature".
 #' @param tseq_index,sseq_index the user-specified x-axis and y-axis tick marks, and it should be
-#'                              given as a vector of strings of the same length as tseq or sseq.
+#'                              given as a vector of character strings of the same length as tseq or sseq.
 #' @param method 'original': the function plots the correlation heatmap between the original
 #'               functional response \eqn{y_i(t)} and the original functional predictor \eqn{x_j(s)};
 #'               'latent': the function plots the correlation heatmap between

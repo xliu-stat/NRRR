@@ -2,111 +2,106 @@
 % Please edit documentation in R/NestRRR.cv.select.r
 \name{NestRRR.cv.select}
 \alias{NestRRR.cv.select}
-\title{NRRR with cross validation to select ranks}
+\title{Select ranks with cross validation}
 \usage{
-NestRRR.cv.select(
-  Y,
-  X,
-  nfold = 10,
-  norder = NULL,
-  Ag0 = NULL,
-  Bg0 = NULL,
-  jx,
-  jy,
-  p,
-  d,
-  n,
-  maxiter = 300,
-  conv = 1e-04,
-  quietly = FALSE,
-  method = c("RRR", "RRS")[1],
-  lambda = 0,
-  ic = c("BIC", "BICP", "AIC", "GCV")[1],
-  dimred = c(TRUE, TRUE, TRUE),
-  rankfix = NULL,
-  xrankfix = NULL,
-  yrankfix = NULL
-)
+NestRRR.cv.select(Y, X, nfold = 10, norder = NULL, Ag0 = NULL, Bg0 = NULL,
+                  jx, jy, p, d, n,
+                  maxiter = 300, conv = 1e-4, quietly = FALSE,
+                  method = c('RRR','RRS')[1], lambda=0,
+                  dimred = c(TRUE,TRUE,TRUE),
+                  rankfix = NULL, xrankfix = NULL, yrankfix = NULL)
 }
 \arguments{
-\item{Y}{Response matrix.}
+\item{Y}{the response matrix of dimension n-by-jy*d.}
 
-\item{X}{Design matrix.}
+\item{X}{the design matrix of dimension n-by-jx*p.}
 
-\item{nfold}{Number of folds, default is 10.}
+\item{nfold}{the number of folds used in cross validation. Default is 10.}
 
-\item{norder}{Assign samples to multiple folds for cross validation.}
+\item{norder}{a vector of length n that assigns samples to multiple folds for cross validation.}
 
-\item{Ag0}{Initial estimator of U, if NULL then generate it by
-function \code{NestRRRini()}.}
+\item{Ag0}{an initial estimator of matrix U. If NULL then generate it
+by \code{\link{NestRRRini}}. Default is NULL.}
 
-\item{Bg0}{Initial estimator of V, if NULL then generate it by
-function \code{NestRRRini()}.}
+\item{Bg0}{an initial estimator of matrix V, if NULL then generate it
+by \code{\link{NestRRRini}}. Default is NULL.}
 
-\item{jx}{Number of basis functions to expand x(s).}
+\item{jx}{the number of basis functions to expand functional predictor.}
 
-\item{jy}{Number of basis functions to expand y(t).}
+\item{jy}{the number of basis functions to expand functional response.}
 
-\item{p}{Number of predictors.}
+\item{p}{the number of predictors.}
 
-\item{d}{Number of responses.}
+\item{d}{the number of responses.}
 
-\item{n}{Sample size.}
+\item{n}{the sample size.}
 
-\item{maxiter}{Maximum iteration number, Default 300.}
+\item{maxiter}{the maximum iteration number of the
+blockwise coordinate descent algorithm. Default is 300.}
 
-\item{conv}{Tolerance level to control convergence, default 1e-4.}
+\item{conv}{the tolerance level used to control the convergence of the
+blockwise coordinate descent algorithm. Default is 1e-4.}
 
-\item{quietly}{FALSE (default) show the rank selection process; TRUE not show.}
+\item{quietly}{a logical value with two options. FALSE (default): show the
+rank selection process; TRUE: do not show the process.}
 
-\item{method}{RRR (default) no ridge penalty; RRS use ridge penalty.}
+\item{method}{'RRR' (default): no additional ridge penalty; 'RRS': add an
+additional ridge penalty.}
 
-\item{lambda}{Tuning parameter for the ridge penalty, only used when
-method='RRS', default=0.}
+\item{lambda}{the tuning parameter to control the amount of ridge
+    penalization. It is only used when \code{method = 'RRS'}.
+    Default is 0.
+including BIC, BICP, AIC, GCV.}
 
-\item{ic}{Information criterion, selected from BIC, BICP, AIC, GCV.}
+\item{dimred}{a vector of logical values to decide whether use cross validation
+do rank selection on certain dimension. TRUE (default): yes; FALSE: no.
+If \code{dimred[1]=FALSE}, r is provided by \code{rankfix}
+or \eqn{min(jx*p,jy*d, rank(X))};
+If \code{dimred[2]=FALSE}, rx equals to \code{xrankfix} or p; If \code{dimred[3]=FALSE},
+ry equals to \code{yrankfix} or d. Default is \code{c(TRUE,TRUE,TRUE)}.}
 
-\item{dimred}{A vector to decide whether do dimension reduction on certain
-dimensions, with c(TRUE,TRUE,TRUE) corresponding to c(r,rx,ry),
-TRUE (default) do dimension reduction; FALSE do not.
-If dimred[1]=FALSE, r is provided by rankfix or min(jx*p,jy*d,rank(X));
-If dimred[2]=FALSE, rx is provided by xrankfix or p;
-If dimred[3]=FALSE, ry is provided by yrankfix or d.}
+\item{rankfix}{a user-provided value of r when \code{dimred[1]=FALSE}. Default is NULL
+which leads to \eqn{r=min(jx*p,jy*d,rank(X))}.}
 
-\item{rankfix}{Provide a value for r when dimred[1]=FALSE, default is NULL
-which leads to min(jx*p,jy*d,rank(X)).}
+\item{xrankfix}{a user-provided value of rx when \code{dimred[2]=FALSE}. Default is NULL
+which leads to \code{rx=p}.}
 
-\item{xrankfix}{Provide a value for rx when dimred[2]=FALSE, default is NULL
-which leads to p.}
-
-\item{yrankfix}{Provide a value for ry when dimred[3]=FALSE, default is NULL
-which leads to d.}
+\item{yrankfix}{a user-provided value of ry when \code{dimred[3]=FALSE}. Default is NULL
+which leads to \code{ry=d}.}
 }
 \value{
-The returned items are
-  \item{Ag}{estimated matrix U.}
-  \item{Bg}{estimated matrix V.}
-  \item{Al}{estimated matrix A.}
-  \item{Bl}{estimated matrix B.}
-  \item{C}{estimated matrix C.}
-  \item{df}{a scalar, estimated degrees of freedom of the selected model.}
-  \item{sse}{a scalar, the sum of squared errors of the selected model.}
-  \item{ic}{a vector contains values of BIC,BICP,AIC,GCV of the selected model.}
-  \item{obj}{a vector contains all objective function (sse) values along
-          iterations of the selected model.}
+The function returns a list:
+  \item{Ag}{the estimated U.}
+  \item{Bg}{the estimated V.}
+  \item{Al}{the estimated A.}
+  \item{Bl}{the estimated B.}
+  \item{C}{the estimated coefficient matrix C.}
+  \item{df}{the estimated degrees of freedom of the selected model.}
+  \item{sse}{the sum of squared errors of the selected model.}
+  \item{ic}{a vector containing values of BIC, BICP, AIC, GCV of the selected model.}
   \item{rx_path}{a matrix displays the path of selecting rx with cross validation.}
   \item{ry_path}{a matrix displays the path of selecting ry with cross validation.}
   \item{r_path}{a matrix displays the path of selecting r with cross validation.}
-  \item{r_fitseq}{a sequence of possible r values.}
   \item{iter}{the number of iterations needed to converge in the selected model.}
-  \item{rank}{a scalar, the estimated r.}
-  \item{rx}{a scalar, the estimated rx.}
-  \item{ry}{a scalar, the estimated ry.}
+  \item{rank}{the estimated r.}
+  \item{rx}{the estimated rx.}
+  \item{ry}{the estimated ry.}
 }
 \description{
-This function applies Cross-Validation
- to select the optimal (r, rx, ry) with
- the blockwise coordinate descent algorithm.
+This function selects the optimal ranks \code{(r, rx, ry)} using a cross
+validation procedure. The blockwise coordinate descent algorithm is used to fit
+the model with any combinations of \code{(r, rx, ry)}.
+}
+\details{
+A three-dimensional grid search procedure of the rank
+values is performed, and the best model is chosen as the one with the
+smallest prediction error. Instead of a nested rank selection method, we apply a
+one-at-a-time selection approach. We first set \eqn{rx = p, ry = d}, and
+select the best local rank \eqn{\hat r} among the models with
+\eqn{1 \le r \le min(rank(X), Jy*d)}. We then fix the local rank at
+\eqn{\hat r}, and repeat the similar procedure to determine \eqn{\hat rx}
+and \eqn{\hat ry}, one at a time. Finally, with fixed \eqn{\hat rx} and \eqn{\hat ry},
+we refine the estimation of r.
 }
 \examples{
 library(NRRR)
@@ -120,7 +115,6 @@ fit_init <- with(simDat, NestRRR.cv.select(Yest,Xest,nfold=10,norder=NULL,
                               jx=8,jy=8,p=10,d=10,n=100,
                               maxiter=300,conv=1e-4,quietly=FALSE,
                               method=c('RRR','RRS')[1],lambda=0,
-                              ic=c("BIC","BICP","AIC","GCV")[1],
                               dimred = c(TRUE,TRUE,TRUE),
                               rankfix=NULL,xrankfix=NULL,yrankfix=NULL))
 }

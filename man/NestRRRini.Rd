@@ -2,38 +2,39 @@
 % Please edit documentation in R/NestRRRini.r
 \name{NestRRRini}
 \alias{NestRRRini}
-\title{Generate initial estimators for NRRR}
+\title{Generate initial estimators}
 \usage{
 NestRRRini(Y, X, r, rx, ry, jx, jy, p, d, n)
 }
 \arguments{
-\item{Y}{Response matrix with n rows and jy*d columns.}
+\item{Y}{the response matrix of dimension n-by-jy*d.}
 
-\item{X}{Design matrix with n rows and jx*p columns.}
+\item{X}{the design matrix of dimension n-by-jx*p.}
 
-\item{r}{Rank of the local reduced-rank structure.}
+\item{r}{rank of the local reduced-rank structure.}
 
-\item{rx}{Number of latent predictors.}
+\item{rx}{the number of latent predictors.}
 
-\item{ry}{Number of latent responses.}
+\item{ry}{the number of latent responses.}
 
-\item{jx}{Number of basis functions to expand x(s).}
+\item{jx}{the number of basis functions to expand functional predictor.}
 
-\item{jy}{Number of basis functions to expand y(t).}
+\item{jy}{the number of basis functions to expand functional response.}
 
-\item{p}{Number of predictors.}
+\item{p}{the number of predictors.}
 
-\item{d}{Number of responses.}
+\item{d}{the number of responses.}
 
-\item{n}{Sample size.}
+\item{n}{the sample size.}
 }
 \value{
-The returned items
-  \item{Ag}{the global low-dimensional structure U, a d by ry matrix of rank ry.}
-  \item{Bg}{the global low-dimensional structure V, a p by rx matrix of rank rx.}
+The function returns a list:
+  \item{Ag}{the estimated U.}
+  \item{Bg}{the estimated V.}
 }
 \description{
-This function estimates U and V to initialize the blockwise coordinate descent algorithm.
+This function provides the initial estimators of U and V to initialize the
+blockwise coordinate descent algorithm.
 }
 \examples{
 library(NRRR)

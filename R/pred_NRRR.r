@@ -1,26 +1,39 @@
-#' Generate prediction of response curves
+#' @title
+#' Predict the response trajectory
 #'
-#' This function generates prediction of response curves.
+#' @description
+#' This function generates prediction of the functional response based on the fitting
+#' results of the NRRR model and the given predictor trajectory. The functional
+#' response is predicted at a given sequence of time points \code{tseq}.
 #'
-#' @param sseq A sequence of the observed time points of x(s).
-#' @param tseq A sequence of the prediction time points of y(t).
-#' @param X X(s), an array of observed predictor curves.
-#' @param phi The set of basis functions to expand x(s).
-#' @param Ag i.e. U, a d*ry matrix of rank ry
-#' @param Ag Global low-dimensional structure U, a d by ry matrix of rank ry.
-#' @param Bg Global low-dimensional structure V, a p by rx matrix of rank rx.
-#' @param Al Local low-dimensional structure A, a jy*ry by r matrix of rank r.
-#' @param Bl Local low-dimensional structure B, a jx*rx by r matrix of rank r.
-#' @return The returned items
-#'   \item{Cstar}{\eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T}, the coefficient matrix
-#'           in equation (7).}
-#'   \item{Jpsihalf}{psi is the set of basis functions to expand y(t); Jpsi is
-#'           the covariance matrix of psi, and Jpsihalf is (Jpsi)^(1/2).}
-#'   \item{Ypred}{the predicted response curves Ypred(t), an array of
-#'           dimension (n, d, nt).}
+#' @usage
+#' NestRRR.prediction(tseq, X, sseq, Ag, Bg, Al, Bl, phi)
+#'
+#' @param tseq a sequence of time points at which the prediction of response
+#'             trajectory is obtained.
+#' @param sseq a sequence of time points at which the predictor trajectory is observed.
+#' @param X an array of dimension \code{c(n, p, length(sseq))} where n is
+#'          the sample size and p is the number of components in the
+#'          multivariate predictor. It is the predictor trajectory observed at
+#'          discrete time points \code{sseq}.
+#' @param phi a matrix of dimension \code{length(sseq)}-by-jx. It is the set of
+#'            basis functions to expand the predictor trajectory.
+#' @param Ag a d-by-ry matrix of rank ry, i.e., the matrix U in NRRR paper.
+#' @param Bg a p-by-rx matrix of rank rx, i.e., the matrix V in NRRR paper.
+#' @param Al a jy*ry-by-r matrix of rank r, i.e., the matrix A in NRRR paper.
+#' @param Bl a jx*rx-by-r matrix of rank r, i.e., the matrix B in NRRR paper.
+#'
+#'
+#' @return This function returns a list:
+#'   \item{Cstar}{the estimated coefficient matrix in equation (7) of NRRR paper,
+#'                i.e., \eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T}.}
+#'   \item{Ypred}{the predicted response trajectory which is an array of
+#'           dimension \code{c(n, d, length(tseq)}}
+#'
 #' @references Liu, X., Ma, S., & Chen, K. (2020).
 #' Multivariate Functional Regression via Nested Reduced-Rank Regularization.
 #' arXiv: Methodology.
+#'
 #' @importFrom splines bs
 #' @export
 #' @examples
@@ -37,7 +50,8 @@
 #'                               ic=c("BIC","BICP","AIC","GCV")[1],
 #'                               dimred = c(TRUE,TRUE,TRUE),rankfix=NULL))
 #' Ypred_nrrr <- NestRRR.prediction(simDat$tseq,simDat$X,simDat$sseq,
-#'                                  fit_nrrr$Ag,fit_nrrr$Bg,fit_nrrr$Al,fit_nrrr$Bl,
+#'                                  fit_nrrr$Ag,fit_nrrr$Bg,
+#'                                  fit_nrrr$Al,fit_nrrr$Bl,
 #'                                  simDat$phi)
 NestRRR.prediction <- function(tseq,X,sseq,Ag,Bg,Al,Bl,phi){
   n <- nrow(X)

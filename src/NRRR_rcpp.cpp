@@ -908,7 +908,6 @@ Rcpp::List nrrr_cv_my(arma::mat Y,
                       int p,
                       int d,
                       int n,
-                      int ic,
                       int maxiter,
                       int method,
                       int dimred1,
@@ -918,7 +917,6 @@ Rcpp::List nrrr_cv_my(arma::mat Y,
                       double lambda
                       ){
 
-    /* ic: 0-BIC, 1-BICP, 2-AIC, 3-GCV       */
     /* method: 1-RRR, 2-RRS                  */
     /* xrankfix: 0-null, others-specified rx */
 
