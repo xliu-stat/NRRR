@@ -14,13 +14,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-This document provides a brief introduction to the functions of implementing nested reduced-rank regression. Both the nested reduced-rank regression and nested reduced-rank ridge regression fitting procedures are displayed. To facilitate illustration, we generate functional observations and fit a multivariate functional linear regression. However, the nested reduced-rank regression is widely applicable to all multivariate regression problems where a double-layer dimension reduction structure is meaningful. 
+This document provides a brief introduction to the functions of implementing nested reduced-rank regression. Both the nested reduced-rank regression and nested reduced-rank ridge regression fitting procedures are displayed. To facilitate illustration, we generate functional observations and fit a multivariate functional linear regression. The nested reduced-rank regression is widely applicable to all multivariate regression problems where a double-layer dimension reduction structure is meaningful. 
 
 ## Install the package
 ```{r setup}
 #install.packages("devtools")
 #devtools::install_github("xliu-stat/NRRR")
 library(NRRR)
+set.seed(1)
 ```
 
 # Nested reduced-rank regression
@@ -72,7 +73,7 @@ fit_nrrr1$ry
 # CV tuning
 fit_nrrr2 <- NestRRR.cv.select(Y, X, nfold = 10, norder = NULL, NULL, NULL,
                           jx, jy, p, d, n, maxiter = 300, conv = 1e-2, 
-                          quietly = TRUE, method = 'RRR', ic = "BIC")
+                          quietly = TRUE, method = 'RRR')
 fit_nrrr2$rank
 fit_nrrr2$rx
 fit_nrrr2$ry

@@ -36,9 +36,11 @@
 #'                    and the function plots \eqn{C^*_{x_ind,y_ind}(s,t)} in Eq. (2) of the NRRR paper.
 #'                    If \code{method = "y_original"}, \eqn{0 < x_ind <= rx, 0 < y_ind <= d}.
 #'                    If \code{method = "x_original"}, \eqn{0 < x_ind <= p, 0 < y_ind <= ry}.
-#' @param x_lab,y_lab the user-specified x-axis and y-axis label,
-#'                    and it should be given as a character string, e.g., x_lab = "temperature".
-#' @param tseq_index,sseq_index the user-specified x-axis and y-axis tick marks, and it should be
+#' @param x_lab,y_lab the user-specified x-axis (with x_lab for predictor) and
+#'                    y-axis (with y_lab for response) label,
+#'                    and it should be given as a character string, e.g., x_lab = "Temperature".
+#' @param tseq_index,sseq_index the user-specified x-axis (with sseq_index for predictor)
+#'                              and y-axis (with tseq_index for response) tick marks, and it should be
 #'                              given as a vector of character strings of the same length as tseq or sseq.
 #' @param method 'original': the function plots the correlation heatmap between the original
 #'               functional response \eqn{y_i(t)} and the original functional predictor \eqn{x_j(s)};
@@ -141,30 +143,30 @@ NRRR.plot.RegSurface <- function(Ag, Bg, Al, Bl, rx, ry,
     dat$Var2 <- factor(dat$Var2)
     if (is.null(tseq_index)) {
       levels(dat$Var1) <- factor(tseq)
-      x_breaks <- tseq[seq(1,nt,2)]
+      y_breaks <- tseq[seq(1,nt,2)]
     } else {
       levels(dat$Var1) <- tseq_index
-      x_breaks <- tseq_index[seq(1,nt,2)]
+      y_breaks <- tseq_index[seq(1,nt,2)]
     }
 
     if (is.null(sseq_index)) {
       levels(dat$Var2) <- factor(sseq)
-      y_breaks <- sseq[seq(1,ns,2)]
+      x_breaks <- sseq[seq(1,ns,2)]
     } else {
       levels(dat$Var2) <- sseq_index
-      y_breaks <- sseq_index[seq(1,ns,2)]
+      x_breaks <- sseq_index[seq(1,ns,2)]
     }
 
 
-    ggplot2::ggplot(dat, aes(Var1, Var2, fill = value)) + geom_tile() +
+    ggplot2::ggplot(dat, aes(Var2, Var1, fill = value)) + geom_tile() +
       scale_fill_gradient2(low = "blue", mid = "white",
                            high = "red", midpoint = 0, limits= range(comp),
                            space = "Lab", name = "",
                            na.value = "grey50", guide = "colourbar", aesthetics = "fill")+
       scale_x_discrete(breaks = x_breaks) +
       scale_y_discrete(breaks = y_breaks) +
-      xlab(ifelse(is.null(y_lab), "response (t)", y_lab)) +
-      ylab(ifelse(is.null(x_lab), "predictor (s)", x_lab)) +
+      ylab(ifelse(is.null(y_lab), "response (t)", y_lab)) +
+      xlab(ifelse(is.null(x_lab), "predictor (s)", x_lab)) +
       theme_classic() +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
       theme(axis.text=element_text(size=10),axis.title=element_text(size=13),

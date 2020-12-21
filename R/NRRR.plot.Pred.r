@@ -35,7 +35,9 @@
 #'                given as a vector of character strings of the same length as tseq.
 #'                Default is NULL.
 #'
-#' @return A ggplot2 object.
+#' @return A ggplot2 object. If the response trajectory is truely observed, then
+#'         it is plotted as a black line while the predicted trajectory is in red.
+#'
 #'
 #' @author
 #' Xiaokang Liu and Kun Chen
@@ -80,7 +82,7 @@ NRRR.plot.Pred <- function(Ypred, Y = NULL, i_ind = 1, yi_ind = 1,
             plot.title = element_text(hjust = 0.5, size = 20))
   } else {
     a <- Y[iy,l,]
-    b <- Ypred$Ypred[iy,l,]
+    b <- Ypred[iy,l,]
     y.range <- range(a,b)
     cur <- data.frame(a,b,tseq)
     ggplot(data = cur, aes(x = tseq)) +
