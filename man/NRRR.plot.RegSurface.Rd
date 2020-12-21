@@ -39,10 +39,12 @@ and the function plots \eqn{C^*_{x_ind,y_ind}(s,t)} in Eq. (2) of the NRRR paper
 If \code{method = "y_original"}, \eqn{0 < x_ind <= rx, 0 < y_ind <= d}.
 If \code{method = "x_original"}, \eqn{0 < x_ind <= p, 0 < y_ind <= ry}.}
 
-\item{x_lab, y_lab}{the user-specified x-axis and y-axis label,
-and it should be given as a character string, e.g., x_lab = "temperature".}
+\item{x_lab, y_lab}{the user-specified x-axis (with x_lab for predictor) and
+y-axis (with y_lab for response) label,
+and it should be given as a character string, e.g., x_lab = "Temperature".}
 
-\item{tseq_index, sseq_index}{the user-specified x-axis and y-axis tick marks, and it should be
+\item{tseq_index, sseq_index}{the user-specified x-axis (with sseq_index for predictor)
+and y-axis (with tseq_index for response) tick marks, and it should be
 given as a vector of character strings of the same length as tseq or sseq.}
 
 \item{method}{'original': the function plots the correlation heatmap between the original

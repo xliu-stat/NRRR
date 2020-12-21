@@ -20,6 +20,7 @@ RoxygenNote: 7.1.1
 Suggests: 
     testthat,
     knitr,
+    fds,
     rmarkdown
 Imports: 
     MASS,

@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This document provides a brief introduction to the functions of implementing nested reduced-rank regression. Both the nested reduced-rank regression and nested reduced-rank ridge regression fitting procedures are displayed. To facilitate illustration, we generate functional observations and fit a multivariate functional linear regression. The nested reduced-rank regression is widely applicable to all multivariate regression problems where a double-layer dimension reduction structure is meaningful. 
+This document provides a brief introduction to the functions of implementing nested reduced-rank regression (NRRR) from how to generate functional observations with user-provided model dimensions to how to predict response trajectories based on the fitting results. Both the nested reduced-rank regression and the nested reduced-rank ridge regression fitting procedures are displayed. For an introduction of the NRRR model and its application in an electricity data analysis, please see another vignette **Adelaide Electricity Demand Data Analysis with NRRR**. 
 
 ## Install the package
 ```{r setup}
@@ -47,7 +47,7 @@ ry <- 3
 s2n <- 1
 rho_X <- 0.1
 rho_E <- 0
-Sigma <- CorrAR
+Sigma <- "CorrAR"
 
 # generate data
 mydata <- nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
@@ -81,7 +81,7 @@ fit_nrrr2$ry
 
 
 ## Nested reduced-rank ridge regression
-We first obtain a reference tuning level from a cross-validation tuned reduced-rank ridge regression:
+We first obtain a reference tuning level from a cross validation tuned reduced-rank ridge regression:
 ```{r}
 # Reduced-rank ridge regression
 xr <- sum(svd(X)$d > 1e-2)

@@ -88,7 +88,7 @@
 #' simDat <- nrrr.sim(
 #'   n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
 #'   jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
-#'   rho_E = 0, Sigma = CorrAR
+#'   rho_E = 0, Sigma = "CorrAR"
 #' )
 #' fit_init <- with(simDat, NestRRR(
 #'   Y = Yest, X = Xest, Ag0 = NULL, Bg0 = NULL,

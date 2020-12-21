@@ -92,7 +92,7 @@
 #' # Simulation setting 2 in NRRR paper
 #' simDat <- nrrr.sim(n=100,ns=100,nt=100,r=3,rx=3,ry=3,
 #'                    jx=8,jy=8,p=20,d=20,s2n=1,rho_X=0.5,
-#'                    rho_E=0,Sigma=CorrAR)
+#'                    rho_E=0,Sigma="CorrAR")
 #' fit_init <- with(simDat, NestRRR.select(Yest,Xest,Ag0=NULL,Bg0=NULL,
 #'                               jx=8,jy=8,p=20,d=20,n=100,
 #'                               maxiter=300,conv=1e-4,quietly=FALSE,

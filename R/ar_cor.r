@@ -5,7 +5,7 @@
 # @param p Dimension.
 # @param rho Correlation strength.
 # @return A covariance matrix (p by p).
-#' @export
+# @export
 # @examples
 # library(NRRR)
 # CorrAR(10, 0.5)

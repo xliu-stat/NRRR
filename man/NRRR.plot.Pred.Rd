@@ -40,7 +40,8 @@ and it should be given as a character string, e.g., x_lab = "Time".
 Default is NULL.}
 }
 \value{
-A ggplot2 object.
+A ggplot2 object. If the response trajectory is truely observed, then
+        it is plotted as a black line while the predicted trajectory is in red.
 }
 \description{
 This function plots the predicted response curves based on the output of \code{\link{NestRRR.prediction}}.

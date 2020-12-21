@@ -109,7 +109,7 @@ set.seed(1)
 # Simulation setting 1 in NRRR paper
 simDat <- nrrr.sim(n=100,ns=60,nt=60,r=5,rx=3,ry=3,
                    jx=8,jy=8,p=10,d=10,s2n=1,rho_X=0.5,
-                   rho_E=0,Sigma=CorrAR)
+                   rho_E=0,Sigma="CorrAR")
 fit_init <- with(simDat, NestRRR.cv.select(Yest,Xest,nfold=10,norder=NULL,
                               Ag0=NULL,Bg0=NULL,
                               jx=8,jy=8,p=10,d=10,n=100,

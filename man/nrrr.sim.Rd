@@ -5,7 +5,7 @@
 \title{Generate simulation data}
 \usage{
 nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
-         s2n, rho_X, rho_E, Sigma = CorrAR)
+         s2n, rho_X, rho_E, Sigma = "CorrAR")
 }
 \arguments{
 \item{n}{sample size.}
@@ -35,8 +35,8 @@ nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
 \item{rho_E}{a scalar between 0 and 1 to specify the correlation strength among components of the random error.}
 
 \item{Sigma}{the correlation structure of random errors. Two options are available,
-CorrAR: autoregressive,
-CorrCS: compound symmetry.}
+"CorrAR": autoregressive,
+"CorrCS": compound symmetry.}
 }
 \value{
 The function returns a list:
@@ -74,6 +74,6 @@ and truncation.
 library(NRRR)
 simDat <- nrrr.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
                    jx=15,jy=15,p=10,d=6,s2n=1,rho_X=0.5,
-                   rho_E=0,Sigma=CorrAR)
+                   rho_E=0,Sigma="CorrAR")
 simDat$Ag
 }

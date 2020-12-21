@@ -4,10 +4,10 @@
 \alias{NestRRR.select_rcpp}
 \title{Select ranks with information criterion (Rcpp)}
 \usage{
-NestRRR.select(Y, X, jx, jy, p, d, n, maxiter = 300, conv = 1e-4,
-               method = c('RRR','RRS')[1], lambda = 0,
-               ic = c("BIC","BICP","AIC","GCV")[1],
-               dimred = c(TRUE,TRUE,TRUE), rankfix = NULL)
+NestRRR.select_rcpp(Y, X, jx, jy, p, d, n, maxiter = 300, conv = 1e-4,
+                    method = c('RRR','RRS')[1], lambda = 0,
+                    ic = c("BIC","BICP","AIC","GCV")[1],
+                    dimred = c(TRUE,TRUE,TRUE), rankfix = NULL)
 }
 \arguments{
 \item{Y}{the response matrix of dimension n-by-jy*d.}
@@ -102,7 +102,7 @@ set.seed(3)
 # Simulation setting 2 in NRRR paper
 simDat <- nrrr.sim(n=100,ns=100,nt=100,r=3,rx=3,ry=3,
                    jx=8,jy=8,p=20,d=20,s2n=1,rho_X=0.5,
-                   rho_E=0,Sigma=CorrAR)
+                   rho_E=0,Sigma="CorrAR")
 fit_init <- with(simDat, NestRRR.select_rcpp(Yest,Xest,
                               jx=8,jy=8,p=20,d=20,n=100,
                               maxiter=300,conv=1e-4,

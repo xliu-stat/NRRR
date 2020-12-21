@@ -290,6 +290,8 @@ Here we use the daily half-hour electricity demand as the functional multivariat
 
 ### Estimation
 ```{r}
+#install.packages("devtools")
+#devtools::install_github("xliu-stat/NRRR")
 library(NRRR)
 set.seed(6)
 

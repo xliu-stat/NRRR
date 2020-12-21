@@ -11,7 +11,7 @@
 # @param Bl Matrix B.
 # @param jx Number of basis functions to expand x(s).
 # @param jy Number of basis functions to expand y(t).
-#' @export
+# @export
 # @return The returned items
 #   \item{C}{the NRRR estimator of the coefficient matrix C.}
 #   \item{XC}{a matrix, prediction of Y.}

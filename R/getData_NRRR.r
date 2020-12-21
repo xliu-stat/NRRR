@@ -12,7 +12,7 @@
 #'
 #' @usage
 #' nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
-#'          s2n, rho_X, rho_E, Sigma = CorrAR)
+#'          s2n, rho_X, rho_E, Sigma = "CorrAR")
 #'
 #' @param n sample size.
 #' @param ns the number of time points at which the predictor trajectory is observed.
@@ -28,8 +28,8 @@
 #' @param rho_X a scalar between 0 and 1 to specify the correlation strength among covariates.
 #' @param rho_E a scalar between 0 and 1 to specify the correlation strength among components of the random error.
 #' @param Sigma the correlation structure of random errors. Two options are available,
-#'              CorrAR: autoregressive,
-#'              CorrCS: compound symmetry.
+#'              "CorrAR": autoregressive,
+#'              "CorrCS": compound symmetry.
 #'
 #'
 #' @return The function returns a list:
@@ -57,13 +57,13 @@
 #' library(NRRR)
 #' simDat <- nrrr.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
 #'                    jx=15,jy=15,p=10,d=6,s2n=1,rho_X=0.5,
-#'                    rho_E=0,Sigma=CorrAR)
+#'                    rho_E=0,Sigma="CorrAR")
 #' simDat$Ag
 #' @importFrom stats runif rnorm sd
 #' @importFrom splines bs
 #' @importFrom MASS mvrnorm
 #' @export
-nrrr.sim <- function(n,ns,nt,r,rx,ry,jx,jy,p,d,s2n,rho_X,rho_E,Sigma=CorrAR){
+nrrr.sim <- function(n,ns,nt,r,rx,ry,jx,jy,p,d,s2n,rho_X,rho_E,Sigma="CorrAR"){
 
   #require(MASS)
   #require(splines)
@@ -79,6 +79,11 @@ nrrr.sim <- function(n,ns,nt,r,rx,ry,jx,jy,p,d,s2n,rho_X,rho_E,Sigma=CorrAR){
   for(s in 1:ns) Jphi <- Jphi + phi[s,]%*%t(phi[s,])*sdiff[s]
 
   # generate X(s)
+  if (Sigma == "CorrAR") {
+      Sigma <- CorrAR
+    } else {
+      Sigma <- CorrCS
+    }
   Xsigma <- Sigma(p*jx,rho_X)
   Xi <- MASS::mvrnorm(n,rep(0,p*jx),Xsigma)
   X <- array(dim=c(n,p,ns),NA)

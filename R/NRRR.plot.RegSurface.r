@@ -67,12 +67,16 @@ NRRR.plot.RegSurface <- function(Ag, Bg, Al, Bl, rx, ry,
                                  x_ind, y_ind,
                                  x_lab = NULL, y_lab = NULL,
                                  tseq_index = NULL, sseq_index = NULL,
-                                 method = c("latent", "y_original", "x_original","original")[1]
+                                 method = c("latent", "x_original", "y_original","original")[1]
 ){
   ry <- ry
   rx <- rx
   Al <- Al
   Bl <- Bl
+  Ag <- Ag
+  Bg <- Bg
+  p <- dim(Bg)[1]
+  d <- dim(Ag)[1]
   ns <- dim(phi)[1]
   nt <- dim(psi)[1]
   jx <- dim(phi)[2]
@@ -158,7 +162,7 @@ NRRR.plot.RegSurface <- function(Ag, Bg, Al, Bl, rx, ry,
     }
 
 
-    ggplot2::ggplot(dat, aes(Var2, Var1, fill = value)) + geom_tile() +
+    ggplot2::ggplot(dat, aes(dat$Var2, dat$Var1, fill = dat$value)) + geom_tile() +
       scale_fill_gradient2(low = "blue", mid = "white",
                            high = "red", midpoint = 0, limits= range(comp),
                            space = "Lab", name = "",

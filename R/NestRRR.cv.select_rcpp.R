@@ -7,13 +7,13 @@
 #' the model with any combinations of \code{(r, rx, ry)}.
 #'
 #' @usage
-#' NestRRR.cv.select(Y, X, nfold = 10, norder = NULL,
-#'                   jx, jy, p, d, n,
-#'                   maxiter = 300, conv = 1e-4,
-#'                   method = c('RRR','RRS')[1], lambda=0,
-#                   ic=c("BIC","BICP","AIC","GCV")[1],
-#'                   dimred = c(TRUE,TRUE,TRUE),
-#'                   rankfix = NULL, xrankfix = NULL, yrankfix = NULL)
+#' NestRRR.cv.select_rcpp(Y, X, nfold = 10, norder = NULL,
+#'                        jx, jy, p, d, n,
+#'                        maxiter = 300, conv = 1e-4,
+#'                        method = c('RRR','RRS')[1], lambda=0,
+#                         ic=c("BIC","BICP","AIC","GCV")[1],
+#'                        dimred = c(TRUE,TRUE,TRUE),
+#'                        rankfix = NULL, xrankfix = NULL, yrankfix = NULL)
 #'
 #' @param Y the response matrix of dimension n-by-jy*d.
 #' @param X the design matrix of dimension n-by-jx*p.
@@ -94,7 +94,7 @@
 #' # Simulation setting 1 in NRRR paper
 #' simDat <- nrrr.sim(n=100,ns=60,nt=60,r=5,rx=3,ry=3,
 #'                    jx=8,jy=8,p=10,d=10,s2n=1,rho_X=0.5,
-#'                    rho_E=0,Sigma=CorrAR)
+#'                    rho_E=0,Sigma="CorrAR")
 #' fit_init <- with(simDat, NestRRR.cv.select_rcpp(Yest,Xest,nfold=10,norder=NULL,
 #'                               jx=8,jy=8,p=10,d=10,n=100,
 #'                               maxiter=300,conv=1e-4,
