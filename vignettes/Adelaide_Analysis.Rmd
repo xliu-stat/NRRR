@@ -289,17 +289,25 @@ Here we use the daily half-hour electricity demand as the functional multivariat
 
 
 ### Estimation
+The package `NRRR` is available at [Github](https://github.com/xliu-stat/NRRR), and we first install it:
 ```{r}
 #install.packages("devtools")
 #devtools::install_github("xliu-stat/NRRR")
 library(NRRR)
 set.seed(6)
-
+```
+As fitting the NRRR with cross validation could be time-consuming, we set `eval=FALSE` in this code chunk and directly use the previous fitting results here. 
+```{r, eval=FALSE}
+# set 'eval = TRUE' to reproduce the results
 fit.NRRR <- NestRRR.cv.select(Yest, Xest,
   nfold = 10, norder = NULL,
   NULL, NULL, jx, jy, p, d, n = 508,
   maxiter = 300, conv = 1e-4, quietly = TRUE, method = "RRR"
 )
+```
+ 
+```{r}
+load("fit_nRRR.rda")
 # the estimated r
 fit.NRRR$rank
 # the estimated rx
@@ -330,6 +338,30 @@ based on which, we can visualize the bivariate function in:
 
 From the fitting results we obtained above by using the temperature data from Kent, we've get only one latent predictor and five latent responses. Here, we visualize the effect of the latent predictor on the original functional response.
 ```{r, fig.height = 4, fig.width = 6, fig.align = "center"}
+time_index <- c("00:00","00:30",
+                "1:00","1:30",
+                "2:00","2:30",
+                "3:00","3:30",
+                "4:00","4:30",
+                "5:00","5:30",
+                "6:00","6:30",
+                "7:00","7:30",
+                "8:00","8:30",
+                "9:00","9:30",
+                "10:00","10:30",
+                "11:00","11:30",
+                "12:00","12:30",
+                "13:00","13:30",
+                "14:00","14:30",
+                "15:00","15:30",
+                "16:00","16:30",
+                "17:00","17:30",
+                "18:00","18:30",
+                "19:00","19:30",
+                "20:00","20:30",
+                "21:00","21:30",
+                "22:00","22:30",
+                "23:00","23:30")
 NRRR.plot.RegSurface(-fit.NRRR$Ag, fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl, 
                      fit.NRRR$rx, fit.NRRR$ry, sseq, phi, tseq, psi,
                      x_ind = 1, y_ind = 2, x_lab = "Temperature", 
@@ -359,6 +391,10 @@ Ytrain <- Yest[TXindex, ]
 PXindex <- (1:508)[-TXindex]
 Xtest <- Xest[-TXindex, ]
 Ytest <- Yest[-TXindex, ]
+```
+We do not run the code chunk of fitting the NRRR with cross validation for the same reason as before.
+```{r, eval=FALSE}
+# set 'eval = TRUE' to reproduce the results
 
 ##########################
 ##  estimation with RRR
@@ -369,25 +405,6 @@ rankmax <- min(xr, d * jy, 20)
 
 fit.RRR <- cv.rrr(Ytrain, Xtrain, maxrank = rankmax, nfold = 10)
 norder <- fit.RRR$norder
-
-fit.RRR$rank
-
-if (sum(abs(fit.RRR$coef)) != 0) {
-  svdC <- svd(fit.RRR$coef, nu = fit.RRR$rank, nv = fit.RRR$rank)
-  Alrrr <- svdC$v
-  Blrrr <- svdC$u %*% diag(svdC$d[1:fit.RRR$rank], nrow = fit.RRR$rank, 
-                           ncol = fit.RRR$rank)
-} else {
-  Alrrr <- matrix(nrow = d * jy, fit.RRR$rank, 0)
-  Blrrr <- matrix(nrow = p * jx, fit.RRR$rank, 0)
-}
-
-# prediction
-Ypred.RRR <- NestRRR.prediction(
-  tseq, X[PXindex, , ], sseq, diag(d),
-  diag(p), Alrrr, Blrrr, phi
-)
-
 
 
 ###########################
@@ -400,22 +417,37 @@ fit.NRRR <- NestRRR.cv.select(Ytrain, Xtrain,
   maxiter = 300, conv = 1e-4, quietly = TRUE,
   method = "RRR"
 )
-# selected r, rx, ry
-fit.NRRR$rank
-fit.NRRR$rx
-fit.NRRR$ry
+```
+
+```{r}
+load("pred_compare.rda")
+
+# predict with RRR
+if (sum(abs(fit.RRR$coef)) != 0) {
+  svdC <- svd(fit.RRR$coef, nu = fit.RRR$rank, nv = fit.RRR$rank)
+  Alrrr <- svdC$v
+  Blrrr <- svdC$u %*% diag(svdC$d[1:fit.RRR$rank], nrow = fit.RRR$rank, 
+                           ncol = fit.RRR$rank)
+} else {
+  Alrrr <- matrix(nrow = d * jy, fit.RRR$rank, 0)
+  Blrrr <- matrix(nrow = p * jx, fit.RRR$rank, 0)
+}
+Ypred.RRR <- NestRRR.prediction(
+  tseq, X[PXindex, , ], sseq, diag(d),
+  diag(p), Alrrr, Blrrr, phi
+)
 
 
-# prediction
+# predict with NRRR
 Ypred.NRRR <- NestRRR.prediction(
   tseq, X[PXindex, , ], sseq, fit.NRRR$Ag,
   fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl, phi
 )
 
+
 # relative prediction error of Y(t) for each sample in testing set
 err1 <- vector()
 err2 <- vector()
-
 for (iy in 1:108) {
   err1[iy] <- sum((Y[PXindex[iy], , ] - 
                      Ypred.RRR$Ypred[iy, , ])^2) / sum((Y[PXindex[iy], , ])^2)
