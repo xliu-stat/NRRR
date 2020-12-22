@@ -159,8 +159,12 @@ NRRR.plot.RegSurface <- function(Ag, Bg, Al, Bl, rx, ry,
       x_breaks <- sseq_index[seq(1,ns,2)]
     }
 
+    # Var1 <- dat$Var1
+    # Var2 <- dat$Var2
+    # value <- dat$value
 
-    ggplot2::ggplot(dat, aes(dat$Var2, dat$Var1, fill = dat$value)) + geom_tile() +
+
+    ggplot2::ggplot(dat, aes(Var2, Var1, fill = value)) + geom_tile() +
       scale_fill_gradient2(low = "blue", mid = "white",
                            high = "red", midpoint = 0, limits= range(comp),
                            space = "Lab", name = "",

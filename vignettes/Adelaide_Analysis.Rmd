@@ -28,7 +28,7 @@ Next, we deal with the latent regression surface ${\bf C}^*_0(s,t)$. A basis exp
 $${\bf C}^*_0(s,t)\approx ({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf C}_0^* ({\bf I}_{r_x}\otimes {\bf \Phi}(s)),\ {\bf C}_0^* \in \mathbb{R}^{J_yr_y\times J_xr_x},$$
 where ${\bf \Psi}(t) = (\psi_1(t),\ldots,\psi_{J_y}(t))$ consists $J_y$ basis functions and ${\bf \Phi}(s) = (\phi_1(s),\ldots,\phi_{J_x}(s))$ consists $J_x$ basis functions. Then, we impose the local reduced-rank structure on ${\bf C}_0^*$ as $rank({\bf C}_0^*)\leq r$ for $r \leq \min(J_xr_x, J_yr_y)$, or we can write it as a full-rank decomposition ${\bf C}_0^* = {\bf A}_0^*{\bf B}_0^{*T}$ for some ${\bf A}_0^* \in \mathbb{R}^{J_yr_y \times r}$ and ${\bf B}_0^* \in \mathbb{R}^{J_xr_x \times r}$. This structure induces the dependency between the latent responses and the latent predictors through their basis-expansion. 
 
-With these two layers of dimension reduction, the complexity of the model is greatly reduced. Thus, we can get a more interpretable model and a more accurate estimation is available with limited samples. The basis functions used here are treated as given, such as spline, wavelet, and Fourier basis. Also, we assume all the responses or the predictors share the same set of basis for simplicity. 
+With these two layers of dimension reduction, the complexity of the model is greatly reduced. Thus, we can get a more interpretable model and a more accurate estimation is available with limited samples. The basis functions used here are treated as given, such as spline, wavelet, and Fourier basis. In the package `NRRR`, the B-spline is mainly used. Also, we assume all the responses or the predictors share the same set of basis functions for simplicity. 
 
 
 After the basis expansion procedure, we obtain the integrated predictors and responses from 
@@ -48,7 +48,7 @@ Next, we use the Adelaide electricity demand data as an example to show the usag
 
 ## Application: Adelaide Electricity Demand analysis
 
-Adelaide is the capital city of the state of South Australia. In summer time, the cooling in Adelaide mainly depends on air conditioning, which makes the electricity demand highly dependent on the weather conditions, and a large volatility in temperature throughout the day could make stable electricity supply challenging. Therefore, for facilitating the supply management of electricity, it is important to understand the dependence and the predictive association between the electricity demand and the temperature. Here we apply NRRR to perform a multivariate functional regression analysis between daily half-hour electricity demand profiles for the 7 days of a week and the corresponding temperature profiles for the 7 days of the same week. 
+Adelaide is the capital city of the state of South Australia. In the summertime, the cooling in Adelaide mainly depends on air conditioning, which makes the electricity demand highly dependent on the weather conditions, and large volatility in temperature throughout the day could make stable electricity supply challenging. Therefore, for facilitating the supply management of electricity, it is important to understand the dependence and predictive association between the electricity demand and the temperature. Here we apply NRRR to perform a multivariate functional regression analysis between daily half-hour electricity demand profiles for the 7 days of a week and the corresponding temperature profiles for the 7 days of the same week. 
 
 
 Half-hourly temperature records at two locations, Adelaide Kent town and Adelaide airport, are available between 7/6/1997 and 3/31/2007. Also available are the half-hourly electricity demand records of Adelaide for the same period. The data is contained in an R packege `fds`, and let's first obtain the data.
@@ -168,7 +168,7 @@ ggplot(prgdata, aes(y = PRG3, x = b, group = day, colour = day)) +
 
 ```
 
-Since our main focus is on studying the general association between the within-day demand and temperature trajectories in a week, we center the 48 discrete observations of each daily curve, to remove the between-day trend and seasonality of the data. Each week is then treated as a replication.
+Since our primary focus is on studying the general association between the within-day demand and temperature trajectories in a week, we center the 48 discrete observations of each daily curve to remove the between-day trend and seasonality of the data. Each week is then treated as a replication.
 ```{r}
 # response
 mon <- as.matrix(mondaydemand$y)
@@ -285,7 +285,7 @@ for (j in 2:jx) Xest <- cbind(Xest, Xa[, , j])
 ```
 
 
-Here we use the daily half-hour electricity demand as the functional multivariate response with $d = 7$ (corresponding to 7 days in a week from Monday to Sunday). As for the predictors, we use the half-hour temperature data from Kent as the multivariate functional predictors, so that $p = 7$. The total sample size is $n = 508$, equaling to the number of weeks in the study period. 
+Here we use the daily half-hour electricity demand as the functional multivariate response with $d = 7$ (corresponding to 7 days in a week from Monday to Sunday). As for the predictors, we use the half-hour temperature data from Kent as the multivariate functional predictors, so that $p = 7$. The total sample size is $n = 508$, equaling the number of weeks in the study period. 
 
 
 ### Estimation
@@ -324,7 +324,7 @@ The estimated rank values are $\hat r = 4$, $\hat r_x = 1$, and $\hat r_y = 5$. 
 
 ### Visualization of regression surface
 
-The function `NRRR.plot.RegSurface` is designed to plot heatmap for each bivariate function in the functional coefficient matrix, e.g., $c_{k,l}(s,t),\ 1\leq k \leq d, 1 \leq l \leq p$ in ${\bf C}_0(s,t)$. Based on the fitting results from the nested reduced-rank regression, different kinds of regression surfaces can be visualized to give a clear illustration of the functional correlation between the user-specified predictor (or latent predictor) trajectory and response (or latent response) trajectory. With the nested reduced-rank structure, the functional regression becomes
+The function `NRRR.plot.RegSurface` is designed to plot heatmap for each bivariate function in the functional coefficient matrix, e.g., $c_{k,l}(s,t),\ 1\leq k \leq d, 1 \leq l \leq p$ in ${\bf C}(s,t)$. Based on the fitting results from the nested reduced-rank regression, different kinds of regression surfaces can be visualized to give a clear illustration of the functional correlation between the user-specified predictor (or latent predictor) trajectory and response (or latent response) trajectory. With the nested reduced-rank structure, the functional regression becomes
 $${\bf y}(t) \approx \int_{\mathcal{S}} {\bf U}({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)){\bf V}^T {\bf x}(s)ds + {\bf \epsilon}(t),$$
 based on which, we can visualize the bivariate function in:
 
@@ -336,7 +336,7 @@ based on which, we can visualize the bivariate function in:
 
 * $({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)) \in \mathbb{R}^{r_y \times r_x}$ to see the effects of the $i$-th element of ${\bf V}^T{\bf x}(s)$ on the $j$-th element of ${\bf U}^T{\bf y}(t)$ with $1\leq i \leq r_x,\ 1\leq j \leq r_y$ by specifying `method = "latent"`, `x_ind = i` and `y_ind = j`.
 
-From the fitting results we obtained above by using the temperature data from Kent, we've get only one latent predictor and five latent responses. Here, we visualize the effect of the latent predictor on the original functional response.
+From the fitting results we obtained above, we've get only one latent predictor and five latent responses. Thus, we visualize the effect of the latent predictor on the original functional response.
 ```{r, fig.height = 4, fig.width = 6, fig.align = "center"}
 time_index <- c("00:00","00:30",
                 "1:00","1:30",
@@ -375,7 +375,7 @@ NRRR.plot.RegSurface(-fit.NRRR$Ag, fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl,
                      tseq_index = time_index, sseq_index = time_index,
                      method = "y_original")
 ```
-One thing that needs attention is the sign of the estimated matrices. The components ${\bf U, V, A, B}$ in the nested reduced-rank structure is not identifiable even though as a whole the matrix ${\bf C}$ is identifiable. Since all the elements in the estimated ${\bf V}$ here is negative and we're plotting the relationship between ${\bf V^Tx}(s)$ and ${\bf y}(t)$, we need to specify the input `Ag` in function `NRRR.plot.RegSurface` as `-fit.NRRR$Ag` to avoid producing a heatmap of opposite values.
+One thing that needs attention is the sign of the estimated matrices. Since all the elements in the estimated ${\bf V}$ here is negative and we're plotting the relationship between ${\bf V^Tx}(s)$ and ${\bf y}(t)$, we need to specify the input `Ag` in function `NRRR.plot.RegSurface` as `-fit.NRRR$Ag` to avoid producing a heatmap of opposite values.
 
 ### Prediction
 Here we use both the reduced-rank regression (RRR) and nested reduced-rank regression (NRRR) to conduct a comparison in terms of the prediction power. We use the first 400 samples as the fitting set and use the remaining 108 samples as the testing set.
