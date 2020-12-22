@@ -32,9 +32,9 @@ nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
 
 \item{rho_X}{a scalar between 0 and 1 to specify the correlation strength among covariates.}
 
-\item{rho_E}{a scalar between 0 and 1 to specify the correlation strength among components of the random error.}
+\item{rho_E}{a scalar between 0 and 1 to specify the correlation strength among random errors.}
 
-\item{Sigma}{the correlation structure of random errors. Two options are available,
+\item{Sigma}{the correlation structure. Two options are available,
 "CorrAR": autoregressive,
 "CorrCS": compound symmetry.}
 }
@@ -57,14 +57,14 @@ The function returns a list:
   \item{E}{the random error matrix.}
   \item{Y}{an array of dimension \code{(n, d, nt)}, i.e., the generated response observations.}
   \item{X}{an array of dimension \code{(n, p, ns)}, i.e., the generated predictor observations.}
-  \item{Ytrue}{an array of \code{dimension (n, d, nt)}. The response observations without random error.}
-  \item{Yest}{the response matrix of dimension n-by-jy*d and is used in estimation.}
-  \item{Xest}{the design matrix of dimension n-by-jx*p and is used in estimation.}
+  \item{Ytrue}{an array of dimension \code{(n, d, nt)}. The response observations without random errors.}
+  \item{Yest}{the response matrix of dimension n-by-jy*d and is used in NRRR estimation.}
+  \item{Xest}{the design matrix of dimension n-by-jx*p and is used in NRRR estimation.}
 }
 \description{
 This function generates simulation data for the nested reduced-rank
 regression under the multivariate functional regression scenario.
-With user-specified dimensions and model ranks,
+With user-specified model dimensions and ranks,
 this function first generates functional multivariate predictors and
 responses and then transform the functional regression problem into a
 conventional finite-dimensional regression problem through basis expansion

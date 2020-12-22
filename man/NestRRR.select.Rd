@@ -2,7 +2,7 @@
 % Please edit documentation in R/NestRRR.select.r
 \name{NestRRR.select}
 \alias{NestRRR.select}
-\title{Select ranks with information criterion}
+\title{Select ranks with an information criterion}
 \usage{
 NestRRR.select(Y, X, Ag0=NULL, Bg0=NULL,
                jx, jy, p, d, n, maxiter = 300, conv = 1e-4,
@@ -11,9 +11,9 @@ NestRRR.select(Y, X, Ag0=NULL, Bg0=NULL,
                dimred = c(TRUE,TRUE,TRUE), rankfix = NULL)
 }
 \arguments{
-\item{Y}{the response matrix of dimension n-by-jy*d.}
+\item{Y}{response matrix of dimension n-by-jy*d.}
 
-\item{X}{the design matrix of dimension n-by-jx*p.}
+\item{X}{design matrix of dimension n-by-jx*p.}
 
 \item{Ag0}{an initial estimator of matrix U. If NULL then generate it
 by \code{\link{NestRRRini}}. Default is NULL.}
@@ -21,15 +21,15 @@ by \code{\link{NestRRRini}}. Default is NULL.}
 \item{Bg0}{an initial estimator of matrix V, if NULL then generate it
 by \code{\link{NestRRRini}}. Default is NULL.}
 
-\item{jx}{the number of basis functions to expand functional predictor.}
+\item{jx}{the number of basis functions to expand the functional predictor.}
 
-\item{jy}{the number of basis functions to expand functional response.}
+\item{jy}{the number of basis functions to expand the functional response.}
 
 \item{p}{the number of predictors.}
 
 \item{d}{the number of responses.}
 
-\item{n}{the sample size.}
+\item{n}{sample size.}
 
 \item{maxiter}{the maximum iteration number of the
 blockwise coordinate descent algorithm. Default is 300.}
@@ -50,8 +50,8 @@ Default is 0.}
 \item{ic}{the user-specified information criterion. Four options are available,
 including BIC, BICP, AIC, GCV.}
 
-\item{dimred}{a vector of logical values to decide whether do dimension
-reduction on certain dimension. TRUE means the rank is selected
+\item{dimred}{a vector of logical values to decide whether to use the selected information criterion
+do rank selection on certain dimensions. TRUE means the rank is selected
 by the selected information criterion. If \code{dimred[1]=FALSE}, r is
 provided by \code{rankfix} or \eqn{min(jx*p,jy*d, rank(X))};
 If \code{dimred[2]=FALSE}, rx equals to p; If \code{dimred[3]=FALSE},
@@ -69,7 +69,7 @@ The function returns a list:
   \item{C}{the estimated coefficient matrix C.}
   \item{df}{the estimated degrees of freedom of the NRRR model.}
   \item{sse}{the sum of squared errors of the selected model.}
-  \item{ic}{a vector containing values of BIC,BICP,AIC,GCV of the selected model.}
+  \item{ic}{a vector containing values of BIC, BICP, AIC, GCV of the selected model.}
   \item{rank}{the estimated r.}
   \item{rx}{the estimated rx.}
   \item{ry}{the estimated ry.}
@@ -95,8 +95,8 @@ values is performed, and the best model is chosen as the one with the
 smallest BIC value. Instead of a nested rank selection method, we apply a
 one-at-a-time selection approach. We first set \eqn{rx = p, ry = d}, and
 select the best local rank \eqn{\hat r} among the models with
-\eqn{1 \le r \le min(rank(X), Jy*d)}. We then fix the local rank at
-\eqn{\hat r}, and repeat the similar procedure to determine \eqn{\hat rx}
+\eqn{1 \le r \le min(rank(X), jy*d)}. We then fix the local rank at
+\eqn{\hat r} and repeat a similar procedure to determine \eqn{\hat rx}
 and \eqn{\hat ry}, one at a time. Finally, with fixed \eqn{\hat rx} and \eqn{\hat ry},
 we refine the estimation of r.
 }

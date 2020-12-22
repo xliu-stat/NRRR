@@ -1,5 +1,5 @@
 #' @title
-#' Reduced-rank ridge regression with cross validation to select rank and tuning parameter
+#' Reduced-rank ridge regression with rank and tuning parameter selected by cross validation
 #'
 #' @description
 #' This function performs reduced-rank ridge regression with the rank and the
@@ -17,9 +17,9 @@
 #' @param nlam the number of tuning parameter candidates. Default is 100.
 #' @param lambda the tuning sequence of length \code{nlam}.
 #' @param norder a vector of length n that assigns samples to multiple folds
-#'               for cross validation. Default is NULL and then it will be
+#'               for cross validation. Default is NULL and then \code{norder} will be
 #'               generated randomly.
-#' @param nest.tune a logical value to specify whether tune the rank and lambda
+#' @param nest.tune a logical value to specify whether to tune the rank and lambda
 #'                  in a nested way. Default is FALSE.
 #' @param fold.drop the number of folds to drop. Default is 0.
 #'

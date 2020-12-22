@@ -10,7 +10,7 @@ NestRRR.prediction(tseq, X, sseq, Ag, Bg, Al, Bl, phi)
 \item{tseq}{a sequence of time points at which the prediction of response
 trajectory is obtained.}
 
-\item{X}{an array of dimension \code{c(n, p, length(sseq))} where n is
+\item{X}{an array of dimension \code{(n, p, length(sseq))} where n is
 the sample size and p is the number of components in the
 multivariate predictor. It is the predictor trajectory observed at
 discrete time points \code{sseq}.}
@@ -33,7 +33,7 @@ This function returns a list:
   \item{Cstar}{the estimated coefficient matrix in equation (7) of NRRR paper,
                i.e., \eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T}.}
   \item{Ypred}{the predicted response trajectory which is an array of
-          dimension \code{c(n, d, length(tseq)}}
+          dimension \code{(n, d, length(tseq)}}
 }
 \description{
 This function generates prediction of the functional response based on the fitting

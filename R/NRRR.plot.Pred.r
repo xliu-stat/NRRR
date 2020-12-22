@@ -1,8 +1,8 @@
 #' @title
-#' Plot predicted Y curve
+#' Plot the predicted response trajectory
 #'
 #' @description
-#' This function plots the predicted response curves based on the output of \code{\link{NestRRR.prediction}}.
+#' This function plots the predicted response trajectory based on the output of \code{\link{NestRRR.prediction}}.
 #'
 #'
 #' @usage
@@ -11,11 +11,11 @@
 #'                y_lab = NULL)
 #'
 #'
-#' @param Ypred an array of dimension \code{c(n, d, length(tseq))} where n is
+#' @param Ypred an array of dimension \code{(n, d, length(tseq))} where n is
 #'              the sample size and d is the number of components in the
-#'              multivariate response. The response curve is predicted at
+#'              multivariate response. The response trajectory is predicted at
 #'              a set of time points \code{tseq}.
-#' @param Y an array of dimension \code{c(n, d, length(tseq))}. It is the truely
+#' @param Y an array of dimension \code{(n, d, length(tseq))}. It is the truely
 #'          observed response trajectory in the form of discrete observations at
 #'          time points \code{tseq}. This term is only available
 #'          when the function is applied to a testing set.
@@ -35,7 +35,7 @@
 #'                given as a vector of character strings of the same length as tseq.
 #'                Default is NULL.
 #'
-#' @return A ggplot2 object. If the response trajectory is truely observed, then
+#' @return A ggplot2 object. If the observed response trajectory is available, then
 #'         it is plotted as a black line while the predicted trajectory is in red.
 #'
 #'

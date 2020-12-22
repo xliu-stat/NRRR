@@ -10,7 +10,7 @@
 #'
 #' @param Y response matrix.
 #' @param X design matrix.
-#' @param nrank the given rank. Default is 1.
+#' @param nrank a user-specified rank. Default is 1.
 #' @param weight a logical value. If TRUE, then weighted criterion is performed.
 #'               Default is FALSE.
 #' @param Gamma a weight matrix. Default is an identity matrix.
@@ -19,7 +19,7 @@
 #'              matrix. Default is FALSE.
 #'
 #' @return The function returns a list:
-#'   \item{C}{the reduced-rank estimator C.}
+#'   \item{C}{the reduced-rank estimator.}
 #'   \item{C_ls}{the least square estimator.}
 #'   \item{rank}{the rank value.}
 #'

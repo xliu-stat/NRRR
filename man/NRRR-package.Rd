@@ -6,15 +6,7 @@
 \alias{NRRR-package}
 \title{NRRR: Nested Reduced-Rank Regression}
 \description{
-The nested reduced-rank regression (NRRR) approach can be used in
-     fitting a regression model with multivariate functional responses and 
-     predictors to achieve tailored dimension reduction. A two-level 
-     low-rank structure is imposed on the functional regression surfaces: a 
-     global low-rank structure identifies latent responses and predictors and a 
-     local low-rank structure controls the complexity of the association between 
-     the latent variables. The applicability of NRRR goes beyond the functional 
-     setup, for example, it can also be applied to vector autoregressive 
-     modeling of time series and tensor-on-tensor regression.
+The nested reduced-rank regression (NRRR) proposed by Liu et al. (2020) <arXiv:2003.04786>.
 }
 \details{
 A package to implement Nested reduced-rank regression.

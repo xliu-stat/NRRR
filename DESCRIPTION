@@ -4,15 +4,7 @@ Title: Nested Reduced-Rank Regression
 Version: 0.1.0
 Author: Xiaokang Liu, Kun Chen
 Maintainer: Xiaokang liu <xiaokang.liu@pennmedicine.upenn.edu>
-Description: The nested reduced-rank regression (NRRR) approach can be used in
-     fitting a regression model with multivariate functional responses and 
-     predictors to achieve tailored dimension reduction. A two-level 
-     low-rank structure is imposed on the functional regression surfaces: a 
-     global low-rank structure identifies latent responses and predictors and a 
-     local low-rank structure controls the complexity of the association between 
-     the latent variables. The applicability of NRRR goes beyond the functional 
-     setup, for example, it can also be applied to vector autoregressive 
-     modeling of time series and tensor-on-tensor regression.
+Description: The nested reduced-rank regression (NRRR) proposed by Liu et al. (2020) <arXiv:2003.04786>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

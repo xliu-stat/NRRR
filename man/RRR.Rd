@@ -12,7 +12,7 @@ RRR(Y, X, nrank = 1, weight = FALSE, Gamma = diag(ncol(Y)),
 
 \item{X}{design matrix.}
 
-\item{nrank}{the given rank. Default is 1.}
+\item{nrank}{a user-specified rank. Default is 1.}
 
 \item{weight}{a logical value. If TRUE, then weighted criterion is performed.
 Default is FALSE.}
@@ -26,7 +26,7 @@ matrix. Default is FALSE.}
 }
 \value{
 The function returns a list:
-  \item{C}{the reduced-rank estimator C.}
+  \item{C}{the reduced-rank estimator.}
   \item{C_ls}{the least square estimator.}
   \item{rank}{the rank value.}
 }

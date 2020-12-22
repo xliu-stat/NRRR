@@ -12,7 +12,7 @@
 #' @param tseq a sequence of time points at which the prediction of response
 #'             trajectory is obtained.
 #' @param sseq a sequence of time points at which the predictor trajectory is observed.
-#' @param X an array of dimension \code{c(n, p, length(sseq))} where n is
+#' @param X an array of dimension \code{(n, p, length(sseq))} where n is
 #'          the sample size and p is the number of components in the
 #'          multivariate predictor. It is the predictor trajectory observed at
 #'          discrete time points \code{sseq}.
@@ -28,7 +28,7 @@
 #'   \item{Cstar}{the estimated coefficient matrix in equation (7) of NRRR paper,
 #'                i.e., \eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T}.}
 #'   \item{Ypred}{the predicted response trajectory which is an array of
-#'           dimension \code{c(n, d, length(tseq)}}
+#'           dimension \code{(n, d, length(tseq)}}
 #'
 #' @references Liu, X., Ma, S., & Chen, K. (2020).
 #' Multivariate Functional Regression via Nested Reduced-Rank Regularization.
@@ -86,7 +86,7 @@ NestRRR.prediction <- function(tseq,X,sseq,Ag,Bg,Al,Bl,phi){
   Cstar <- kronecker(Ag,diag(jy))%*%Alstar%*%t(Blstar)%*%kronecker(t(Bg),diag(jx))
 
   # Integrated X
-  phi <- splines::bs(c(0,sseq),df = jx)[-1,]
+  # phi <- splines::bs(c(0,sseq),df = jx)[-1,]
   Xint <- matrix(nrow=p*jx,ncol=n,0)
   sdiff <- (sseq - c(0,sseq[-ns]))
   for(s in 1:ns){

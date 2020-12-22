@@ -9,16 +9,16 @@
 #' NestRRRini(Y, X, r, rx, ry, jx, jy, p, d, n)
 #'
 #'
-#' @param Y the response matrix of dimension n-by-jy*d.
-#' @param X the design matrix of dimension n-by-jx*p.
+#' @param Y response matrix of dimension n-by-jy*d.
+#' @param X design matrix of dimension n-by-jx*p.
 #' @param r rank of the local reduced-rank structure.
 #' @param rx the number of latent predictors.
 #' @param ry the number of latent responses.
-#' @param jx the number of basis functions to expand functional predictor.
-#' @param jy the number of basis functions to expand functional response.
+#' @param jx the number of basis functions to expand the functional predictor.
+#' @param jy the number of basis functions to expand the functional response.
 #' @param p the number of predictors.
 #' @param d the number of responses.
-#' @param n the sample size.
+#' @param n sample size.
 #'
 #'
 #' @return The function returns a list:

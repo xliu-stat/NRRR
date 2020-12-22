@@ -9,9 +9,9 @@ NestRRR(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d, n,
         method = c("RRR", "RRS")[1], lambda = 0)
 }
 \arguments{
-\item{Y}{the response matrix of dimension n-by-jy*d.}
+\item{Y}{response matrix of dimension n-by-jy*d.}
 
-\item{X}{the design matrix of dimension n-by-jx*p.}
+\item{X}{design matrix of dimension n-by-jx*p.}
 
 \item{Ag0}{an initial estimator of matrix U. If NULL then generate it
 by \code{\link{NestRRRini}}. Default is NULL.}
@@ -21,21 +21,21 @@ by \code{\link{NestRRRini}}. Default is NULL.}
 
 \item{rini, r}{rank of the local reduced-rank structure. \code{rini} is used
 in \code{\link{NestRRRini}} to get the initial
-estimator of U and V.}
+estimators of U and V.}
 
 \item{rx}{the number of latent predictors.}
 
 \item{ry}{the number of latent responses.}
 
-\item{jx}{the number of basis functions to expand functional predictor.}
+\item{jx}{the number of basis functions to expand the functional predictor.}
 
-\item{jy}{the number of basis functions to expand functional response.}
+\item{jy}{the number of basis functions to expand the functional response.}
 
 \item{p}{the number of predictors.}
 
 \item{d}{the number of responses.}
 
-\item{n}{the sample size.}
+\item{n}{sample size.}
 
 \item{maxiter}{the maximum iteration number of the
 blockwise coordinate descent algorithm. Default is 100.}
@@ -67,27 +67,28 @@ The function returns a list:
   \item{iter}{the number of iterations to converge.}
 }
 \description{
-This function uses a blockwise coordinate descent algorithm
-to get the nested reduced-rank regression estimator with a
-given \code{(r, rx, ry)}.
+This function implements the blockwise coordinate descent algorithm
+to get the nested reduced-rank regression estimator with
+given rank values \code{(r, rx, ry)}.
 }
 \details{
-The \emph{nested reduced-rank regression (NRRR)} is first motivated to solve
+The \emph{nested reduced-rank regression (NRRR)} is proposed to solve
 a multivariate functional linear regression problem where both the response and
 predictor are multivariate and functional (i.e., \eqn{Y(t)=(y_1(t),...,y_d(t))^T}
 and \eqn{X(s)=(x_1(s),...,y_p(s))^T}). To control the complexity of the
-problem, NRRR proposes a nested reduced-rank structure on the regression
+problem, NRRR imposes a nested reduced-rank structure on the regression
 surface \eqn{C(s,t)}. Specifically, a global dimension reduction makes use of the
 correlation within the components of multivariate response and multivariate
-predictor. Matrices U (d-by-ry) and V (p-by-rx) provides weights to form latent
-functional responses and latent functional predictors. Dimension reduction is achieved
+predictor. Matrices U (d-by-ry) and V (p-by-rx) provides weights to form ry latent
+functional responses and rx latent functional predictors, respectively.
+Dimension reduction is achieved
 once \eqn{ry \le d} or \eqn{rx \le p}. Then, a local dimension reduction is
 conducted by restricting the latent regression surface \eqn{C^*(s,t)} to be of low-rank.
 After basis expansion and truncation, also by applying proper rearrangement to
 columns and rows of the resulting data matrices and coefficient matrices, we
 have the nested reduced-rank problem:
 \deqn{ \min_{C} || Y - XC ||_F^2, s.t., C = (I_{jx} \otimes V) BA^T (I_{jy} \otimes U)^T,}
-where \eqn{BA^T} is a full-rank decomposition structure to control the local
+where \eqn{BA^T} is a full-rank decomposition to control the local
 rank and \eqn{jx, jy} are the number of basis functions. Beyond the functional
 setup, this structure can also be applied in multiple scenarios, including
 multivariate time series autoregression analysis and tensor-on-tensor regression.

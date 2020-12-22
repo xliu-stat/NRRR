@@ -11,27 +11,17 @@ NRRR.plot.RegSurface(Ag, Bg, Al, Bl, rx, ry, sseq, phi, tseq, psi,
                      "y_original", "original")[1])
 }
 \arguments{
-\item{Ag}{the global low-dimensional structure U, a d-by-ry matrix of rank ry.}
+\item{Ag, Bg, Al, Bl, rx, ry}{the estimated U, V, A, B, rx and ry.}
 
-\item{Bg}{the global low-dimensional structure V, a p-by-rx matrix of rank rx.}
+\item{sseq}{a sequence of time points at which the predictor trajectory is observed.}
 
-\item{Al}{the local low-dimensional structure A, a jy*ry-by-r matrix of rank r.}
+\item{phi}{the set of basis functions to expand the predictor trajectory.}
 
-\item{Bl}{the local low-dimensional structure B, a jx*rx-by-r matrix of rank r.}
+\item{tseq}{a sequence of time points at which the response trajectory is observed.}
 
-\item{rx}{the number of latent predictors.}
+\item{psi}{the set of basis functions to expand the response trajectory.}
 
-\item{ry}{the number of latent responses.}
-
-\item{sseq}{a sequence of the observed time points of x(s).}
-
-\item{phi}{a ns-by-jx matrix which is the set of basis functions to expand x(s).}
-
-\item{tseq}{a sequence of the observed time points of y(t).}
-
-\item{psi}{a nt-by-jy matrix which is the set of basis functions to expand y(t).}
-
-\item{x_ind, y_ind}{two indexes to locate the regression surface for which the heat map is to be drawn.
+\item{x_ind, y_ind}{two indices to locate the regression surface for which the heat map is to be drawn.
 If \code{method = "original"}, \eqn{0 < x_ind <= p, 0 < y_ind <= d}
 and the function plots \eqn{C_{x_ind,y_ind}(s,t)} in Eq. (1) of the NRRR paper.
 If \code{method = "latent"}, \eqn{0 < x_ind <= rx, 0 < y_ind <= ry}
@@ -45,7 +35,7 @@ and it should be given as a character string, e.g., x_lab = "Temperature".}
 
 \item{tseq_index, sseq_index}{the user-specified x-axis (with sseq_index for predictor)
 and y-axis (with tseq_index for response) tick marks, and it should be
-given as a vector of character strings of the same length as tseq or sseq.}
+given as a vector of character strings of the same length as sseq or tseq, respectively.}
 
 \item{method}{'original': the function plots the correlation heatmap between the original
 functional response \eqn{y_i(t)} and the original functional predictor \eqn{x_j(s)};
@@ -64,7 +54,10 @@ nested reduced-rank regression, different kinds of regression surfaces
 (at the original scale or the latent scale or in between) can be visualized to give a
 clear illustration of the functional correlation between the user-specified
 predictor (or latent predictor) trajectory and response
-(or latent predictor) trajectory.
+(or latent response) trajectory.
+}
+\details{
+More details can be found in the vignette of electricity demand analysis.
 }
 \references{
 Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization.

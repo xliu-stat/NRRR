@@ -12,9 +12,9 @@ NestRRR.cv.select(Y, X, nfold = 10, norder = NULL, Ag0 = NULL, Bg0 = NULL,
                   rankfix = NULL, xrankfix = NULL, yrankfix = NULL)
 }
 \arguments{
-\item{Y}{the response matrix of dimension n-by-jy*d.}
+\item{Y}{response matrix of dimension n-by-jy*d.}
 
-\item{X}{the design matrix of dimension n-by-jx*p.}
+\item{X}{design matrix of dimension n-by-jx*p.}
 
 \item{nfold}{the number of folds used in cross validation. Default is 10.}
 
@@ -26,15 +26,15 @@ by \code{\link{NestRRRini}}. Default is NULL.}
 \item{Bg0}{an initial estimator of matrix V, if NULL then generate it
 by \code{\link{NestRRRini}}. Default is NULL.}
 
-\item{jx}{the number of basis functions to expand functional predictor.}
+\item{jx}{the number of basis functions to expand the functional predictor.}
 
-\item{jy}{the number of basis functions to expand functional response.}
+\item{jy}{the number of basis functions to expand the functional response.}
 
 \item{p}{the number of predictors.}
 
 \item{d}{the number of responses.}
 
-\item{n}{the sample size.}
+\item{n}{sample size.}
 
 \item{maxiter}{the maximum iteration number of the
 blockwise coordinate descent algorithm. Default is 300.}
@@ -53,8 +53,8 @@ additional ridge penalty.}
     Default is 0.
 including BIC, BICP, AIC, GCV.}
 
-\item{dimred}{a vector of logical values to decide whether use cross validation
-do rank selection on certain dimension. TRUE (default): yes; FALSE: no.
+\item{dimred}{a vector of logical values to decide whether to use cross validation
+do rank selection on certain dimensions. TRUE (default): yes; FALSE: no.
 If \code{dimred[1]=FALSE}, r is provided by \code{rankfix}
 or \eqn{min(jx*p,jy*d, rank(X))};
 If \code{dimred[2]=FALSE}, rx equals to \code{xrankfix} or p; If \code{dimred[3]=FALSE},
@@ -98,8 +98,8 @@ values is performed, and the best model is chosen as the one with the
 smallest prediction error. Instead of a nested rank selection method, we apply a
 one-at-a-time selection approach. We first set \eqn{rx = p, ry = d}, and
 select the best local rank \eqn{\hat r} among the models with
-\eqn{1 \le r \le min(rank(X), Jy*d)}. We then fix the local rank at
-\eqn{\hat r}, and repeat the similar procedure to determine \eqn{\hat rx}
+\eqn{1 \le r \le min(rank(X), jy*d)}. We then fix the local rank at
+\eqn{\hat r} and repeat a similar procedure to determine \eqn{\hat rx}
 and \eqn{\hat ry}, one at a time. Finally, with fixed \eqn{\hat rx} and \eqn{\hat ry},
 we refine the estimation of r.
 }

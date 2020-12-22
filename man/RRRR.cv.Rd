@@ -2,7 +2,7 @@
 % Please edit documentation in R/RRRRcv_NRRR.r
 \name{RRRR.cv}
 \alias{RRRR.cv}
-\title{Reduced-rank ridge regression with cross validation to select rank and tuning parameter}
+\title{Reduced-rank ridge regression with rank and tuning parameter selected by cross validation}
 \usage{
 RRRR.cv(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
         lambda = seq(0, 100, length = nlam), norder = NULL,
@@ -22,10 +22,10 @@ RRRR.cv(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
 \item{lambda}{the tuning sequence of length \code{nlam}.}
 
 \item{norder}{a vector of length n that assigns samples to multiple folds
-for cross validation. Default is NULL and then it will be
+for cross validation. Default is NULL and then \code{norder} will be
 generated randomly.}
 
-\item{nest.tune}{a logical value to specify whether tune the rank and lambda
+\item{nest.tune}{a logical value to specify whether to tune the rank and lambda
 in a nested way. Default is FALSE.}
 
 \item{fold.drop}{the number of folds to drop. Default is 0.}

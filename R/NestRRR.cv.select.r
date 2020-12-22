@@ -15,19 +15,19 @@
 #'                   dimred = c(TRUE,TRUE,TRUE),
 #'                   rankfix = NULL, xrankfix = NULL, yrankfix = NULL)
 #'
-#' @param Y the response matrix of dimension n-by-jy*d.
-#' @param X the design matrix of dimension n-by-jx*p.
+#' @param Y response matrix of dimension n-by-jy*d.
+#' @param X design matrix of dimension n-by-jx*p.
 #' @param nfold the number of folds used in cross validation. Default is 10.
 #' @param norder a vector of length n that assigns samples to multiple folds for cross validation.
 #' @param Ag0 an initial estimator of matrix U. If NULL then generate it
 #'            by \code{\link{NestRRRini}}. Default is NULL.
 #' @param Bg0 an initial estimator of matrix V, if NULL then generate it
 #'            by \code{\link{NestRRRini}}. Default is NULL.
-#' @param jx the number of basis functions to expand functional predictor.
-#' @param jy the number of basis functions to expand functional response.
+#' @param jx the number of basis functions to expand the functional predictor.
+#' @param jy the number of basis functions to expand the functional response.
 #' @param p the number of predictors.
 #' @param d the number of responses.
-#' @param n the sample size.
+#' @param n sample size.
 #' @param maxiter the maximum iteration number of the
 #'                blockwise coordinate descent algorithm. Default is 300.
 #' @param conv the tolerance level used to control the convergence of the
@@ -41,8 +41,8 @@
 #'               Default is 0.
 # @param ic the user-specified information criterion. Four options are available,
 #'           including BIC, BICP, AIC, GCV.
-#' @param dimred a vector of logical values to decide whether use cross validation
-#'               do rank selection on certain dimension. TRUE (default): yes; FALSE: no.
+#' @param dimred a vector of logical values to decide whether to use cross validation
+#'               do rank selection on certain dimensions. TRUE (default): yes; FALSE: no.
 #'               If \code{dimred[1]=FALSE}, r is provided by \code{rankfix}
 #'               or \eqn{min(jx*p,jy*d, rank(X))};
 #'               If \code{dimred[2]=FALSE}, rx equals to \code{xrankfix} or p; If \code{dimred[3]=FALSE},
@@ -79,8 +79,8 @@
 #' smallest prediction error. Instead of a nested rank selection method, we apply a
 #' one-at-a-time selection approach. We first set \eqn{rx = p, ry = d}, and
 #' select the best local rank \eqn{\hat r} among the models with
-#' \eqn{1 \le r \le min(rank(X), Jy*d)}. We then fix the local rank at
-#' \eqn{\hat r}, and repeat the similar procedure to determine \eqn{\hat rx}
+#' \eqn{1 \le r \le min(rank(X), jy*d)}. We then fix the local rank at
+#' \eqn{\hat r} and repeat a similar procedure to determine \eqn{\hat rx}
 #' and \eqn{\hat ry}, one at a time. Finally, with fixed \eqn{\hat rx} and \eqn{\hat ry},
 #' we refine the estimation of r.
 #'

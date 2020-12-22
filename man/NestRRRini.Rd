@@ -7,9 +7,9 @@
 NestRRRini(Y, X, r, rx, ry, jx, jy, p, d, n)
 }
 \arguments{
-\item{Y}{the response matrix of dimension n-by-jy*d.}
+\item{Y}{response matrix of dimension n-by-jy*d.}
 
-\item{X}{the design matrix of dimension n-by-jx*p.}
+\item{X}{design matrix of dimension n-by-jx*p.}
 
 \item{r}{rank of the local reduced-rank structure.}
 
@@ -17,15 +17,15 @@ NestRRRini(Y, X, r, rx, ry, jx, jy, p, d, n)
 
 \item{ry}{the number of latent responses.}
 
-\item{jx}{the number of basis functions to expand functional predictor.}
+\item{jx}{the number of basis functions to expand the functional predictor.}
 
-\item{jy}{the number of basis functions to expand functional response.}
+\item{jy}{the number of basis functions to expand the functional response.}
 
 \item{p}{the number of predictors.}
 
 \item{d}{the number of responses.}
 
-\item{n}{the sample size.}
+\item{n}{sample size.}
 }
 \value{
 The function returns a list:

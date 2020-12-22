@@ -2,19 +2,19 @@
 % Please edit documentation in R/NRRR.plot.Pred.r
 \name{NRRR.plot.Pred}
 \alias{NRRR.plot.Pred}
-\title{Plot predicted Y curve}
+\title{Plot the predicted response trajectory}
 \usage{
 NRRR.plot.Pred(Ypred, Y = NULL, i_ind = 1, yi_ind = 1,
                tseq, t_index = NULL, x_lab = NULL,
                y_lab = NULL)
 }
 \arguments{
-\item{Ypred}{an array of dimension \code{c(n, d, length(tseq))} where n is
+\item{Ypred}{an array of dimension \code{(n, d, length(tseq))} where n is
 the sample size and d is the number of components in the
-multivariate response. The response curve is predicted at
+multivariate response. The response trajectory is predicted at
 a set of time points \code{tseq}.}
 
-\item{Y}{an array of dimension \code{c(n, d, length(tseq))}. It is the truely
+\item{Y}{an array of dimension \code{(n, d, length(tseq))}. It is the truely
 observed response trajectory in the form of discrete observations at
 time points \code{tseq}. This term is only available
 when the function is applied to a testing set.}
@@ -40,11 +40,11 @@ and it should be given as a character string, e.g., x_lab = "Time".
 Default is NULL.}
 }
 \value{
-A ggplot2 object. If the response trajectory is truely observed, then
+A ggplot2 object. If the observed response trajectory is available, then
         it is plotted as a black line while the predicted trajectory is in red.
 }
 \description{
-This function plots the predicted response curves based on the output of \code{\link{NestRRR.prediction}}.
+This function plots the predicted response trajectory based on the output of \code{\link{NestRRR.prediction}}.
 }
 \references{
 Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization.
