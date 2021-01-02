@@ -1,5 +1,5 @@
 #' @title
-#' Nested reduced-rank regression with a given rank
+#' Multivariate functional regression via nested reduced-rank regression with given ranks
 #'
 #' @description
 #' This function implements the blockwise coordinate descent algorithm

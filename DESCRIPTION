@@ -1,10 +1,10 @@
 Package: NRRR
 Type: Package
-Title: Nested Reduced-Rank Regression
+Title: Multivariate Functional Regression via Nested Reduced-Rank Regression
 Version: 0.1.0
 Author: Xiaokang Liu, Kun Chen
 Maintainer: Xiaokang liu <xiaokang.liu@pennmedicine.upenn.edu>
-Description: The nested reduced-rank regression (NRRR) proposed by Liu et al. (2020) <arXiv:2003.04786>.
+Description: The nested reduced-rank regression (NRRR) proposed by Liu et al. (2020) <arXiv:2003.04786> in the multivariate functional regression setting.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -2,7 +2,7 @@
 % Please edit documentation in R/NestRRR.r
 \name{NestRRR}
 \alias{NestRRR}
-\title{Nested reduced-rank regression with a given rank}
+\title{Multivariate functional regression via nested reduced-rank regression with given ranks}
 \usage{
 NestRRR(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d, n,
         maxiter = 100, conv = 1e-4, quietly = TRUE,
