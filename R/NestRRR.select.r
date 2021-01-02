@@ -106,6 +106,9 @@ NestRRR.select <- function(Y,X,Ag0=NULL,Bg0=NULL,
                            dimred = c(TRUE,TRUE,TRUE),rankfix=NULL
 ){
   #require(rrpack)
+  if (method == "RRS" & lambda == 0) stop("A positive tuning parameter should be provided when 'RRS' is used.")
+  if (!(ic %in% c("BIC","BICP","AIC","GCV"))) stop("A valid information criterion name should be provided.")
+
   # compute rank(X)
   xr <- sum(svd(X)$d>1e-2)
 

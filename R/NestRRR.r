@@ -18,13 +18,13 @@
 #'            by \code{\link{NestRRRini}}. Default is NULL.
 #' @param Bg0 an initial estimator of matrix V, if NULL then generate it
 #'            by \code{\link{NestRRRini}}. Default is NULL.
-#' @param rini,r rank of the local reduced-rank structure. \code{rini} is used
+#' @param rini,r a positive integer. They are the rank of the local reduced-rank structure. \code{rini} is used
 #'               in \code{\link{NestRRRini}} to get the initial
 #'               estimators of U and V.
-#' @param rx the number of latent predictors.
-#' @param ry the number of latent responses.
-#' @param jx the number of basis functions to expand the functional predictor.
-#' @param jy the number of basis functions to expand the functional response.
+#' @param rx a positive integer and is the number of latent predictors.
+#' @param ry a positive integer and is the number of latent responses.
+#' @param jx a positive integer and is the number of basis functions to expand the functional predictor.
+#' @param jy a positive integer and is the number of basis functions to expand the functional response.
 #' @param p the number of predictors.
 #' @param d the number of responses.
 #' @param n sample size.
@@ -102,6 +102,12 @@
 NestRRR <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d, n,
                     maxiter = 100, conv = 1e-4, quietly = TRUE,
                     method = c("RRR", "RRS")[1], lambda = 0) {
+  if (rini == 0) stop("rini cannot be 0")
+  if (r == 0) stop("r cannot be 0")
+  if(p < rx) stop("rx cannot be greater than p")
+  if(d < ry) stop("ry cannot be greater than d")
+
+
   if (method == "RRS" & lambda != 0) { # RRS is reduced rank ridge regression.
     Y <- rbind(Y, matrix(nrow = p * jx, ncol = d * jy, 0.0))
     X <- rbind(X, sqrt(lambda) * diag(nrow = p * jx, ncol = p * jx))
@@ -128,6 +134,7 @@ NestRRR <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d,
   }
 
   # Given Ag (U) and Bg (V), compute Al and Bl
+  if (r > min(dim(Yl0)[2])) stop("r cannot be greater than jy*ry")
   fitRR <- RRR(Yl0, Xl0, nrank = r)
   Bl0 <- fitRR$C_ls %*% fitRR$A
   Al0 <- fitRR$A
@@ -201,6 +208,7 @@ NestRRR <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d,
     Ag0 <- Ag1
     Bg0 <- Bg1
   }
+  if ((iter == maxiter) & (abs(obj[iter] - objnow) > conv)) stop("The algorithm reaches the maximum iteration.")
 
   # compute rank of X
   xr <- sum(svd(X)$d > 1e-2)

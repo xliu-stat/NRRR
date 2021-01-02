@@ -67,6 +67,8 @@ nrrr.sim <- function(n,ns,nt,r,rx,ry,jx,jy,p,d,s2n,rho_X,rho_E,Sigma="CorrAR"){
 
   #require(MASS)
   #require(splines)
+  if(p < rx) stop("rx cannot be greater than p")
+  if(d < ry) stop("ry cannot be greater than d")
 
   ### generate X(s) and Y(t)
   # generate uniformly distributed time points for x(s)

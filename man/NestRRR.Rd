@@ -19,17 +19,17 @@ by \code{\link{NestRRRini}}. Default is NULL.}
 \item{Bg0}{an initial estimator of matrix V, if NULL then generate it
 by \code{\link{NestRRRini}}. Default is NULL.}
 
-\item{rini, r}{rank of the local reduced-rank structure. \code{rini} is used
+\item{rini, r}{a positive integer. They are the rank of the local reduced-rank structure. \code{rini} is used
 in \code{\link{NestRRRini}} to get the initial
 estimators of U and V.}
 
-\item{rx}{the number of latent predictors.}
+\item{rx}{a positive integer and is the number of latent predictors.}
 
-\item{ry}{the number of latent responses.}
+\item{ry}{a positive integer and is the number of latent responses.}
 
-\item{jx}{the number of basis functions to expand the functional predictor.}
+\item{jx}{a positive integer and is the number of basis functions to expand the functional predictor.}
 
-\item{jy}{the number of basis functions to expand the functional response.}
+\item{jy}{a positive integer and is the number of basis functions to expand the functional response.}
 
 \item{p}{the number of predictors.}
 

@@ -40,6 +40,12 @@
 #' @export
 NestRRRini <- function(Y,X,r,rx,ry,jx,jy,p,d,n){
   #require(rrpack)
+  if (r == 0) stop("r cannot be 0")
+  if (r > min(dim(Y)[2])) stop("r cannot be greater than jy*d")
+  if(p < rx) stop("rx cannot be greater than p")
+  if(d < ry) stop("ry cannot be greater than d")
+
+
   # ignore the global structure to estimate C from RRR
   fit_RRR <- RRR(Y,X,nrank=r)
   Crr <- fit_RRR$C

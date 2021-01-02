@@ -114,6 +114,8 @@ NestRRR.cv.select <- function(Y,X,nfold=10,norder=NULL,Ag0=NULL,Bg0=NULL,jx,jy,p
                               rankfix=NULL,xrankfix=NULL,yrankfix=NULL
 ){
   #require(rrpack)
+  if (method == "RRS" & lambda == 0) stop("A positive tuning parameter should be provided when 'RRS' is used.")
+
   xr <- sum(svd(X)$d>1e-2)
   if (is.null(norder))
     norder <- sample(seq_len(n),n)
