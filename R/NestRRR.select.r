@@ -116,13 +116,13 @@ NestRRR.select <- function(Y,X,Ag0=NULL,Bg0=NULL,
   if(dimred[1]){
     fitRRR <- rrpack::cv.rrr(Y,X,nfold=10)
     rest <- fitRRR$rank
-    if(!quietly) {
-      cat("Initial r   = ",rest, "\n",sep="")
-    }
     # If zero fit
     if(rest==0){
       fitRRR <- RRR(Y,X,nrank=1)
       rest <- fitRRR$rank
+    }
+    if(!quietly) {
+      cat("Initial r   = ",rest, "\n",sep="")
     }
   }else{
     rest <- ifelse(is.null(rankfix),min(ncol(Y),ncol(X),xr),rankfix)

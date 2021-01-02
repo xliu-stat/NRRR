@@ -124,13 +124,13 @@ NestRRR.cv.select <- function(Y,X,nfold=10,norder=NULL,Ag0=NULL,Bg0=NULL,jx,jy,p
   if(dimred[1]){
     fitRRR <- rrpack::cv.rrr(Y,X,nfold=10,norder = norder)
     rest <- fitRRR$rank
-    if(!quietly) {
-      cat("Initial r   = ",rest, "\n",sep="")
-    }
     # If zero fit
     if(rest==0){
       fitRRR <- RRR(Y,X,nrank=1)
       rest <- fitRRR$rank
+    }
+    if(!quietly) {
+      cat("Initial r   = ",rest, "\n",sep="")
     }
   }else{
     rest <- ifelse(is.null(rankfix),min(ncol(Y),ncol(X),xr),rankfix)
@@ -139,36 +139,40 @@ NestRRR.cv.select <- function(Y,X,nfold=10,norder=NULL,Ag0=NULL,Bg0=NULL,jx,jy,p
 
   # Select rx by cross validation
   rx_path <- matrix(ncol = nfold, nrow = p, NA)
-  if(dimred[2]){
-    ndel <- round(n/nfold)
-    for (f in seq_len(nfold)){
-      if (f != nfold) {
-        iddel <- norder[(1 + ndel * (f - 1)):(ndel * f)]
-      }
-      else {
-        iddel <- norder[(1 + ndel * (f - 1)):n]
-      }
-      ndel <- length(iddel)
-      nf <- n - ndel
-      idkeep <- (seq_len(n))[-iddel]
-      Xf <- X[-iddel, ]
-      Xfdel <- X[iddel, ]
-      Yf <- Y[-iddel, ]
-      Yfdel <- Y[iddel, ]
-      for (i in seq_len(p)){
-        rxfit <- i
-        ryfit <- d
-        fit1 <- NestRRR(Yf,Xf,NULL,NULL,rini=rfit,rfit,rxfit,ryfit,jx,jy,p,
-                        d,n=nf,maxiter=maxiter,conv=conv,quietly=TRUE,
-                        method=method,lambda=lambda)
-        rx_path[i,f] <- sum((Yfdel-Xfdel%*%fit1$C)^2)
-      }
-    }
-    index <- order(colSums(rx_path))
-    crerr <- rowSums(rx_path[, index])/length(index) * nfold
-    rxest <- which.min(crerr)
+  if (p == 1) {
+    rxest <- p
   } else {
-    rxest <- ifelse(is.null(xrankfix),p,xrankfix)
+    if(dimred[2]){
+      ndel <- round(n/nfold)
+      for (f in seq_len(nfold)){
+        if (f != nfold) {
+          iddel <- norder[(1 + ndel * (f - 1)):(ndel * f)]
+        }
+        else {
+          iddel <- norder[(1 + ndel * (f - 1)):n]
+        }
+        ndel <- length(iddel)
+        nf <- n - ndel
+        idkeep <- (seq_len(n))[-iddel]
+        Xf <- X[-iddel, ]
+        Xfdel <- X[iddel, ]
+        Yf <- Y[-iddel, ]
+        Yfdel <- Y[iddel, ]
+        for (i in seq_len(p)){
+          rxfit <- i
+          ryfit <- d
+          fit1 <- NestRRR(Yf,Xf,NULL,NULL,rini=rfit,rfit,rxfit,ryfit,jx,jy,p,
+                          d,n=nf,maxiter=maxiter,conv=conv,quietly=TRUE,
+                          method=method,lambda=lambda)
+          rx_path[i,f] <- sum((Yfdel-Xfdel%*%fit1$C)^2)
+        }
+      }
+      index <- order(colSums(rx_path))
+      crerr <- rowSums(rx_path[, index])/length(index) * nfold
+      rxest <- which.min(crerr)
+    } else {
+      rxest <- ifelse(is.null(xrankfix),p,xrankfix)
+    }
   }
 
   if(!quietly) {
@@ -177,37 +181,42 @@ NestRRR.cv.select <- function(Y,X,nfold=10,norder=NULL,Ag0=NULL,Bg0=NULL,jx,jy,p
 
   # Select ry by cross validation
   ry_path <- matrix(ncol = nfold, nrow = d, NA)
-  if(dimred[3]){
-    ndel <- round(n/nfold)
-    for (f in seq_len(nfold)){
-      if (f != nfold) {
-        iddel <- norder[(1 + ndel * (f - 1)):(ndel * f)]
-      }
-      else {
-        iddel <- norder[(1 + ndel * (f - 1)):n]
-      }
-      ndel <- length(iddel)
-      nf <- n - ndel
-      idkeep <- (seq_len(n))[-iddel]
-      Xf <- X[-iddel, ]
-      Xfdel <- X[iddel, ]
-      Yf <- Y[-iddel, ]
-      Yfdel <- Y[iddel, ]
-      for (i in seq_len(d)){
-        rxfit <- rxest
-        ryfit <- i
-        fit1 <- NestRRR(Yf,Xf,NULL,NULL,rini=rfit,rfit,rxfit,ryfit,jx,jy,p,
-                        d,n=nf,maxiter=maxiter,conv=conv,quietly=TRUE,
-                        method=method,lambda=lambda)
-        ry_path[i,f] <- sum((Yfdel-Xfdel%*%fit1$C)^2)
-      }
-    }
-    index <- order(colSums(ry_path))
-    crerr <- rowSums(ry_path[, index])/length(index) * nfold
-    ryest <- which.min(crerr)
+  if (d == 1) {
+    ryest <- d
   } else {
-    ryest <- ifelse(is.null(yrankfix),d,yrankfix)
+    if(dimred[3]){
+      ndel <- round(n/nfold)
+      for (f in seq_len(nfold)){
+        if (f != nfold) {
+          iddel <- norder[(1 + ndel * (f - 1)):(ndel * f)]
+        }
+        else {
+          iddel <- norder[(1 + ndel * (f - 1)):n]
+        }
+        ndel <- length(iddel)
+        nf <- n - ndel
+        idkeep <- (seq_len(n))[-iddel]
+        Xf <- X[-iddel, ]
+        Xfdel <- X[iddel, ]
+        Yf <- Y[-iddel, ]
+        Yfdel <- Y[iddel, ]
+        for (i in seq_len(d)){
+          rxfit <- rxest
+          ryfit <- i
+          fit1 <- NestRRR(Yf,Xf,NULL,NULL,rini=rfit,rfit,rxfit,ryfit,jx,jy,p,
+                          d,n=nf,maxiter=maxiter,conv=conv,quietly=TRUE,
+                          method=method,lambda=lambda)
+          ry_path[i,f] <- sum((Yfdel-Xfdel%*%fit1$C)^2)
+        }
+      }
+      index <- order(colSums(ry_path))
+      crerr <- rowSums(ry_path[, index])/length(index) * nfold
+      ryest <- which.min(crerr)
+    } else {
+      ryest <- ifelse(is.null(yrankfix),d,yrankfix)
+    }
   }
+
   if(!quietly) {
     cat("Selected ry = ",ryest, "\n",sep="")
   }
