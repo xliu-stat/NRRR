@@ -12,13 +12,13 @@ RoxygenNote: 7.1.1
 Suggests: 
     testthat,
     knitr,
-    fds,
     rmarkdown
 Imports: 
     MASS,
     rrpack,
     splines,
     stats,
+    fds,
     reshape2,
     ggplot2,
     Rcpp
