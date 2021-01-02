@@ -20,9 +20,9 @@
 #'
 #'
 #' @param Ag,Bg,Al,Bl,rx,ry the estimated U, V, A, B, rx and ry.
-#' @param sseq a sequence of time points at which the predictor trajectory is observed.
+#' @param sseq the sequence of time points at which the predictor trajectory is observed.
 #' @param phi the set of basis functions to expand the predictor trajectory.
-#' @param tseq a sequence of time points at which the response trajectory is observed.
+#' @param tseq the sequence of time points at which the response trajectory is observed.
 #' @param psi the set of basis functions to expand the response trajectory.
 #' @param x_ind,y_ind two indices to locate the regression surface for which the heat map is to be drawn.
 #'                    If \code{method = "original"}, \eqn{0 < x_ind <= p, 0 < y_ind <= d}
@@ -79,6 +79,11 @@ NRRR.plot.RegSurface <- function(Ag, Bg, Al, Bl, rx, ry,
   nt <- dim(psi)[1]
   jx <- dim(phi)[2]
   jy <- dim(psi)[2]
+
+  if (method == "original" & any(c(0 > x_ind, x_ind > p, 0 > y_ind, y_ind > d))) stop("when 'original' is selected, 0 < x_ind <= p, 0 < y_ind <= d")
+  if (method == "latent" & any(c(0 > x_ind, x_ind > rx, 0 > y_ind, y_ind > ry))) stop("when 'original' is selected, 0 < x_ind <= rx, 0 < y_ind <= ry")
+  if (method == "y_original" & any(c(0 > x_ind, x_ind > rx, 0 > y_ind, y_ind > d))) stop("when 'original' is selected, 0 < x_ind <= rx, 0 < y_ind <= d")
+  if (method == "x_original" & any(c(0 > x_ind, x_ind > p, 0 > y_ind, y_ind > ry))) stop("when 'original' is selected, 0 < x_ind <= p, 0 < y_ind <= ry")
 
 
   Jpsi <- matrix(nrow = jy, ncol = jy, 0)

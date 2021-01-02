@@ -146,6 +146,7 @@ NestRRR.select_rcpp <- function(Y,X,jx,jy,p,d,n,maxiter=300,
 
   fit <- nrrr_select_my(Y, X, xr, rfit, jx, jy, p, d, n, ic_num, maxiter, conv,
                         method, lambda, dimred1, dimred2, dimred3)
+  if( sum(fit$rxErrseq)>0 | sum(fit$ryErrseq)>0 | sum(fit$rErrseq)>0 ) stop('Error occurs or the algorithm reaches the maximum iteration')
 
   return(list(Ag=fit$Ag,Bg=fit$Bg,Al=fit$Al,Bl=fit$Bl,C=fit$C,df=fit$df,
               sse=fit$sse,ic=fit$ic,obj=fit$obj,

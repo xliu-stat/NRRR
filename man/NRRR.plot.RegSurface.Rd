@@ -13,11 +13,11 @@ NRRR.plot.RegSurface(Ag, Bg, Al, Bl, rx, ry, sseq, phi, tseq, psi,
 \arguments{
 \item{Ag, Bg, Al, Bl, rx, ry}{the estimated U, V, A, B, rx and ry.}
 
-\item{sseq}{a sequence of time points at which the predictor trajectory is observed.}
+\item{sseq}{the sequence of time points at which the predictor trajectory is observed.}
 
 \item{phi}{the set of basis functions to expand the predictor trajectory.}
 
-\item{tseq}{a sequence of time points at which the response trajectory is observed.}
+\item{tseq}{the sequence of time points at which the response trajectory is observed.}
 
 \item{psi}{the set of basis functions to expand the response trajectory.}
 

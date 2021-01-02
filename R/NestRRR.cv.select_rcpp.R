@@ -147,6 +147,8 @@ NestRRR.cv.select_rcpp <- function(Y,X,nfold=10,norder=NULL,jx,jy,p,d,n,
   fit <- nrrr_cv_my(Y, X, norder, nfold, xr, rfit, xrankfix, yrankfix,
                     jx, jy, p, d, n, maxiter, method,
                     dimred1, dimred2, dimred3, conv, lambda)
+  if( sum(fit$rxErrmat)>0 | sum(fit$ryErrmat)>0 | sum(fit$rErrmat)>0 ) stop('Error occurs or the algorithm reaches the maximum iteration')
+
 
   return(list(Ag=fit$Ag,Bg=fit$Bg,Al=fit$Al,Bl=fit$Bl,C=fit$C,df=fit$df,
               sse=fit$sse,ic=fit$ic,obj=fit$obj,rx_path=fit$rx_path,ry_path=fit$ry_path,

@@ -51,7 +51,7 @@ Rcpp::List rrr_my(arma::mat X,
     /*
      almost the same as RRR in R
      */
-
+    bool rrr_success = true;
     Rcpp::List inv_X0;
     inv_X0 = pinv_my(X.t()*X);
     bool inv_X0_err;
@@ -77,13 +77,24 @@ Rcpp::List rrr_my(arma::mat X,
     arma::vec s1;
     arma::mat V1;
     //svd(U1, s1, V1, proj_mat, "std");
-    svd(U1, s1, V1, proj_mat);
+    bool svd_success = true;
+    svd_success = svd(U1, s1, V1, proj_mat);
+    if (svd_success == true){
+        Bl = fit_now * V1.cols(0, r-1);
+        Al = V1.cols(0, r-1);
+    } else {
+        arma::mat SS = Y.t() * X * fit_now;
+        SS = (SS + SS.t())/2.0;
+        arma::vec eigval;
+        arma::mat eigvec;
 
-    Bl = fit_now * V1.cols(0, r-1);
-    Al = V1.cols(0, r-1);
+        rrr_success = eig_sym(eigval, eigvec, SS);
 
-
-    return Rcpp::List::create(Bl, Al);
+        arma::mat SS_r = eigvec.tail_cols(r);
+        Bl = fit_now * SS_r;
+        Al = SS_r;
+    }
+    return Rcpp::List::create(Bl, Al, rrr_success);
 }
 
 
@@ -614,7 +625,18 @@ Rcpp::List nrrr_est_my(
 
         /* update Al (A) and Bl (B) */
 
-        /* --------- RRR start ----------*/
+        Rcpp::List fitRR = rrr_my(Xl0, Yl0, r);
+        arma::mat fitRR_Bl1 = fitRR[0];
+        arma::mat fitRR_Al1 = fitRR[1];
+        bool fitRR_success = fitRR[2];
+        if (fitRR_success == false) {
+            err_flag(iter) = 4;
+            break;
+        }
+        Bl1 = fitRR_Bl1;
+        Al1 = fitRR_Al1;
+
+        /* --------- RRR start ----------
         Rcpp::List inv_X0 = pinv_my(Xl0.t()*Xl0);
         bool inv_X0_err = inv_X0[0];
 
@@ -659,7 +681,7 @@ Rcpp::List nrrr_est_my(
             Bl1 = fit_now * V2.cols(0, r-1);
             Al1 = V2.cols(0, r-1);
         }
-        /*-------- RRR end ---------*/
+        -------- RRR end ---------*/
 
 
 
@@ -690,6 +712,9 @@ Rcpp::List nrrr_est_my(
         Bl0 = Bl1;
         Ag0 = Ag1;
         Bg0 = Bg1;
+    }
+    if ( (iter == maxiter) && (std::abs(obj(iter) - objnow) > conv) ) {
+        err_flag(iter) = 5;
     }
     /*---------------------- BLCD end ----------------------*/
 
@@ -933,49 +958,55 @@ Rcpp::List nrrr_cv_my(arma::mat Y,
     int rxfit, ryfit;
     int rxest, ryest;
     arma::mat rxErrmat(p,nfold);
+    rxErrmat.zeros();
     arma::mat ryErrmat(d,nfold);
+    ryErrmat.zeros();
 
     ndel = round(n/nfold);
 
     /* select rx */
     arma::mat rx_path(p, nfold);
-    if (dimred2 == 1){
-
-        arma::vec rxfitseq(p);
-        for (f=0; f<nfold; f++){
-            if (f != nfold - 1){
-                iddel = norder.subvec(ndel * f, ndel * (f + 1) - 1);
-            } else {
-                iddel = norder.subvec(ndel * f, n-1);
-            }
-            ndel = iddel.n_elem;
-            nf = n - ndel;
-
-            Xf = del_rows(X, iddel);
-            Xfdel = X.rows(iddel);
-            Yf = del_rows(Y, iddel);
-            Yfdel = Y.rows(iddel);
-
-            ryfit = d;
-            for (i=0; i<p; i++){
-                rxfit = i + 1;
-                rxfitseq(i) = i + 1;
-
-                Rcpp::List fit1 = nrrr_est_my(Yf,Xf,rfit,rfit,rxfit,ryfit,jx,jy,p,
-                                              d,nf,maxiter,conv,
-                                              method,lambda);
-                arma::mat C_est = fit1[4];
-                rx_path(i, f) = accu( arma::square(Yfdel - Xfdel * C_est) );
-                rxErrmat(i, f) = fit1[7];
-            }
-        }
-        arma::vec crerr = arma::sum(rx_path, 1);
-        rxest = rxfitseq(index_min(crerr));
+    rx_path.zeros();
+    if (p == 1) {
+        rxest = p;
     } else {
-        if (xrankfix == 0) {
-            rxest = p;
+        if (dimred2 == 1){
+            arma::vec rxfitseq(p);
+            for (f=0; f<nfold; f++){
+                if (f != nfold - 1){
+                    iddel = norder.subvec(ndel * f, ndel * (f + 1) - 1);
+                } else {
+                    iddel = norder.subvec(ndel * f, n-1);
+                }
+                ndel = iddel.n_elem;
+                nf = n - ndel;
+
+                Xf = del_rows(X, iddel);
+                Xfdel = X.rows(iddel);
+                Yf = del_rows(Y, iddel);
+                Yfdel = Y.rows(iddel);
+
+                ryfit = d;
+                for (i=0; i<p; i++){
+                    rxfit = i + 1;
+                    rxfitseq(i) = i + 1;
+
+                    Rcpp::List fit1 = nrrr_est_my(Yf,Xf,rfit,rfit,rxfit,ryfit,jx,jy,p,
+                                                  d,nf,maxiter,conv,
+                                                  method,lambda);
+                    arma::mat C_est = fit1[4];
+                    rx_path(i, f) = accu( arma::square(Yfdel - Xfdel * C_est) );
+                    rxErrmat(i, f) = fit1[7];
+                }
+            }
+            arma::vec crerr = arma::sum(rx_path, 1);
+            rxest = rxfitseq(index_min(crerr));
         } else {
-            rxest = xrankfix;
+            if (xrankfix == 0) {
+                rxest = p;
+            } else {
+                rxest = xrankfix;
+            }
         }
     }
     rxfit = rxest;
@@ -983,42 +1014,47 @@ Rcpp::List nrrr_cv_my(arma::mat Y,
 
     /* select ry */
     arma::mat ry_path(d, nfold);
-    if (dimred3 == 1){
-
-        arma::vec ryfitseq(d);
-        for (f=0; f<nfold; f++){
-            if (f != nfold - 1){
-                iddel = norder.subvec(ndel * f, ndel * (f + 1) - 1);
-            } else {
-                iddel = norder.subvec(ndel * f, n-1);
-            }
-            ndel = iddel.n_elem;
-            nf = n - ndel;
-
-            Xf = del_rows(X, iddel);
-            Xfdel = X.rows(iddel);
-            Yf = del_rows(Y, iddel);
-            Yfdel = Y.rows(iddel);
-
-            for (i=0; i<d; i++){
-                ryfit = i + 1;
-                ryfitseq(i) = i + 1;
-
-                Rcpp::List fit1 = nrrr_est_my(Yf,Xf,rfit,rfit,rxfit,ryfit,jx,jy,p,
-                                              d,nf,maxiter,conv,
-                                              method,lambda);
-                arma::mat C_est = fit1[4];
-                ry_path(i, f) = accu( arma::square(Yfdel - Xfdel * C_est) );
-                ryErrmat(i, f) = fit1[7];
-            }
-        }
-        arma::vec crerr = arma::sum(ry_path, 1);
-        ryest = ryfitseq(index_min(crerr));
+    ry_path.zeros();
+    if (d == 1) {
+        ryest = d;
     } else {
-        if (yrankfix == 0) {
-            ryest = d;
+        if (dimred3 == 1){
+
+            arma::vec ryfitseq(d);
+            for (f=0; f<nfold; f++){
+                if (f != nfold - 1){
+                    iddel = norder.subvec(ndel * f, ndel * (f + 1) - 1);
+                } else {
+                    iddel = norder.subvec(ndel * f, n-1);
+                }
+                ndel = iddel.n_elem;
+                nf = n - ndel;
+
+                Xf = del_rows(X, iddel);
+                Xfdel = X.rows(iddel);
+                Yf = del_rows(Y, iddel);
+                Yfdel = Y.rows(iddel);
+
+                for (i=0; i<d; i++){
+                    ryfit = i + 1;
+                    ryfitseq(i) = i + 1;
+
+                    Rcpp::List fit1 = nrrr_est_my(Yf,Xf,rfit,rfit,rxfit,ryfit,jx,jy,p,
+                                                  d,nf,maxiter,conv,
+                                                  method,lambda);
+                    arma::mat C_est = fit1[4];
+                    ry_path(i, f) = accu( arma::square(Yfdel - Xfdel * C_est) );
+                    ryErrmat(i, f) = fit1[7];
+                }
+            }
+            arma::vec crerr = arma::sum(ry_path, 1);
+            ryest = ryfitseq(index_min(crerr));
         } else {
-            ryest = yrankfix;
+            if (yrankfix == 0) {
+                ryest = d;
+            } else {
+                ryest = yrankfix;
+            }
         }
     }
     ryfit = ryest;
@@ -1037,7 +1073,9 @@ Rcpp::List nrrr_cv_my(arma::mat Y,
     arma::vec rfitseq(r_length);
 
     arma::mat r_path(r_length, nfold);
+    r_path.zeros();
     arma::mat rErrmat(r_length, nfold);
+    rErrmat.zeros();
     if ( dimred1 == 1 ){
 
         for (f=0; f<nfold; f++){

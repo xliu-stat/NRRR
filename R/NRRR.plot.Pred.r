@@ -53,6 +53,9 @@ NRRR.plot.Pred <- function(Ypred, Y = NULL, i_ind = 1, yi_ind = 1,
                            tseq, t_index = NULL, x_lab = NULL,
                            y_lab = NULL){
 
+  if (i_ind > dim(Ypred)[1]) stop("i_ind cannot be greater than n")
+  if (yi_ind > dim(Ypred)[2]) stop("yi_ind cannot be greater than d")
+
   iy <- i_ind
   l <- yi_ind
 
