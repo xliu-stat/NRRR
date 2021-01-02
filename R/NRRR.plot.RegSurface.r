@@ -50,7 +50,7 @@
 #' Xiaokang Liu and Kun Chen
 #'
 #' @details
-#' More details can be found in the vignette of electricity demand analysis.
+#' More details and the examples of its usage can be found in the vignette of electricity demand analysis.
 #'
 #' @references
 #' Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization.
@@ -81,9 +81,9 @@ NRRR.plot.RegSurface <- function(Ag, Bg, Al, Bl, rx, ry,
   jy <- dim(psi)[2]
 
   if (method == "original" & any(c(0 > x_ind, x_ind > p, 0 > y_ind, y_ind > d))) stop("when 'original' is selected, 0 < x_ind <= p, 0 < y_ind <= d")
-  if (method == "latent" & any(c(0 > x_ind, x_ind > rx, 0 > y_ind, y_ind > ry))) stop("when 'original' is selected, 0 < x_ind <= rx, 0 < y_ind <= ry")
-  if (method == "y_original" & any(c(0 > x_ind, x_ind > rx, 0 > y_ind, y_ind > d))) stop("when 'original' is selected, 0 < x_ind <= rx, 0 < y_ind <= d")
-  if (method == "x_original" & any(c(0 > x_ind, x_ind > p, 0 > y_ind, y_ind > ry))) stop("when 'original' is selected, 0 < x_ind <= p, 0 < y_ind <= ry")
+  if (method == "latent" & any(c(0 > x_ind, x_ind > rx, 0 > y_ind, y_ind > ry))) stop("when 'latent' is selected, 0 < x_ind <= rx, 0 < y_ind <= ry")
+  if (method == "y_original" & any(c(0 > x_ind, x_ind > rx, 0 > y_ind, y_ind > d))) stop("when 'y_original' is selected, 0 < x_ind <= rx, 0 < y_ind <= d")
+  if (method == "x_original" & any(c(0 > x_ind, x_ind > p, 0 > y_ind, y_ind > ry))) stop("when 'x_original' is selected, 0 < x_ind <= p, 0 < y_ind <= ry")
 
 
   Jpsi <- matrix(nrow = jy, ncol = jy, 0)

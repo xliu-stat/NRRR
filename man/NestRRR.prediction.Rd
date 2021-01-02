@@ -33,12 +33,15 @@ This function returns a list:
   \item{Cstar}{the estimated coefficient matrix in equation (7) of NRRR paper,
                i.e., \eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T}.}
   \item{Ypred}{the predicted response trajectory which is an array of
-          dimension \code{(n, d, length(tseq)}}
+          dimension \code{(n, d, length(tseq))}}
 }
 \description{
 This function generates prediction of the functional response based on the fitting
 results of the NRRR model and the given predictor trajectory. The functional
 response is predicted at a given sequence of time points \code{tseq}.
+}
+\details{
+An examples of its usage can be found in the vignette of electricity demand analysis.
 }
 \examples{
 library(NRRR)

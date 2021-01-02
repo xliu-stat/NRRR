@@ -1,5 +1,5 @@
 #' @title
-#' Multivariate functional regression via nested reduced-rank regression with given ranks
+#' Multivariate functional regression via nested reduced-rank regularization with given ranks
 #'
 #' @description
 #' This function implements the blockwise coordinate descent algorithm
@@ -61,10 +61,10 @@
 #' problem, NRRR imposes a nested reduced-rank structure on the regression
 #' surface \eqn{C(s,t)}. Specifically, a global dimension reduction makes use of the
 #' correlation within the components of multivariate response and multivariate
-#' predictor. Matrices U (d-by-ry) and V (p-by-rx) provides weights to form ry latent
+#' predictor. Matrices U (d-by-ry) and V (p-by-rx) provide weights to form ry latent
 #' functional responses and rx latent functional predictors, respectively.
 #' Dimension reduction is achieved
-#' once \eqn{ry \le d} or \eqn{rx \le p}. Then, a local dimension reduction is
+#' once \eqn{ry < d} or \eqn{rx < p}. Then, a local dimension reduction is
 #' conducted by restricting the latent regression surface \eqn{C^*(s,t)} to be of low-rank.
 #' After basis expansion and truncation, also by applying proper rearrangement to
 #' columns and rows of the resulting data matrices and coefficient matrices, we
@@ -72,7 +72,7 @@
 #' \deqn{ \min_{C} || Y - XC ||_F^2, s.t., C = (I_{jx} \otimes V) BA^T (I_{jy} \otimes U)^T,}
 #' where \eqn{BA^T} is a full-rank decomposition to control the local
 #' rank and \eqn{jx, jy} are the number of basis functions. Beyond the functional
-#' setup, this structure can also be applied in multiple scenarios, including
+#' setup, this structure can also be applied to multiple scenarios, including
 #' multivariate time series autoregression analysis and tensor-on-tensor regression.
 #' This problem is non-convex and has no explicit solution, thus we use a
 #' blockwise coordinate descent algorithm to find a local solution.

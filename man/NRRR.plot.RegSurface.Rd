@@ -57,7 +57,7 @@ predictor (or latent predictor) trajectory and response
 (or latent response) trajectory.
 }
 \details{
-More details can be found in the vignette of electricity demand analysis.
+More details and the examples of its usage can be found in the vignette of electricity demand analysis.
 }
 \references{
 Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization.

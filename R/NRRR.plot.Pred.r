@@ -15,7 +15,7 @@
 #'              the sample size and d is the number of components in the
 #'              multivariate response. The response trajectory is predicted at
 #'              a set of time points \code{tseq}.
-#' @param Y an array of dimension \code{(n, d, length(tseq))}. It is the truely
+#' @param Y an array of dimension \code{(n, d, length(tseq))}. It is the truly
 #'          observed response trajectory in the form of discrete observations at
 #'          time points \code{tseq}. This term is only available
 #'          when the function is applied to a testing set.
@@ -41,6 +41,9 @@
 #'
 #' @author
 #' Xiaokang Liu and Kun Chen
+#'
+#' @details
+#' An examples of its usage can be found in the vignette of electricity demand analysis.
 #'
 #' @references
 #' Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization.

@@ -58,7 +58,7 @@ If \code{dimred[2]=FALSE}, rx equals to p; If \code{dimred[3]=FALSE},
 ry equals to d. Default is \code{c(TRUE,TRUE,TRUE)}.}
 
 \item{rankfix}{a user-provided value of r when \code{dimred[1]=FALSE}. Default is NULL
-which leads to \eqn{r=min(jx*p,jy*d,rank(X))}.}
+which leads to \eqn{r=min(jy*d,rank(X))}.}
 }
 \value{
 The function returns a list:

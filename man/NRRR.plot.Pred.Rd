@@ -14,7 +14,7 @@ the sample size and d is the number of components in the
 multivariate response. The response trajectory is predicted at
 a set of time points \code{tseq}.}
 
-\item{Y}{an array of dimension \code{(n, d, length(tseq))}. It is the truely
+\item{Y}{an array of dimension \code{(n, d, length(tseq))}. It is the truly
 observed response trajectory in the form of discrete observations at
 time points \code{tseq}. This term is only available
 when the function is applied to a testing set.}
@@ -45,6 +45,9 @@ A ggplot2 object. If the observed response trajectory is available, then
 }
 \description{
 This function plots the predicted response trajectory based on the output of \code{\link{NestRRR.prediction}}.
+}
+\details{
+An examples of its usage can be found in the vignette of electricity demand analysis.
 }
 \references{
 Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization.

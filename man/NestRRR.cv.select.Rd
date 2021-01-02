@@ -56,12 +56,12 @@ including BIC, BICP, AIC, GCV.}
 \item{dimred}{a vector of logical values to decide whether to use cross validation
 do rank selection on certain dimensions. TRUE (default): yes; FALSE: no.
 If \code{dimred[1]=FALSE}, r is provided by \code{rankfix}
-or \eqn{min(jx*p,jy*d, rank(X))};
+or \eqn{min(jy*d, rank(X))};
 If \code{dimred[2]=FALSE}, rx equals to \code{xrankfix} or p; If \code{dimred[3]=FALSE},
 ry equals to \code{yrankfix} or d. Default is \code{c(TRUE,TRUE,TRUE)}.}
 
 \item{rankfix}{a user-provided value of r when \code{dimred[1]=FALSE}. Default is NULL
-which leads to \eqn{r=min(jx*p,jy*d,rank(X))}.}
+which leads to \eqn{r=min(jy*d,rank(X))}.}
 
 \item{xrankfix}{a user-provided value of rx when \code{dimred[2]=FALSE}. Default is NULL
 which leads to \code{rx=p}.}

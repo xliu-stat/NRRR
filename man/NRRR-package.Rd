@@ -4,9 +4,9 @@
 \name{NRRR-package}
 \alias{NRRR}
 \alias{NRRR-package}
-\title{NRRR: Multivariate Functional Regression via Nested Reduced-Rank Regression}
+\title{NRRR: Multivariate Functional Regression via Nested Reduced-Rank Regularization}
 \description{
-The nested reduced-rank regression (NRRR) proposed by Liu et al. (2020) <arXiv:2003.04786> in the multivariate functional regression setting.
+The multivariate functional regression with a nested reduced-rank structure proposed by Liu et al. (2020) <arXiv:2003.04786>.
 }
 \details{
 A package to implement Nested reduced-rank regression.

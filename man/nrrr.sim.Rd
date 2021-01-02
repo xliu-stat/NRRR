@@ -45,9 +45,9 @@ The function returns a list:
   \item{Al}{the matrix A.}
   \item{Bl}{the matrix B.}
   \item{C}{the coefficient matrix C.}
-  \item{Alstar}{A* in equation (7).}
-  \item{Blstar}{B* in equation (7).}
-  \item{Cstar}{\eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T} in equation (7).}
+  \item{Alstar}{A* in equation (7) of the NRRR paper.}
+  \item{Blstar}{B* in equation (7) of the NRRR paper.}
+  \item{Cstar}{\eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T} in equation (7) of the NRRR paper.}
   \item{tseq}{a sequence of time points at which the response trajectory is observed.}
   \item{psi}{the set of basis functions to expand the response trajectory.}
   \item{Jpsi}{the correlation matrix of psi. Jpsihalf is (Jpsi)^(1/2).}
