@@ -117,7 +117,7 @@ NestRRR.cv.select_rcpp <- function(Y,X,nfold=10,norder=NULL,jx,jy,p,d,n,
 
   # initialize r
   if(dimred[1]){
-    fitRRR <- rrpack::cv.rrr(Y,X,nfold=10,norder = norder)
+    fitRRR <- cv.rrr(Y,X,nfold=10,norder = norder)
     rest <- fitRRR$rank
     # if(!quietly) {
     #   cat("Initial r   = ",rest, "\n",sep="")

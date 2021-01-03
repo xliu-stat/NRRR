@@ -381,7 +381,6 @@ One thing that needs attention is the sign of the estimated matrices. Since all 
 ### Prediction
 Here we use both the reduced-rank regression (RRR) and nested reduced-rank regression (NRRR) to conduct a comparison in terms of the prediction power. We use the first 400 samples as the fitting set and use the remaining 108 samples as the testing set.
 ```{r}
-library(rrpack)
 TXindex <- 1:400
 
 # training set, sample size 400
@@ -404,7 +403,7 @@ We do not run the code chunk of fitting the NRRR with cross validation for the s
 xr <- sum(svd(Xtrain)$d > 1e-2)
 rankmax <- min(xr, d * jy, 20)
 
-fit.RRR <- cv.rrr(Ytrain, Xtrain, maxrank = rankmax, nfold = 10)
+fit.RRR <- NRRR:::cv.rrr(Ytrain, Xtrain, maxrank = rankmax, nfold = 10)
 norder <- fit.RRR$norder
 
 

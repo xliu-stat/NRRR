@@ -871,7 +871,7 @@ Rcpp::List nrrr_select_my(arma::mat Y,
 
         arma::vec icseq_r(r_length);
 
-        for (l=0; l< rfitseq.n_elem; l++){
+        for (l=0; l< r_length; l++){
             rfit = rfitseq(l);
 
             Rcpp::List fit1 = nrrr_est_my(Y,X,rfit,rfit,rxfit,ryfit,jx,jy,p,

@@ -35,7 +35,7 @@
 #' Statistical analysis and data mining,
 #' 4(6), 612–622.
 #'
-#' @importFrom rrpack rrs.fit
+# @importFrom rrpack rrs.fit
 #' @export
 RRRR.cv<-function(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
                      lambda = seq(0, 100, length = nlam), norder = NULL, nest.tune = FALSE,
@@ -63,7 +63,7 @@ RRRR.cv<-function(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
     Yf <- Y[-iddel, ]
     Yfdel <- Y[iddel, ]
     for (ll in 1:nlam) {
-      ini <- rrpack::rrs.fit(Yf, Xf, lambda = lambda[ll], nrank = rankmax)
+      ini <- rrs.fit(Yf, Xf, lambda = lambda[ll], nrank = rankmax)
       C_ls <- ini$coef.ls
       A <- ini$A
       tempFit <- Xfdel %*% C_ls
@@ -104,7 +104,7 @@ RRRR.cv<-function(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
       Yf <- Y[-iddel, ]
       Yfdel <- Y[iddel, ]
       for (ll in 1:nlam) {
-        ini <- rrpack::rrs.fit(Yf, Xf, lambda = lambda[ll], nrank = rankmax)
+        ini <- rrs.fit(Yf, Xf, lambda = lambda[ll], nrank = rankmax)
         C_ls <- ini$coef.ls
         A <- ini$A
         tempFit <- Xfdel %*% C_ls
@@ -132,7 +132,7 @@ RRRR.cv<-function(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
          C = matrix(nrow = p, ncol = q, 0), rank = 0)
   }
   else {
-    fit <- rrpack::rrs.fit(Y, X, lambda = lambda[minid1], nrank = rankmax)
+    fit <- rrs.fit(Y, X, lambda = lambda[minid1], nrank = rankmax)
     C_lslam <- fit$coef.ls
     A <- fit$A
     list(cr_path = cr_path, CRE = crerr, ID = c(minid1, minid2),

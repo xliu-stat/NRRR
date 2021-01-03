@@ -84,7 +84,7 @@
 #' @references Liu, X., Ma, S., & Chen, K. (2020).
 #' Multivariate Functional Regression via Nested Reduced-Rank Regularization.
 #' arXiv: Methodology.
-#' @importFrom rrpack cv.rrr
+# @importFrom rrpack cv.rrr
 #' @export
 #' @examples
 #' library(NRRR)
@@ -114,7 +114,7 @@ NestRRR.select <- function(Y,X,Ag0=NULL,Bg0=NULL,
 
   # initialize r
   if(dimred[1]){
-    fitRRR <- rrpack::cv.rrr(Y,X,nfold=10)
+    fitRRR <- cv.rrr(Y,X,nfold=10)
     rest <- fitRRR$rank
     # If zero fit
     if(rest==0){

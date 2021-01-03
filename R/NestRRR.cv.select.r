@@ -88,7 +88,7 @@
 #' Multivariate Functional Regression via Nested Reduced-Rank Regularization.
 #' arXiv: Methodology.
 #'
-#' @importFrom rrpack cv.rrr
+# @importFrom rrpack cv.rrr
 #' @export
 #' @examples
 #' library(NRRR)
@@ -122,7 +122,7 @@ NestRRR.cv.select <- function(Y,X,nfold=10,norder=NULL,Ag0=NULL,Bg0=NULL,jx,jy,p
 
   # initialize r
   if(dimred[1]){
-    fitRRR <- rrpack::cv.rrr(Y,X,nfold=10,norder = norder)
+    fitRRR <- cv.rrr(Y,X,nfold=10,norder = norder)
     rest <- fitRRR$rank
     # If zero fit
     if(rest==0){
