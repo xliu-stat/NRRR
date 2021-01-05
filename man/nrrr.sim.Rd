@@ -10,23 +10,23 @@ NRRR.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
 \arguments{
 \item{n}{sample size.}
 
-\item{ns}{the number of time points at which the predictor trajectory is observed.}
+\item{ns}{number of time points at which the predictor trajectory is observed.}
 
-\item{nt}{the number of time points at which the response trajectory is observed.}
+\item{nt}{number of time points at which the response trajectory is observed.}
 
-\item{r}{rank.}
+\item{r}{rank of the local reduced-rank structure.}
 
-\item{rx}{the number of latent predictors.}
+\item{rx}{number of latent predictors.}
 
-\item{ry}{the number of latent responses.}
+\item{ry}{number of latent responses.}
 
-\item{jx}{the number of basis functions to expand the predictor trajectory.}
+\item{jx}{number of basis functions to expand the predictor trajectory.}
 
-\item{jy}{the number of basis functions to expand the response trajectory.}
+\item{jy}{number of basis functions to expand the response trajectory.}
 
-\item{p}{the number of predictors.}
+\item{p}{number of predictors.}
 
-\item{d}{the number of responses.}
+\item{d}{number of responses.}
 
 \item{s2n}{a positive number to specify the signal to noise ratio.}
 
@@ -58,8 +58,8 @@ The function returns a list:
   \item{Y}{an array of dimension \code{(n, d, nt)}, i.e., the generated response observations.}
   \item{X}{an array of dimension \code{(n, p, ns)}, i.e., the generated predictor observations.}
   \item{Ytrue}{an array of dimension \code{(n, d, nt)}. The response observations without random errors.}
-  \item{Yest}{the response matrix of dimension n-by-jy*d and is used in NRRR estimation.}
-  \item{Xest}{the design matrix of dimension n-by-jx*p and is used in NRRR estimation.}
+  \item{Yest}{the response matrix used in NRRR estimation, and is of dimension n-by-jy*d.}
+  \item{Xest}{the design matrix used in NRRR estimation, and is of dimension n-by-jx*p.}
 }
 \description{
 This function generates simulation data for the nested reduced-rank
@@ -68,12 +68,12 @@ With user-specified model dimensions and ranks,
 this function first generates functional multivariate predictors and
 responses and then transform the functional regression problem into a
 conventional finite-dimensional regression problem through basis expansion
-and truncation.
+and truncation. The B-spline basis is used to conduct basis expansion.
 }
 \examples{
 library(NRRR)
-simDat <- NRRR.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
-                   jx=15,jy=15,p=10,d=6,s2n=1,rho_X=0.5,
-                   rho_E=0,Sigma="CorrAR")
+simDat <- NRRR.sim(n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
+                   jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
+                   rho_E = 0, Sigma = "CorrAR")
 simDat$Ag
 }

@@ -14,14 +14,16 @@ RRR(Y, X, nrank = 1, weight = FALSE, Gamma = diag(ncol(Y)),
 
 \item{nrank}{a user-specified rank. Default is 1.}
 
-\item{weight}{a logical value. If TRUE, then weighted criterion is performed.
+\item{weight}{a logical value. If TRUE, then the weighted criterion is employed.
 Default is FALSE.}
 
 \item{Gamma}{a weight matrix. Default is an identity matrix.}
 
-\item{ypy.svd}{a logical value. If TRUE, svd function is used. Default is FALSE.}
+\item{ypy.svd}{a logical value. If TRUE (default), then the singular value decomposition
+method is used. If FALSE, then the eigenvalue decomposition method is used.}
 
-\item{c.svd}{a logical value. If TRUE, output the svd of the coefficient
+\item{c.svd}{a logical value. If TRUE, then output the singular value
+decomposition of the estimated coefficient
 matrix. Default is FALSE.}
 }
 \value{

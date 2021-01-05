@@ -295,7 +295,7 @@ The package `NRRR` is available at [Github](https://github.com/xliu-stat/NRRR), 
 #install.packages("devtools")
 #devtools::install_github("xliu-stat/NRRR")
 library(NRRR)
-set.seed(5)
+set.seed(3)
 ```
 As fitting the NRRR with cross validation could be time-consuming, we set `eval=FALSE` in this code chunk and directly use the previous fitting results here. 
 ```{r, eval=TRUE}

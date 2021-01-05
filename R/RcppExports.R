@@ -21,8 +21,8 @@ nrrr_est_my <- function(Y, X, rini, r, rx, ry, jx, jy, p, d, n, maxiter, conv, m
     .Call(`_NRRR_nrrr_est_my`, Y, X, rini, r, rx, ry, jx, jy, p, d, n, maxiter, conv, method, lambda)
 }
 
-nrrr_select_my <- function(Y, X, xr, rfit, jx, jy, p, d, n, ic, maxiter, conv, method, lambda, dimred1, dimred2, dimred3) {
-    .Call(`_NRRR_nrrr_select_my`, Y, X, xr, rfit, jx, jy, p, d, n, ic, maxiter, conv, method, lambda, dimred1, dimred2, dimred3)
+nrrr_select_my <- function(Y, X, xr, rfit, xrankfix, yrankfix, jx, jy, p, d, n, ic, maxiter, conv, method, lambda, dimred1, dimred2, dimred3) {
+    .Call(`_NRRR_nrrr_select_my`, Y, X, xr, rfit, xrankfix, yrankfix, jx, jy, p, d, n, ic, maxiter, conv, method, lambda, dimred1, dimred2, dimred3)
 }
 
 del_rows <- function(X, e) {

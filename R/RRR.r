@@ -11,11 +11,13 @@
 #' @param Y response matrix.
 #' @param X design matrix.
 #' @param nrank a user-specified rank. Default is 1.
-#' @param weight a logical value. If TRUE, then weighted criterion is performed.
+#' @param weight a logical value. If TRUE, then the weighted criterion is employed.
 #'               Default is FALSE.
 #' @param Gamma a weight matrix. Default is an identity matrix.
-#' @param ypy.svd a logical value. If TRUE, svd function is used. Default is FALSE.
-#' @param c.svd a logical value. If TRUE, output the svd of the coefficient
+#' @param ypy.svd a logical value. If TRUE (default), then the singular value decomposition
+#'                method is used. If FALSE, then the eigenvalue decomposition method is used.
+#' @param c.svd a logical value. If TRUE, then output the singular value
+#'              decomposition of the estimated coefficient
 #'              matrix. Default is FALSE.
 #'
 #' @return The function returns a list:

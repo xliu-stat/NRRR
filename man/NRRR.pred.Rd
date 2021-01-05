@@ -7,8 +7,8 @@
 NRRR.pred(tseq, X, sseq, Ag, Bg, Al, Bl, phi)
 }
 \arguments{
-\item{tseq}{a sequence of time points at which the prediction of response
-trajectory is obtained.}
+\item{tseq}{a sequence of time points at which the prediction of the response
+trajectory is generated.}
 
 \item{X}{an array of dimension \code{(n, p, length(sseq))} where n is
 the sample size and p is the number of components in the
@@ -17,20 +17,20 @@ discrete time points \code{sseq}.}
 
 \item{sseq}{a sequence of time points at which the predictor trajectory is observed.}
 
-\item{Ag}{a d-by-ry matrix of rank ry, i.e., the matrix U in NRRR paper.}
+\item{Ag}{the estimated matrix U in a NRRR model.}
 
-\item{Bg}{a p-by-rx matrix of rank rx, i.e., the matrix V in NRRR paper.}
+\item{Bg}{the estimated matrix V in a NRRR model.}
 
-\item{Al}{a jy*ry-by-r matrix of rank r, i.e., the matrix A in NRRR paper.}
+\item{Al}{the estimated matrix A in a NRRR model.}
 
-\item{Bl}{a jx*rx-by-r matrix of rank r, i.e., the matrix B in NRRR paper.}
+\item{Bl}{the estimated matrix B in a NRRR model.}
 
 \item{phi}{a matrix of dimension \code{length(sseq)}-by-jx. It is the set of
 basis functions to expand the predictor trajectory.}
 }
 \value{
 This function returns a list:
-  \item{Cstar}{the estimated coefficient matrix in equation (7) of NRRR paper,
+  \item{Cstar}{the estimated coefficient matrix in equation (7) of the NRRR paper,
                i.e., \eqn{(U \otimes I_jy)A* B*^T(V \otimes I_jx)^T}.}
   \item{Ypred}{the predicted response trajectory which is an array of
           dimension \code{(n, d, length(tseq))}}
@@ -40,32 +40,21 @@ This function generates prediction of the functional response based on the fitti
 results of the NRRR model and the given predictor trajectory. The functional
 response is predicted at a given sequence of time points \code{tseq}.
 }
-\details{
-An examples of its usage can be found in the vignette of electricity demand analysis.
-}
 \examples{
 library(NRRR)
 set.seed(3)
 # Simulation setting 2 in NRRR paper
-simDat <- NRRR.sim(
-  n = 100, ns = 100, nt = 100, r = 3, rx = 3, ry = 3,
-  jx = 8, jy = 8, p = 20, d = 20, s2n = 1, rho_X = 0.5,
-  rho_E = 0, Sigma = "CorrAR"
-)
-fit_nrrr <- with(simDat, NRRR.ic(Yest, Xest,
-  Ag0 = NULL, Bg0 = NULL,
-  jx = 8, jy = 8, p = 20, d = 20, n = 100,
-  maxiter = 300, conv = 1e-4, quietly = FALSE,
-  method = c("RRR", "RRS")[1], lambda = 0,
-  ic = c("BIC", "BICP", "AIC", "GCV")[1],
-  dimred = c(TRUE, TRUE, TRUE), rankfix = NULL
-))
-Ypred_nrrr <- NRRR.pred(
-  simDat$tseq, simDat$X, simDat$sseq,
-  fit_nrrr$Ag, fit_nrrr$Bg,
-  fit_nrrr$Al, fit_nrrr$Bl,
-  simDat$phi
-)
+simDat <- NRRR.sim(n = 100, ns = 100, nt = 100, r = 3, rx = 3, ry = 3,
+                   jx = 8, jy = 8, p = 20, d = 20, s2n = 1, rho_X = 0.5,
+                   rho_E = 0, Sigma = "CorrAR")
+fit_nrrr <- with(simDat, NRRR.ic(Yest, Xest, Ag0 = NULL, Bg0 = NULL,
+                 jx = 8, jy = 8, p = 20, d = 20, n = 100,
+                 maxiter = 300, conv = 1e-4, method = c("RRR", "RRS")[1],
+                 lambda = 0, ic = c("BIC", "BICP", "AIC", "GCV")[1],
+                 dimred = c(TRUE, TRUE, TRUE), rankfix = NULL))
+Ypred_nrrr <- NRRR.pred(simDat$tseq, simDat$X, simDat$sseq,
+                        fit_nrrr$Ag, fit_nrrr$Bg, fit_nrrr$Al,
+                        fit_nrrr$Bl, simDat$phi)
 }
 \references{
 Liu, X., Ma, S., & Chen, K. (2020).

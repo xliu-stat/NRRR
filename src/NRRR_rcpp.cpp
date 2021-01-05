@@ -773,6 +773,8 @@ Rcpp::List nrrr_select_my(arma::mat Y,
                           arma::mat X,
                           int xr,
                           int rfit,
+                          int xrankfix,
+                          int yrankfix,
                           int jx,
                           int jy,
                           int p,
@@ -821,7 +823,11 @@ Rcpp::List nrrr_select_my(arma::mat Y,
         min_ind = index_min(icseq_x);
         rxest = rxfitseq(min_ind);
     } else {
-        rxest = p;
+        if (xrankfix == 0) {
+            rxest = p;
+        } else {
+            rxest = xrankfix;
+        }
     }
     rxfit = rxest;
 
@@ -845,7 +851,11 @@ Rcpp::List nrrr_select_my(arma::mat Y,
         min_ind = index_min(icseq_y);
         ryest = ryfitseq(min_ind);
     } else {
-        ryest = d;
+        if (yrankfix == 0) {
+            ryest = d;
+        } else {
+            ryest = yrankfix;
+        }
     }
     ryfit = ryest;
 

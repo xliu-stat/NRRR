@@ -25,7 +25,7 @@ then set \code{i_ind = 1}; otherwise it should be an integer
 less than or equal to n. Default is 1.}
 
 \item{yi_ind}{a user-specified response component index for which the plot
-is to be drawn. It should be an integer between 0 and d.
+is to be drawn. It should satisfy \eqn{0 < yi_ind \le d}.
 Default is 1.}
 
 \item{tseq}{a sequence of time points at which the predicted response values
@@ -40,19 +40,16 @@ and it should be given as a character string, e.g., x_lab = "Time".
 Default is NULL.}
 }
 \value{
-A ggplot2 object. If the observed response trajectory is available, then
+A ggplot2 object. If the truly observed response trajectory is available, then
         it is plotted as a black line while the predicted trajectory is in red.
 }
 \description{
-This function plots the predicted response trajectory based on the output of \code{\link{NestRRR.prediction}}.
+This function plots the predicted response trajectory based on the output of \code{\link{NRRR.pred}}.
 }
 \details{
-An examples of its usage can be found in the vignette of electricity demand analysis.
+An example of its usage can be found in the vignette of electricity demand analysis.
 }
 \references{
 Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization.
 arXiv: Methodology.
-}
-\author{
-Xiaokang Liu and Kun Chen
 }

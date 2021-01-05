@@ -2,7 +2,7 @@
 #' Plot the predicted response trajectory
 #'
 #' @description
-#' This function plots the predicted response trajectory based on the output of \code{\link{NestRRR.prediction}}.
+#' This function plots the predicted response trajectory based on the output of \code{\link{NRRR.pred}}.
 #'
 #'
 #' @usage
@@ -24,7 +24,7 @@
 #'              then set \code{i_ind = 1}; otherwise it should be an integer
 #'              less than or equal to n. Default is 1.
 #' @param yi_ind a user-specified response component index for which the plot
-#'               is to be drawn. It should be an integer between 0 and d.
+#'               is to be drawn. It should satisfy \eqn{0 < yi_ind \le d}.
 #'               Default is 1.
 #' @param tseq a sequence of time points at which the predicted response values
 #'             are obtained.
@@ -35,15 +35,12 @@
 #'                given as a vector of character strings of the same length as tseq.
 #'                Default is NULL.
 #'
-#' @return A ggplot2 object. If the observed response trajectory is available, then
+#' @return A ggplot2 object. If the truly observed response trajectory is available, then
 #'         it is plotted as a black line while the predicted trajectory is in red.
 #'
 #'
-#' @author
-#' Xiaokang Liu and Kun Chen
-#'
 #' @details
-#' An examples of its usage can be found in the vignette of electricity demand analysis.
+#' An example of its usage can be found in the vignette of electricity demand analysis.
 #'
 #' @references
 #' Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization.

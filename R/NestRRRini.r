@@ -12,12 +12,12 @@
 #' @param Y response matrix of dimension n-by-jy*d.
 #' @param X design matrix of dimension n-by-jx*p.
 #' @param r rank of the local reduced-rank structure.
-#' @param rx the number of latent predictors.
-#' @param ry the number of latent responses.
-#' @param jx the number of basis functions to expand the functional predictor.
-#' @param jy the number of basis functions to expand the functional response.
-#' @param p the number of predictors.
-#' @param d the number of responses.
+#' @param rx number of latent predictors.
+#' @param ry number of latent responses.
+#' @param jx number of basis functions to expand the functional predictor.
+#' @param jy number of basis functions to expand the functional response.
+#' @param p number of predictors.
+#' @param d number of responses.
 #' @param n sample size.
 #'
 #'
@@ -31,11 +31,12 @@
 #'
 #' @examples
 #' library(NRRR)
-#' simDat <- NRRR.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
-#'                    jx=15,jy=15,p=10,d=6,s2n=1,rho_X=0.5,
-#'                    rho_E=0,Sigma="CorrAR")
-#' fit_init <- with(simDat, NRRR.ini(Y=Yest,X=Xest,r=5,
-#'                  rx=3,ry=3,jx=15,jy=15,p=10,d=6,n=100))
+#' simDat <- NRRR.sim(n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
+#'                    jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
+#'                    rho_E = 0, Sigma = "CorrAR")
+#' fit_init <- with(simDat, NRRR.ini(Y = Yest, X = Xest, r = 5,
+#'                  rx = 3, ry = 3, jx = 15, jy = 15,
+#'                  p = 10, d = 6, n = 100))
 #' fit_init$Ag
 #' @export
 NRRR.ini <- function(Y,X,r,rx,ry,jx,jy,p,d,n){

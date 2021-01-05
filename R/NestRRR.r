@@ -15,19 +15,19 @@
 #'
 #' @param Y response matrix of dimension n-by-jy*d.
 #' @param X design matrix of dimension n-by-jx*p.
-#' @param Ag0 an initial estimator of matrix U. If NULL then generate it
+#' @param Ag0 an initial estimator of matrix U. If \code{Ag0 = NULL} then generate it
 #'            by \code{\link{NRRR.ini}}. Default is NULL.
-#' @param Bg0 an initial estimator of matrix V, if NULL then generate it
+#' @param Bg0 an initial estimator of matrix V. If \code{Bg0 = NULL} then generate it
 #'            by \code{\link{NRRR.ini}}. Default is NULL.
-#' @param rini,r a positive integer. They are the rank of the local reduced-rank structure. \code{rini} is used
+#' @param rini,r rank of the local reduced-rank structure. \code{rini} is used
 #'               in \code{\link{NRRR.ini}} to get the initial
 #'               estimators of U and V.
-#' @param rx a positive integer and is the number of latent predictors.
-#' @param ry a positive integer and is the number of latent responses.
-#' @param jx a positive integer and is the number of basis functions to expand the functional predictor.
-#' @param jy a positive integer and is the number of basis functions to expand the functional response.
-#' @param p the number of predictors.
-#' @param d the number of responses.
+#' @param rx number of latent predictors.
+#' @param ry number of latent responses.
+#' @param jx number of basis functions to expand the functional predictor.
+#' @param jy number of basis functions to expand the functional response.
+#' @param p number of predictors.
+#' @param d number of responses.
 #' @param n sample size.
 #' @param maxiter the maximum iteration number of the
 #'                blockwise coordinate descent algorithm. Default is 100.
@@ -36,7 +36,8 @@
 #' @param method 'RRR' (default): no additional ridge penalty; 'RRS': add an
 #'               additional ridge penalty.
 #' @param lambda the tuning parameter to control the amount of ridge
-#'               penalization. It is only used when \code{method = 'RRS'}.
+#'               penalization. It is only used when \code{method = 'RRS'} and
+#'               a positive value should be provided.
 #'               Default is 0.
 #'
 #' @return The function returns a list:
@@ -46,10 +47,10 @@
 #'   \item{Bl}{the estimated B.}
 #'   \item{C}{the estimated coefficient matrix C.}
 #'   \item{df}{degrees of freedom of the model.}
-#'   \item{sse}{the sum of squared errors.}
+#'   \item{sse}{sum of squared errors.}
 #'   \item{ic}{a vector containing values of BIC, BICP, AIC, GCV.}
 #   \item{obj}{a vector contains all objective function (sse) values along iteration.}
-#'   \item{iter}{the number of iterations to converge.}
+#'   \item{iter}{the number of iterations needed to converge.}
 #'
 #' @details
 #' The \emph{nested reduced-rank regression (NRRR)} is proposed to solve
@@ -73,7 +74,8 @@
 #' setup, this structure can also be applied to multiple scenarios, including
 #' multivariate time series autoregression analysis and tensor-on-tensor regression.
 #' This problem is non-convex and has no explicit solution, thus we use a
-#' blockwise coordinate descent algorithm to find a local solution.
+#' blockwise coordinate descent algorithm to find a local solution. The convergence
+#' is decided by the change in objective values between two neighboring iterations.
 #'
 #'
 #'
@@ -84,16 +86,13 @@
 #' arXiv: Methodology.
 #' @examples
 #' library(NRRR)
-#' simDat <- NRRR.sim(
-#'   n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
-#'   jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
-#'   rho_E = 0, Sigma = "CorrAR"
-#' )
-#' fit_init <- with(simDat, NRRR.est(
-#'   Y = Yest, X = Xest, Ag0 = NULL, Bg0 = NULL,
-#'   rini = 5, r = 5,
-#'   rx = 3, ry = 3, jx = 15, jy = 15, p = 10, d = 6, n = 100
-#' ))
+#' simDat <- NRRR.sim(n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
+#'                    jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
+#'                    rho_E = 0, Sigma = "CorrAR")
+#' fit_init <- with(simDat, NRRR.est(Y = Yest, X = Xest,
+#'                  Ag0 = NULL, Bg0 = NULL, rini = 5, r = 5,
+#'                  rx = 3, ry = 3, jx = 15, jy = 15,
+#'                  p = 10, d = 6, n = 100))
 #' fit_init$Ag
 #' @importFrom MASS ginv
 #' @export

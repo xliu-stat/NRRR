@@ -2,6 +2,7 @@
 
 export(NRRR.cv)
 export(NRRR.est)
+export(NRRR.func)
 export(NRRR.ic)
 export(NRRR.ini)
 export(NRRR.plot.pred)

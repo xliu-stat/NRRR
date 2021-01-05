@@ -17,7 +17,7 @@
 #' @param n sample size.
 #' @param ns number of time points at which the predictor trajectory is observed.
 #' @param nt number of time points at which the response trajectory is observed.
-#' @param r rank.
+#' @param r rank of the local reduced-rank structure.
 #' @param rx number of latent predictors.
 #' @param ry number of latent responses.
 #' @param jx number of basis functions to expand the predictor trajectory.
@@ -51,13 +51,13 @@
 #'   \item{Y}{an array of dimension \code{(n, d, nt)}, i.e., the generated response observations.}
 #'   \item{X}{an array of dimension \code{(n, p, ns)}, i.e., the generated predictor observations.}
 #'   \item{Ytrue}{an array of dimension \code{(n, d, nt)}. The response observations without random errors.}
-#'   \item{Yest}{the response matrix of dimension n-by-jy*d and is used in NRRR estimation.}
-#'   \item{Xest}{the design matrix of dimension n-by-jx*p and is used in NRRR estimation.}
+#'   \item{Yest}{the response matrix used in NRRR estimation, and is of dimension n-by-jy*d.}
+#'   \item{Xest}{the design matrix used in NRRR estimation, and is of dimension n-by-jx*p.}
 #' @examples
 #' library(NRRR)
-#' simDat <- NRRR.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
-#'                    jx=15,jy=15,p=10,d=6,s2n=1,rho_X=0.5,
-#'                    rho_E=0,Sigma="CorrAR")
+#' simDat <- NRRR.sim(n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
+#'                    jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
+#'                    rho_E = 0, Sigma = "CorrAR")
 #' simDat$Ag
 #' @importFrom stats runif rnorm sd
 #' @importFrom splines bs

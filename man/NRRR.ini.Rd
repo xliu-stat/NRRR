@@ -13,17 +13,17 @@ NRRR.ini(Y, X, r, rx, ry, jx, jy, p, d, n)
 
 \item{r}{rank of the local reduced-rank structure.}
 
-\item{rx}{the number of latent predictors.}
+\item{rx}{number of latent predictors.}
 
-\item{ry}{the number of latent responses.}
+\item{ry}{number of latent responses.}
 
-\item{jx}{the number of basis functions to expand the functional predictor.}
+\item{jx}{number of basis functions to expand the functional predictor.}
 
-\item{jy}{the number of basis functions to expand the functional response.}
+\item{jy}{number of basis functions to expand the functional response.}
 
-\item{p}{the number of predictors.}
+\item{p}{number of predictors.}
 
-\item{d}{the number of responses.}
+\item{d}{number of responses.}
 
 \item{n}{sample size.}
 }
@@ -38,11 +38,12 @@ blockwise coordinate descent algorithm.
 }
 \examples{
 library(NRRR)
-simDat <- NRRR.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
-                   jx=15,jy=15,p=10,d=6,s2n=1,rho_X=0.5,
-                   rho_E=0,Sigma="CorrAR")
-fit_init <- with(simDat, NRRR.ini(Y=Yest,X=Xest,r=5,
-                 rx=3,ry=3,jx=15,jy=15,p=10,d=6,n=100))
+simDat <- NRRR.sim(n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
+                   jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
+                   rho_E = 0, Sigma = "CorrAR")
+fit_init <- with(simDat, NRRR.ini(Y = Yest, X = Xest, r = 5,
+                 rx = 3, ry = 3, jx = 15, jy = 15,
+                 p = 10, d = 6, n = 100))
 fit_init$Ag
 }
 \references{

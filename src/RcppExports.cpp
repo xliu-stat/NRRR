@@ -104,8 +104,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // nrrr_select_my
-Rcpp::List nrrr_select_my(arma::mat Y, arma::mat X, int xr, int rfit, int jx, int jy, int p, int d, int n, int ic, int maxiter, double conv, int method, double lambda, int dimred1, int dimred2, int dimred3);
-RcppExport SEXP _NRRR_nrrr_select_my(SEXP YSEXP, SEXP XSEXP, SEXP xrSEXP, SEXP rfitSEXP, SEXP jxSEXP, SEXP jySEXP, SEXP pSEXP, SEXP dSEXP, SEXP nSEXP, SEXP icSEXP, SEXP maxiterSEXP, SEXP convSEXP, SEXP methodSEXP, SEXP lambdaSEXP, SEXP dimred1SEXP, SEXP dimred2SEXP, SEXP dimred3SEXP) {
+Rcpp::List nrrr_select_my(arma::mat Y, arma::mat X, int xr, int rfit, int xrankfix, int yrankfix, int jx, int jy, int p, int d, int n, int ic, int maxiter, double conv, int method, double lambda, int dimred1, int dimred2, int dimred3);
+RcppExport SEXP _NRRR_nrrr_select_my(SEXP YSEXP, SEXP XSEXP, SEXP xrSEXP, SEXP rfitSEXP, SEXP xrankfixSEXP, SEXP yrankfixSEXP, SEXP jxSEXP, SEXP jySEXP, SEXP pSEXP, SEXP dSEXP, SEXP nSEXP, SEXP icSEXP, SEXP maxiterSEXP, SEXP convSEXP, SEXP methodSEXP, SEXP lambdaSEXP, SEXP dimred1SEXP, SEXP dimred2SEXP, SEXP dimred3SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -113,6 +113,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
     Rcpp::traits::input_parameter< int >::type xr(xrSEXP);
     Rcpp::traits::input_parameter< int >::type rfit(rfitSEXP);
+    Rcpp::traits::input_parameter< int >::type xrankfix(xrankfixSEXP);
+    Rcpp::traits::input_parameter< int >::type yrankfix(yrankfixSEXP);
     Rcpp::traits::input_parameter< int >::type jx(jxSEXP);
     Rcpp::traits::input_parameter< int >::type jy(jySEXP);
     Rcpp::traits::input_parameter< int >::type p(pSEXP);
@@ -126,7 +128,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type dimred1(dimred1SEXP);
     Rcpp::traits::input_parameter< int >::type dimred2(dimred2SEXP);
     Rcpp::traits::input_parameter< int >::type dimred3(dimred3SEXP);
-    rcpp_result_gen = Rcpp::wrap(nrrr_select_my(Y, X, xr, rfit, jx, jy, p, d, n, ic, maxiter, conv, method, lambda, dimred1, dimred2, dimred3));
+    rcpp_result_gen = Rcpp::wrap(nrrr_select_my(Y, X, xr, rfit, xrankfix, yrankfix, jx, jy, p, d, n, ic, maxiter, conv, method, lambda, dimred1, dimred2, dimred3));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -179,7 +181,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_NRRR_BLCD", (DL_FUNC) &_NRRR_BLCD, 18},
     {"_NRRR_nrrr_init_my", (DL_FUNC) &_NRRR_nrrr_init_my, 10},
     {"_NRRR_nrrr_est_my", (DL_FUNC) &_NRRR_nrrr_est_my, 15},
-    {"_NRRR_nrrr_select_my", (DL_FUNC) &_NRRR_nrrr_select_my, 17},
+    {"_NRRR_nrrr_select_my", (DL_FUNC) &_NRRR_nrrr_select_my, 19},
     {"_NRRR_del_rows", (DL_FUNC) &_NRRR_del_rows, 2},
     {"_NRRR_nrrr_cv_my", (DL_FUNC) &_NRRR_nrrr_cv_my, 20},
     {NULL, NULL, 0}

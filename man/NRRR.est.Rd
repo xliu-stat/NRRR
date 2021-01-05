@@ -14,27 +14,27 @@ NRRR.est(Y, X, Ag0 = NULL, Bg0 = NULL,
 
 \item{X}{design matrix of dimension n-by-jx*p.}
 
-\item{Ag0}{an initial estimator of matrix U. If NULL then generate it
+\item{Ag0}{an initial estimator of matrix U. If \code{Ag0 = NULL} then generate it
 by \code{\link{NRRR.ini}}. Default is NULL.}
 
-\item{Bg0}{an initial estimator of matrix V, if NULL then generate it
+\item{Bg0}{an initial estimator of matrix V. If \code{Bg0 = NULL} then generate it
 by \code{\link{NRRR.ini}}. Default is NULL.}
 
-\item{rini, r}{a positive integer. They are the rank of the local reduced-rank structure. \code{rini} is used
+\item{rini, r}{rank of the local reduced-rank structure. \code{rini} is used
 in \code{\link{NRRR.ini}} to get the initial
 estimators of U and V.}
 
-\item{rx}{a positive integer and is the number of latent predictors.}
+\item{rx}{number of latent predictors.}
 
-\item{ry}{a positive integer and is the number of latent responses.}
+\item{ry}{number of latent responses.}
 
-\item{jx}{a positive integer and is the number of basis functions to expand the functional predictor.}
+\item{jx}{number of basis functions to expand the functional predictor.}
 
-\item{jy}{a positive integer and is the number of basis functions to expand the functional response.}
+\item{jy}{number of basis functions to expand the functional response.}
 
-\item{p}{the number of predictors.}
+\item{p}{number of predictors.}
 
-\item{d}{the number of responses.}
+\item{d}{number of responses.}
 
 \item{n}{sample size.}
 
@@ -48,7 +48,8 @@ blockwise coordinate descent algorithm. Default is 1e-4.}
 additional ridge penalty.}
 
 \item{lambda}{the tuning parameter to control the amount of ridge
-penalization. It is only used when \code{method = 'RRS'}.
+penalization. It is only used when \code{method = 'RRS'} and
+a positive value should be provided.
 Default is 0.}
 }
 \value{
@@ -59,9 +60,9 @@ The function returns a list:
   \item{Bl}{the estimated B.}
   \item{C}{the estimated coefficient matrix C.}
   \item{df}{degrees of freedom of the model.}
-  \item{sse}{the sum of squared errors.}
+  \item{sse}{sum of squared errors.}
   \item{ic}{a vector containing values of BIC, BICP, AIC, GCV.}
-  \item{iter}{the number of iterations to converge.}
+  \item{iter}{the number of iterations needed to converge.}
 }
 \description{
 This function implements the blockwise coordinate descent algorithm
@@ -90,20 +91,18 @@ rank and \eqn{jx, jy} are the number of basis functions. Beyond the functional
 setup, this structure can also be applied to multiple scenarios, including
 multivariate time series autoregression analysis and tensor-on-tensor regression.
 This problem is non-convex and has no explicit solution, thus we use a
-blockwise coordinate descent algorithm to find a local solution.
+blockwise coordinate descent algorithm to find a local solution. The convergence
+is decided by the change in objective values between two neighboring iterations.
 }
 \examples{
 library(NRRR)
-simDat <- NRRR.sim(
-  n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
-  jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
-  rho_E = 0, Sigma = "CorrAR"
-)
-fit_init <- with(simDat, NRRR.est(
-  Y = Yest, X = Xest, Ag0 = NULL, Bg0 = NULL,
-  rini = 5, r = 5,
-  rx = 3, ry = 3, jx = 15, jy = 15, p = 10, d = 6, n = 100
-))
+simDat <- NRRR.sim(n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
+                   jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
+                   rho_E = 0, Sigma = "CorrAR")
+fit_init <- with(simDat, NRRR.est(Y = Yest, X = Xest,
+                 Ag0 = NULL, Bg0 = NULL, rini = 5, r = 5,
+                 rx = 3, ry = 3, jx = 15, jy = 15,
+                 p = 10, d = 6, n = 100))
 fit_init$Ag
 }
 \references{
