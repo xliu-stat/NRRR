@@ -8,22 +8,22 @@
 #' this function first generates functional multivariate predictors and
 #' responses and then transform the functional regression problem into a
 #' conventional finite-dimensional regression problem through basis expansion
-#' and truncation.
+#' and truncation. The B-spline basis is used to conduct basis expansion.
 #'
 #' @usage
-#' nrrr.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
+#' NRRR.sim(n, ns, nt, r, rx, ry, jx, jy, p, d,
 #'          s2n, rho_X, rho_E, Sigma = "CorrAR")
 #'
 #' @param n sample size.
-#' @param ns the number of time points at which the predictor trajectory is observed.
-#' @param nt the number of time points at which the response trajectory is observed.
+#' @param ns number of time points at which the predictor trajectory is observed.
+#' @param nt number of time points at which the response trajectory is observed.
 #' @param r rank.
-#' @param rx the number of latent predictors.
-#' @param ry the number of latent responses.
-#' @param jx the number of basis functions to expand the predictor trajectory.
-#' @param jy the number of basis functions to expand the response trajectory.
-#' @param p the number of predictors.
-#' @param d the number of responses.
+#' @param rx number of latent predictors.
+#' @param ry number of latent responses.
+#' @param jx number of basis functions to expand the predictor trajectory.
+#' @param jy number of basis functions to expand the response trajectory.
+#' @param p number of predictors.
+#' @param d number of responses.
 #' @param s2n a positive number to specify the signal to noise ratio.
 #' @param rho_X a scalar between 0 and 1 to specify the correlation strength among covariates.
 #' @param rho_E a scalar between 0 and 1 to specify the correlation strength among random errors.
@@ -55,7 +55,7 @@
 #'   \item{Xest}{the design matrix of dimension n-by-jx*p and is used in NRRR estimation.}
 #' @examples
 #' library(NRRR)
-#' simDat <- nrrr.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
+#' simDat <- NRRR.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
 #'                    jx=15,jy=15,p=10,d=6,s2n=1,rho_X=0.5,
 #'                    rho_E=0,Sigma="CorrAR")
 #' simDat$Ag
@@ -63,7 +63,7 @@
 #' @importFrom splines bs
 #' @importFrom MASS mvrnorm
 #' @export
-nrrr.sim <- function(n,ns,nt,r,rx,ry,jx,jy,p,d,s2n,rho_X,rho_E,Sigma="CorrAR"){
+NRRR.sim <- function(n,ns,nt,r,rx,ry,jx,jy,p,d,s2n,rho_X,rho_E,Sigma="CorrAR"){
 
   #require(MASS)
   #require(splines)

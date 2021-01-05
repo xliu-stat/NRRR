@@ -6,7 +6,7 @@
 #'
 #'
 #' @usage
-#' NRRR.plot.Pred(Ypred, Y = NULL, i_ind = 1, yi_ind = 1,
+#' NRRR.plot.pred(Ypred, Y = NULL, i_ind = 1, yi_ind = 1,
 #'                tseq, t_index = NULL, x_lab = NULL,
 #'                y_lab = NULL)
 #'
@@ -52,7 +52,7 @@
 #' @import ggplot2
 #' @export
 
-NRRR.plot.Pred <- function(Ypred, Y = NULL, i_ind = 1, yi_ind = 1,
+NRRR.plot.pred <- function(Ypred, Y = NULL, i_ind = 1, yi_ind = 1,
                            tseq, t_index = NULL, x_lab = NULL,
                            y_lab = NULL){
 

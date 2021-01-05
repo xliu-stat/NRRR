@@ -6,7 +6,7 @@
 #' blockwise coordinate descent algorithm.
 #'
 #' @usage
-#' NestRRRini(Y, X, r, rx, ry, jx, jy, p, d, n)
+#' NRRR.ini(Y, X, r, rx, ry, jx, jy, p, d, n)
 #'
 #'
 #' @param Y response matrix of dimension n-by-jy*d.
@@ -31,14 +31,14 @@
 #'
 #' @examples
 #' library(NRRR)
-#' simDat <- nrrr.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
+#' simDat <- NRRR.sim(n=100,ns=200,nt=200,r=5,rx=3,ry=3,
 #'                    jx=15,jy=15,p=10,d=6,s2n=1,rho_X=0.5,
 #'                    rho_E=0,Sigma="CorrAR")
-#' fit_init <- with(simDat, NestRRRini(Y=Yest,X=Xest,r=5,
+#' fit_init <- with(simDat, NRRR.ini(Y=Yest,X=Xest,r=5,
 #'                  rx=3,ry=3,jx=15,jy=15,p=10,d=6,n=100))
 #' fit_init$Ag
 #' @export
-NestRRRini <- function(Y,X,r,rx,ry,jx,jy,p,d,n){
+NRRR.ini <- function(Y,X,r,rx,ry,jx,jy,p,d,n){
   #require(rrpack)
   if (r == 0) stop("r cannot be 0")
   if (r > min(dim(Y)[2])) stop("r cannot be greater than jy*d")

@@ -295,20 +295,20 @@ The package `NRRR` is available at [Github](https://github.com/xliu-stat/NRRR), 
 #install.packages("devtools")
 #devtools::install_github("xliu-stat/NRRR")
 library(NRRR)
-set.seed(6)
+set.seed(5)
 ```
 As fitting the NRRR with cross validation could be time-consuming, we set `eval=FALSE` in this code chunk and directly use the previous fitting results here. 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 # set 'eval = TRUE' to reproduce the results
-fit.NRRR <- NestRRR.cv.select(Yest, Xest,
+fit.NRRR <- NRRR.cv(Yest, Xest,
   nfold = 10, norder = NULL,
   NULL, NULL, jx, jy, p, d, n = 508,
-  maxiter = 300, conv = 1e-4, quietly = TRUE, method = "RRR"
+  maxiter = 300, conv = 1e-4, method = "RRR",
+  lang = 'Rcpp'
 )
 ```
  
 ```{r}
-load("fit_nRRR.rda")
 # the estimated r
 fit.NRRR$rank
 # the estimated rx
@@ -363,18 +363,20 @@ time_index <- c("00:00","00:30",
                 "21:00","21:30",
                 "22:00","22:30",
                 "23:00","23:30")
-NRRR.plot.RegSurface(-fit.NRRR$Ag, fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl, 
-                     fit.NRRR$rx, fit.NRRR$ry, sseq, phi, tseq, psi,
-                     x_ind = 1, y_ind = 2, x_lab = "Temperature", 
-                     y_lab = "Electricity Demand",
-                     tseq_index = time_index, sseq_index = time_index,
-                     method = "y_original")
-NRRR.plot.RegSurface(-fit.NRRR$Ag, fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl, 
-                     fit.NRRR$rx, fit.NRRR$ry, sseq, phi, tseq, psi,
-                     x_ind = 1, y_ind = 6, x_lab = "Temperature", 
-                     y_lab = "Electricity Demand",
-                     tseq_index = time_index, sseq_index = time_index,
-                     method = "y_original")
+NRRR.plot.reg(-fit.NRRR$Ag, fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl,
+  fit.NRRR$rx, fit.NRRR$ry, sseq, phi, tseq, psi,
+  x_ind = 1, y_ind = 2, x_lab = "Temperature",
+  y_lab = "Electricity Demand",
+  tseq_index = time_index, sseq_index = time_index,
+  method = "y_original"
+)
+NRRR.plot.reg(-fit.NRRR$Ag, fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl,
+  fit.NRRR$rx, fit.NRRR$ry, sseq, phi, tseq, psi,
+  x_ind = 1, y_ind = 6, x_lab = "Temperature",
+  y_lab = "Electricity Demand",
+  tseq_index = time_index, sseq_index = time_index,
+  method = "y_original"
+)
 ```
 One thing that needs attention is the sign of the estimated matrices. Since all the elements in the estimated ${\bf V}$ here is negative and we're plotting the relationship between ${\bf V^Tx}(s)$ and ${\bf y}(t)$, we need to specify the input `Ag` in function `NRRR.plot.RegSurface` as `-fit.NRRR$Ag` to avoid producing a heatmap of opposite values.
 
@@ -393,7 +395,7 @@ Xtest <- Xest[-TXindex, ]
 Ytest <- Yest[-TXindex, ]
 ```
 We do not run the code chunk of fitting the NRRR with cross validation for the same reason as before.
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 # set 'eval = TRUE' to reproduce the results
 
 ##########################
@@ -411,17 +413,15 @@ norder <- fit.RRR$norder
 ##   estimation with NRRR
 ###########################
 
-fit.NRRR <- NestRRR.cv.select(Ytrain, Xtrain,
+fit.NRRR <- NRRR.cv(Ytrain, Xtrain,
   nfold = 10, norder = norder,
   NULL, NULL, jx, jy, p, d, n = 400,
-  maxiter = 300, conv = 1e-4, quietly = TRUE,
+  maxiter = 300, conv = 1e-4, 
   method = "RRR"
 )
 ```
 
 ```{r}
-load("pred_compare.rda")
-
 # predict with RRR
 if (sum(abs(fit.RRR$coef)) != 0) {
   svdC <- svd(fit.RRR$coef, nu = fit.RRR$rank, nv = fit.RRR$rank)
@@ -432,14 +432,14 @@ if (sum(abs(fit.RRR$coef)) != 0) {
   Alrrr <- matrix(nrow = d * jy, fit.RRR$rank, 0)
   Blrrr <- matrix(nrow = p * jx, fit.RRR$rank, 0)
 }
-Ypred.RRR <- NestRRR.prediction(
+Ypred.RRR <- NRRR.pred(
   tseq, X[PXindex, , ], sseq, diag(d),
   diag(p), Alrrr, Blrrr, phi
 )
 
 
 # predict with NRRR
-Ypred.NRRR <- NestRRR.prediction(
+Ypred.NRRR <- NRRR.pred(
   tseq, X[PXindex, , ], sseq, fit.NRRR$Ag,
   fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl, phi
 )
@@ -459,7 +459,7 @@ c(mean(err1), mean(err2))
 
 The averaged relative prediction error of RRR is 0.42, which is much larger than the one of NRRR. Finally, we use `NRRR.plot.Pred` to plot the predicted response trajectory obtained with NRRR fitting results. In the plot, the black line is the observed response trajectory and the red line is the predicted trajectory. 
 ```{r, fig.height = 3, fig.width = 5, fig.align = "center"}
-NRRR.plot.Pred(Ypred.NRRR$Ypred, Y = Y[PXindex, , ], i_ind = 1, yi_ind = 3,
+NRRR.plot.pred(Ypred.NRRR$Ypred, Y = Y[PXindex, , ], i_ind = 1, yi_ind = 3,
                tseq, t_index = time_index, x_lab = "Time",
                y_lab = "Electricity demand")
 ```

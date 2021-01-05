@@ -6,7 +6,7 @@
 #' tuning parameter selected by cross validation.
 #'
 #' @usage
-#' RRRR.cv(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
+#' RRS.cv(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
 #'         lambda = seq(0, 100, length = nlam), norder = NULL,
 #'         nest.tune = FALSE, fold.drop = 0)
 #'
@@ -37,7 +37,7 @@
 #'
 # @importFrom rrpack rrs.fit
 #' @export
-RRRR.cv<-function(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
+RRS.cv<-function(Y, X, nfold = 10, rankmax = min(dim(Y), dim(X)), nlam = 100,
                      lambda = seq(0, 100, length = nlam), norder = NULL, nest.tune = FALSE,
                      fold.drop = 0)
 {

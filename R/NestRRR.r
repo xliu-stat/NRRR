@@ -7,19 +7,20 @@
 #' given rank values \code{(r, rx, ry)}.
 #'
 #' @usage
-#' NestRRR(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d, n,
-#'         maxiter = 100, conv = 1e-4, quietly = TRUE,
-#'         method = c("RRR", "RRS")[1], lambda = 0)
+#' NRRR.est(Y, X, Ag0 = NULL, Bg0 = NULL,
+#'          rini, r, rx, ry, jx, jy, p, d, n,
+#'          maxiter = 100, conv = 1e-4,
+#'          method = c("RRR", "RRS")[1], lambda = 0)
 #'
 #'
 #' @param Y response matrix of dimension n-by-jy*d.
 #' @param X design matrix of dimension n-by-jx*p.
 #' @param Ag0 an initial estimator of matrix U. If NULL then generate it
-#'            by \code{\link{NestRRRini}}. Default is NULL.
+#'            by \code{\link{NRRR.ini}}. Default is NULL.
 #' @param Bg0 an initial estimator of matrix V, if NULL then generate it
-#'            by \code{\link{NestRRRini}}. Default is NULL.
+#'            by \code{\link{NRRR.ini}}. Default is NULL.
 #' @param rini,r a positive integer. They are the rank of the local reduced-rank structure. \code{rini} is used
-#'               in \code{\link{NestRRRini}} to get the initial
+#'               in \code{\link{NRRR.ini}} to get the initial
 #'               estimators of U and V.
 #' @param rx a positive integer and is the number of latent predictors.
 #' @param ry a positive integer and is the number of latent responses.
@@ -32,9 +33,6 @@
 #'                blockwise coordinate descent algorithm. Default is 100.
 #' @param conv the tolerance level used to control the convergence of the
 #'             blockwise coordinate descent algorithm. Default is 1e-4.
-#' @param quietly a logical value. FALSE: show the
-#'                final fitting information (sse and df);
-#'                TRUE (default): do not show the results.
 #' @param method 'RRR' (default): no additional ridge penalty; 'RRS': add an
 #'               additional ridge penalty.
 #' @param lambda the tuning parameter to control the amount of ridge
@@ -86,12 +84,12 @@
 #' arXiv: Methodology.
 #' @examples
 #' library(NRRR)
-#' simDat <- nrrr.sim(
+#' simDat <- NRRR.sim(
 #'   n = 100, ns = 200, nt = 200, r = 5, rx = 3, ry = 3,
 #'   jx = 15, jy = 15, p = 10, d = 6, s2n = 1, rho_X = 0.5,
 #'   rho_E = 0, Sigma = "CorrAR"
 #' )
-#' fit_init <- with(simDat, NestRRR(
+#' fit_init <- with(simDat, NRRR.est(
 #'   Y = Yest, X = Xest, Ag0 = NULL, Bg0 = NULL,
 #'   rini = 5, r = 5,
 #'   rx = 3, ry = 3, jx = 15, jy = 15, p = 10, d = 6, n = 100
@@ -99,8 +97,8 @@
 #' fit_init$Ag
 #' @importFrom MASS ginv
 #' @export
-NestRRR <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d, n,
-                    maxiter = 100, conv = 1e-4, quietly = TRUE,
+NRRR.est <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d, n,
+                    maxiter = 100, conv = 1e-4,
                     method = c("RRR", "RRS")[1], lambda = 0) {
   if (rini == 0) stop("rini cannot be 0")
   if (r == 0) stop("r cannot be 0")
@@ -117,7 +115,7 @@ NestRRR <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d,
   # require(rrpack)
   # compute initial values of U and V
   if (is.null(Ag0) | is.null(Bg0)) {
-    ini <- NestRRRini(Y, X, rini, rx, ry, jx, jy, p, d, n)
+    ini <- NRRR.ini(Y, X, rini, rx, ry, jx, jy, p, d, n)
     Ag0 <- ini$Ag
     Bg0 <- ini$Bg
   }
@@ -224,9 +222,9 @@ NestRRR <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d,
 
   if (method == "RRS") sse <- sse - lambda * sum(Objiter$C^2)
 
-  if (!quietly) {
-    cat("SSE = ", sse, "DF = ", df, "\n", sep = "")
-  }
+  # if (!quietly) {
+  #   cat("SSE = ", sse, "DF = ", df, "\n", sep = "")
+  # }
   return(list(
     Ag = Ag1, Bg = Bg1, Al = as.matrix(Al1), Bl = as.matrix(Bl1), C = C, df = df,
     sse = sse, ic = c(BIC, BICP, AIC, GCV), obj = obj, iter = iter

@@ -12,7 +12,7 @@
 #'
 #'
 #' @usage
-#' NRRR.plot.RegSurface(Ag, Bg, Al, Bl, rx, ry, sseq, phi, tseq, psi,
+#' NRRR.plot.reg(Ag, Bg, Al, Bl, rx, ry, sseq, phi, tseq, psi,
 #'                      x_ind, y_ind, x_lab = NULL, y_lab = NULL,
 #'                      tseq_index = NULL, sseq_index = NULL,
 #'                      method = c("latent", "x_original",
@@ -60,7 +60,7 @@
 #' @importFrom reshape2 melt
 #' @export
 
-NRRR.plot.RegSurface <- function(Ag, Bg, Al, Bl, rx, ry,
+NRRR.plot.reg <- function(Ag, Bg, Al, Bl, rx, ry,
                                  sseq, phi, tseq, psi,
                                  x_ind, y_ind,
                                  x_lab = NULL, y_lab = NULL,

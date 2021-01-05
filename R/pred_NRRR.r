@@ -7,7 +7,7 @@
 #' response is predicted at a given sequence of time points \code{tseq}.
 #'
 #' @usage
-#' NestRRR.prediction(tseq, X, sseq, Ag, Bg, Al, Bl, phi)
+#' NRRR.pred(tseq, X, sseq, Ag, Bg, Al, Bl, phi)
 #'
 #' @param tseq a sequence of time points at which the prediction of response
 #'             trajectory is obtained.
@@ -43,20 +43,26 @@
 #' library(NRRR)
 #' set.seed(3)
 #' # Simulation setting 2 in NRRR paper
-#' simDat <- nrrr.sim(n=100,ns=100,nt=100,r=3,rx=3,ry=3,
-#'                    jx=8,jy=8,p=20,d=20,s2n=1,rho_X=0.5,
-#'                    rho_E=0,Sigma="CorrAR")
-#' fit_nrrr <- with(simDat, NestRRR.select(Yest,Xest,Ag0=NULL,Bg0=NULL,
-#'                               jx=8,jy=8,p=20,d=20,n=100,
-#'                               maxiter=300,conv=1e-4,quietly=FALSE,
-#'                               method=c('RRR','RRS')[1],lambda=0,
-#'                               ic=c("BIC","BICP","AIC","GCV")[1],
-#'                               dimred = c(TRUE,TRUE,TRUE),rankfix=NULL))
-#' Ypred_nrrr <- NestRRR.prediction(simDat$tseq,simDat$X,simDat$sseq,
-#'                                  fit_nrrr$Ag,fit_nrrr$Bg,
-#'                                  fit_nrrr$Al,fit_nrrr$Bl,
-#'                                  simDat$phi)
-NestRRR.prediction <- function(tseq,X,sseq,Ag,Bg,Al,Bl,phi){
+#' simDat <- NRRR.sim(
+#'   n = 100, ns = 100, nt = 100, r = 3, rx = 3, ry = 3,
+#'   jx = 8, jy = 8, p = 20, d = 20, s2n = 1, rho_X = 0.5,
+#'   rho_E = 0, Sigma = "CorrAR"
+#' )
+#' fit_nrrr <- with(simDat, NRRR.ic(Yest, Xest,
+#'   Ag0 = NULL, Bg0 = NULL,
+#'   jx = 8, jy = 8, p = 20, d = 20, n = 100,
+#'   maxiter = 300, conv = 1e-4, quietly = FALSE,
+#'   method = c("RRR", "RRS")[1], lambda = 0,
+#'   ic = c("BIC", "BICP", "AIC", "GCV")[1],
+#'   dimred = c(TRUE, TRUE, TRUE), rankfix = NULL
+#' ))
+#' Ypred_nrrr <- NRRR.pred(
+#'   simDat$tseq, simDat$X, simDat$sseq,
+#'   fit_nrrr$Ag, fit_nrrr$Bg,
+#'   fit_nrrr$Al, fit_nrrr$Bl,
+#'   simDat$phi
+#' )
+NRRR.pred <- function(tseq,X,sseq,Ag,Bg,Al,Bl,phi){
   n <- nrow(X)
 
   p <- nrow(Bg)

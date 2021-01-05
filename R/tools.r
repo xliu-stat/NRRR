@@ -1,3 +1,77 @@
+# Covariance structure: Compound symmetry
+#
+# This function generates a covariance matrix with compound symmetry structure.
+#
+# @param p Dimension.
+# @param rho Correlation strength.
+# @return A covariance matrix (p by p).
+# @export
+# @examples
+# library(NRRR)
+# CorrCS(10, 0.5)
+CorrCS <- function(p,rho){
+  Sigma <- matrix(nrow=p,ncol=p,rho)
+  diag(Sigma) <- 1
+  Sigma
+}
+
+# Covariance structure: Autoregressive
+#
+# This function generates a covariance matrix with autoregressive structure.
+#
+# @param p Dimension.
+# @param rho Correlation strength.
+# @return A covariance matrix (p by p).
+# @export
+# @examples
+# library(NRRR)
+# CorrAR(10, 0.5)
+CorrAR <- function(p,rho){
+  Sigma <- matrix(nrow=p,ncol=p,NA)
+  for(i in 1:p){
+    for(j in 1:p){
+      Sigma[i,j] <- rho^(abs(i-j))
+    }
+  }
+  Sigma
+}
+
+# Compute || Y - XC ||_F^2
+#
+# This function computes the sum of squared errors
+# with given (A,B,U,V) and (X,Y).
+#
+# @param Y Response matrix with n rows and jy*d columns.
+# @param X Design matrix with n rows and jx*p columns.
+# @param Ag Matrix U.
+# @param Bg Matrix V.
+# @param Al Matrix A.
+# @param Bl Matrix B.
+# @param jx Number of basis functions to expand x(s).
+# @param jy Number of basis functions to expand y(t).
+# @export
+# @return The returned items
+#   \item{C}{the NRRR estimator of the coefficient matrix C.}
+#   \item{XC}{a matrix, prediction of Y.}
+#   \item{E}{a matrix, estimated error matrix.}
+#   \item{sse,obj}{ a scaler, the sum of squared errors.}
+Obj <- function(Y,X,Ag,Bg,Al,Bl,jx,jy){
+
+  if(nrow(Bg)!=ncol(Bg)){
+    Bl <- kronecker(diag(jx),Bg)%*%Bl
+  }
+  if(nrow(Ag)!=ncol(Ag)){
+    Al <- kronecker(diag(jy),Ag)%*%Al
+  }
+  C <- Bl%*%t(Al)
+  XC <- X%*%C
+  E <- Y - XC
+  sse <- sum(E^2)
+
+  return(list(C=C,XC=XC,E=E,sse=sse,obj=sse))
+}
+
+
 cv.rrr <- function (Y,
                     X,
                     nfold = 10,
@@ -181,7 +255,7 @@ rrs.fit <- function(Y,
   if (lambda != 0) {
     S_xx_inv <- 1 / lambda * diag(p) -
       lambda ^ (-2) * t(X) %*% MASS::ginv(diag(n) + lambda ^ (-1) * X %*%
-                                      t(X)) %*% X
+                                            t(X)) %*% X
   } else{
     S_xx_inv <- MASS::ginv(S_xx)
     if (sum(is.na(S_xx_inv)) > 0) {
@@ -253,4 +327,8 @@ rrs.fit <- function(Y,
   #class(ret) <- "rrs.fit"
   ret
 }
+
+
+
+
 
