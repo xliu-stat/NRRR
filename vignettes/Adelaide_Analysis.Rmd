@@ -295,20 +295,20 @@ The package `NRRR` is available at [Github](https://github.com/xliu-stat/NRRR), 
 #install.packages("devtools")
 #devtools::install_github("xliu-stat/NRRR")
 library(NRRR)
-set.seed(3)
+set.seed(6)
 ```
 As fitting the NRRR with cross validation could be time-consuming, we set `eval=FALSE` in this code chunk and directly use the previous fitting results here. 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 # set 'eval = TRUE' to reproduce the results
 fit.NRRR <- NRRR.cv(Yest, Xest,
-  nfold = 10, norder = NULL,
-  NULL, NULL, jx, jy, p, d, n = 508,
-  maxiter = 300, conv = 1e-4, method = "RRR",
-  lang = 'Rcpp'
+  nfold = 10, norder = NULL, Ag0 = NULL, Bg0 = NULL, 
+  jx = 30, jy = 30, p = 7, d = 7, n = 508,
+  maxiter = 300, conv = 1e-4, method = "RRR"
 )
 ```
  
 ```{r}
+load("fit_nRRR.rda")
 # the estimated r
 fit.NRRR$rank
 # the estimated rx
@@ -395,7 +395,7 @@ Xtest <- Xest[-TXindex, ]
 Ytest <- Yest[-TXindex, ]
 ```
 We do not run the code chunk of fitting the NRRR with cross validation for the same reason as before.
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 # set 'eval = TRUE' to reproduce the results
 
 ##########################
@@ -415,13 +415,14 @@ norder <- fit.RRR$norder
 
 fit.NRRR <- NRRR.cv(Ytrain, Xtrain,
   nfold = 10, norder = norder,
-  NULL, NULL, jx, jy, p, d, n = 400,
+  Ag0 = NULL, Bg0 = NULL, jx, jy, p, d, n = 400,
   maxiter = 300, conv = 1e-4, 
   method = "RRR"
 )
 ```
 
 ```{r}
+load("pred_compare.rda")
 # predict with RRR
 if (sum(abs(fit.RRR$coef)) != 0) {
   svdC <- svd(fit.RRR$coef, nu = fit.RRR$rank, nv = fit.RRR$rank)

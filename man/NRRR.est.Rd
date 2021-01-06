@@ -2,7 +2,7 @@
 % Please edit documentation in R/NestRRR.r
 \name{NRRR.est}
 \alias{NRRR.est}
-\title{Multivariate functional regression via nested reduced-rank regularization with given ranks}
+\title{Nested reduced-rank regression with given ranks}
 \usage{
 NRRR.est(Y, X, Ag0 = NULL, Bg0 = NULL,
          rini, r, rx, ry, jx, jy, p, d, n,

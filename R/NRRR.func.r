@@ -1,8 +1,8 @@
 #' @title
-#' Multivatiate functional regression via nested reducced-rank regularization
+#' Multivatiate functional regression via nested reduced-rank regularization
 #'
 #' @description
-#' This function takes functional observations as input and fit a nested
+#' This function takes functional observations as input and fits a nested
 #' reduced-rank regression with a user-specified rank selection method.
 #' The B-spline basis is used to conduct basis expansion.
 #'
@@ -74,6 +74,29 @@
 #'   \item{rank}{the estimated r.}
 #'   \item{rx}{the estimated rx.}
 #'   \item{ry}{the estimated ry.}
+#'   \item{sseq}{sequence of the time points of observing the predictor trajectory.}
+#'   \item{phi}{the basis functions to expand the predictor trajectory.}
+#'   \item{tseq}{sequence of the time points of observing the response trajectory.}
+#'   \item{psi}{the basis functions to expand the response trajectory.}
+#'
+#' @details
+#' This function applies a basis expansion and truncation method to transform
+#' the functional problem into a classical finite-dimensional regression problem,
+#' and then fits a nested reduced-rank regression.
+#' The functional observations are commonly collected in a discrete mannar, and before using this
+#' function, the functional response observations and functional predictor observations
+#' should be saved as a data frame. Data standardization procedures, e.g., centering or
+#' scaling, should be conducted before using this function. B-spline basis is
+#' used to conduct basis expansion. If the functional data are already processed into an integrated form,
+#' functions like \code{\link{NRRR.est}}, \code{\link{NRRR.ic}} or \code{\link{NRRR.cv}} can
+#' be used to fit a NRRR model.
+#'
+#'
+#'
+#' @references Liu, X., Ma, S., & Chen, K. (2020).
+#' Multivariate Functional Regression via Nested Reduced-Rank Regularization.
+#' arXiv: Methodology.
+#'
 #'
 #' @examples
 #' n <- 100
@@ -226,6 +249,10 @@ NRRR.func <- function(Y, X, jx, jy, degree = 3, S.interval = NULL, T.interval = 
                         method, lambda, ic = tuning,
                         dimred, rankfix, lang)
   }
+  fit.nrrr$sseq <- sseq
+  fit.nrrr$phi <- phi
+  fit.nrrr$tseq <- tseq
+  fit.nrrr$psi <- psi
   return(fit.nrrr)
 }
 

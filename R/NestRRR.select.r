@@ -239,10 +239,7 @@ NRRR.ic <- function(Y,X,Ag0=NULL,Bg0=NULL,
                       p,d,n,maxiter=maxiter,conv=conv,#quietly=TRUE,
                       method=method,lambda=lambda)
     }
-
-    # if(!quietly) {
-    #   cat("Selected r  = ",rest,"\n", sep="")
-    # }
+    if (fit$iter == maxiter) stop("The algorithm reaches the maximum iteration.")
 
     return(list(Ag=fit$Ag,Bg=fit$Bg,Al=fit$Al,Bl=fit$Bl,C=fit$C,df=fit$df,
                 sse=fit$sse,ic=fit$ic,#obj=fit$obj,

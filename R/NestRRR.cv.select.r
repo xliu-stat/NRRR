@@ -269,6 +269,7 @@ NRRR.cv <- function(Y,X,nfold=10,norder=NULL,Ag0=NULL,Bg0=NULL,jx,jy,p,d,n,
                      d,n,maxiter=maxiter,conv=conv,#quietly=TRUE,
                      method=method,lambda=lambda)
 
+
    } else {
      rxfit <- rxest
      ryfit <- ryest
@@ -277,10 +278,9 @@ NRRR.cv <- function(Y,X,nfold=10,norder=NULL,Ag0=NULL,Bg0=NULL,jx,jy,p,d,n,
                      method=method,lambda=lambda)
 
    }
+   if (fit$iter == maxiter) stop("The algorithm reaches the maximum iteration.")
 
-   # if(!quietly) {
-   #   cat("Selected r  = ",rest,"\n", sep="")
-   # }
+
    return(list(Ag=fit$Ag,Bg=fit$Bg,Al=fit$Al,Bl=fit$Bl,C=fit$C,df=fit$df,
                sse=fit$sse,ic=fit$ic,#obj=fit$obj,
                rx_path=rx_path,ry_path=ry_path,
