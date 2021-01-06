@@ -205,7 +205,6 @@ NRRR.est <- function(Y, X, Ag0 = NULL, Bg0 = NULL, rini, r, rx, ry, jx, jy, p, d
     Ag0 <- Ag1
     Bg0 <- Bg1
   }
-  if ((iter == maxiter) & (abs(obj[iter] - objnow) > conv)) stop("The algorithm reaches the maximum iteration.")
 
   # compute rank of X
   xr <- sum(svd(X)$d > 1e-2)
