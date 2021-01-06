@@ -4,5 +4,8 @@ This package implements all the required functions to conduct Nested Reduced-Ran
 Install the package with 
 ```{r}
 install.packages("devtools")
+# installation needs around 90 seconds
 devtools::install_github("xliu-stat/NRRR", build_vignettes = TRUE)
+# installation needs around 25 seconds
+devtools::install_github("xliu-stat/NRRR")
 ```
