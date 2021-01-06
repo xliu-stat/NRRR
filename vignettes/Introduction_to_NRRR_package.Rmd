@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 This document provides a brief introduction to the functions of implementing nested reduced-rank regression (NRRR), in a multivariate functional regression setting, from how to generate functional observations with user-provided model dimensions to how to predict response trajectories based on the fitting results. Both the nested reduced-rank regression and the nested reduced-rank ridge regression fitting procedures are displayed. For an introduction of the NRRR model and its application in an electricity data analysis, please see another vignette **Adelaide Electricity Demand Data Analysis with NRRR**. 

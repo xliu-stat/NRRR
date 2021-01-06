@@ -45,7 +45,7 @@ where ${\bf Y} = ({\bf Y}_{\cdot1}, \ldots, {\bf Y}_{\cdot J_y})$ with ${\bf Y}_
 
 This problem is non-convex and has no explicit solution. We proposed a blockwise coordinate descent algorithm to achieve a local solution efficiently, and this algorithm is implemented in package `NRRR`. For more details of NRRR, please read [Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization. arXiv: Methodology.](https://arxiv.org/abs/2003.04786)
 
-Next, we use the Adelaide electricity demand data as an example to show the usage of the package `NRRR` to investigate the functional association between weekly electricity demand trajectory and temperature trajectory. 
+Next, we use the Adelaide electricity demand data as an example to show the usage of the package `NRRR` to investigate the functional association between weekly electricity demand trajectory and temperature trajectory. In the package `NRRR`, there is a function `NRRR.func` that takes functional observations as input and uses B-spline basis to conduct basis expansion and then fits a nested reduced-rank regression model. In the following, to give a clear illustration of how to deal with discrete functional observations, we have not used `NRRR.func`. For a practical application problem, the following introduction is helpful when other kinds of basis functions are preferred to conduct basis expansion.
 
 ## Application: Adelaide Electricity Demand analysis
 

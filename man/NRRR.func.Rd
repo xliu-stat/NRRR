@@ -4,8 +4,8 @@
 \alias{NRRR.func}
 \title{Multivatiate functional regression via nested reduced-rank regularization}
 \usage{
-NRRR.func(Y, X, jx, jy, S.interval = NULL, T.interval = NULL,
-          degree = 3, tuning = c('CV', 'BIC', 'BICP', 'AIC', 'GCV')[1],
+NRRR.func(Y, X, jx, jy, degree = 3, S.interval = NULL, T.interval = NULL,
+          tuning = c('CV', 'BIC', 'BICP', 'AIC', 'GCV')[1],
           nfold = 10, norder = NULL, method = c('RRR', 'RRS')[1],
           lambda = 0, maxiter = 300, conv = 1e-4,
           dimred = c(TRUE,TRUE,TRUE), rankfix = NULL, xrankfix = NULL,
