@@ -336,6 +336,9 @@ Rcpp::List BLCD(arma::mat X,
         Ag0 = Ag1;
         Bg0 = Bg1;
     }
+    if ((iter == maxiter) && (std::abs(obj(iter) - objnow) > conv)) {
+        err_flag(iter) = 5;
+    }
 
     //formulate output
     arma::vec output_obj = obj.subvec(0, iter);

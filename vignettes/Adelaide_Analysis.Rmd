@@ -17,42 +17,42 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 ## Introduction: What is Nested Reduced-Rank Regression (NRRR)?
 
-The nested reduced-rank regression (NRRR) is originally designed to control the complexity of fitting a multivariate functional linear regression
+The nested reduced-rank regression (NRRR) is designed to fit a multivariate functional linear regression
 $$
 {\bf y}(t) = \int_{\mathcal{S}} {\bf C}_0(s,t){\bf x}(s)ds + \epsilon(t),\ t\in\mathcal{T}  
 $$
-where ${\bf y}(t)=(y_1(t),\ldots,y_d(t))^T \in \mathbb{R}^d$ with $t\in\mathcal{T}$ and ${\bf x}(s)=(x_1(s),\ldots,x_p(s))^T \in \mathbb{R}^p$ with $s\in\mathcal{S}$ are multivariate functional responses and predictors, respectively. $\epsilon(t)\in \mathbb{R}^d$ is a zero-mean random error function. The resulting functional coefficient matrix ${\bf C}_0(s,t)=[c_{k,l}(s,t)]_{d\times p}$ consists of unknown bivariate functions $c_{k,l}(s,t),\ k=1,\ldots,d, l=1,\ldots,p$, and NRRR aims to jointly estimate these many functional surfaces by utilizing the potential associations among the functional variables.     
+where ${\bf y}(t)=(y_1(t),\ldots,y_d(t))^T \in \mathbb{R}^d$ with $t\in\mathcal{T}$ and ${\bf x}(s)=(x_1(s),\ldots,x_p(s))^T \in \mathbb{R}^p$ with $s\in\mathcal{S}$ are multivariate functional responses and predictors, respectively. $\epsilon(t)\in \mathbb{R}^d$ is a zero-mean random error function. The functional coefficient matrix ${\bf C}_0(s,t)=[c_{k,l}(s,t)]_{d\times p}$ consists of unknown bivariate functions $c_{k,l}(s,t),\ k=1,\ldots,d, l=1,\ldots,p$, and NRRR aims to jointly estimate these functional surfaces by utilizing the potential associations among the functional variables.     
 
 First, a global reduced-rank structure assumes $$ {\bf C}_0(s,t) = {\bf U}_0 {\bf C}^*_0(s,t) {\bf V}_0^T,$$ where ${\bf U}_0 \in \mathbb{R}^{d\times r_y}$ with $r_y \leq d$ and ${\bf V}_0 \in \mathbb{R}^{p\times r_x}$ with $r_x \leq p$ provide the weights to form latent functional responses ${\bf y}^*(t)={\bf U}_0^T {\bf y}(t)\in \mathbb{R}^{r_y}$ and latent functional predictors ${\bf x}^*(s)={\bf V}_0^T {\bf x}(s)\in \mathbb{R}^{r_x}$, respectively. Therefore, the model is reduced to $${\bf y}^*(t) = \int_{\mathcal{S}} {\bf C}^*_0(s,t){\bf x}^*(s)ds + \epsilon^*(t),\ t\in\mathcal{T},$$ and a global dimension reduction is achieved once we have $r_y < d$ or $r_x < p$. In this way, ${\bf U}_0$ and ${\bf V}_0$ capture the association among the elements of ${\bf y}(t)$ and the association among the elements of ${\bf x}(s)$, respectively. This structure is particularly useful for simultaneously modeling a large number of functional responses and predictors that are highly correlated across $s$ or $t$.
 
-Next, we deal with the latent regression surface ${\bf C}^*_0(s,t)$. A basis expansion and truncation approach is first applied to ensure the smoothness and convert the infinite dimensional problem to finite dimensional, i.e.,
+Next, we deal with the latent regression surface ${\bf C}^*_0(s,t)$. A basis expansion and truncation approach is first applied to ensure the smoothness and convert the infinite-dimensional problem to be finite-dimensional, i.e.,
 $${\bf C}^*_0(s,t)\approx ({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf C}_0^* ({\bf I}_{r_x}\otimes {\bf \Phi}(s)),\ {\bf C}_0^* \in \mathbb{R}^{J_yr_y\times J_xr_x},$$
-where ${\bf \Psi}(t) = (\psi_1(t),\ldots,\psi_{J_y}(t))$ consists $J_y$ basis functions and ${\bf \Phi}(s) = (\phi_1(s),\ldots,\phi_{J_x}(s))$ consists $J_x$ basis functions. Then, we impose the local reduced-rank structure on ${\bf C}_0^*$ as $rank({\bf C}_0^*)\leq r$ for $r \leq \min(J_xr_x, J_yr_y)$, or we can write it as a full-rank decomposition ${\bf C}_0^* = {\bf A}_0^*{\bf B}_0^{*T}$ for some ${\bf A}_0^* \in \mathbb{R}^{J_yr_y \times r}$ and ${\bf B}_0^* \in \mathbb{R}^{J_xr_x \times r}$. This structure induces the dependency between the latent responses and the latent predictors through their basis-expansion. 
+where ${\bf \Psi}(t) = (\psi_1(t),\ldots,\psi_{J_y}(t))$ consists $J_y$ basis functions and ${\bf \Phi}(s) = (\phi_1(s),\ldots,\phi_{J_x}(s))$ consists $J_x$ basis functions. Then, we impose the local reduced-rank structure on ${\bf C}_0^*$ as $rank({\bf C}_0^*)\leq r$ for $r \leq \min(J_xr_x, J_yr_y)$ and write it as a full-rank decomposition ${\bf C}_0^* = {\bf A}_0^*{\bf B}_0^{*T}$ for some ${\bf A}_0^* \in \mathbb{R}^{J_yr_y \times r}$ and ${\bf B}_0^* \in \mathbb{R}^{J_xr_x \times r}$. This structure induces the dependency between the latent responses and the latent predictors through their basis-expansion. 
 
-With these two layers of dimension reduction, the complexity of the model is greatly reduced. Thus, we can get a more interpretable model and a more accurate estimation is available with limited samples. The basis functions used here are treated as given, such as spline, wavelet, and Fourier basis. In the package `NRRR`, the B-spline is mainly used. Also, we assume all the responses or the predictors share the same set of basis functions for simplicity. 
+With these two layers of dimension reduction, the complexity of the model is greatly reduced. The basis functions used here are treated as given, such as spline, wavelet, and Fourier basis. In the package `NRRR`, the B-spline basis is mainly used. Also, we assume all the responses or the predictors share the same set of basis functions for simplicity. 
 
 
-After the basis expansion procedure, we obtain the integrated predictors and responses from 
+Based on the selected basis functions, we obtain the integrated predictors and responses from 
 $${\bf x}=\int_{\mathcal{S}} ({\bf I}_{p}\otimes {\bf \Phi}(s)){\bf x}(s)ds \in \mathbb{R}^{J_x p}, $$
 and 
 $${\bf y}=({\bf I}_d \otimes {\bf J}_{\psi\psi}^{-1/2})\int_{\mathcal{T}} ({\bf I}_{d}\otimes {\bf \Psi}(t)){\bf y}(t)dt  \in \mathbb{R}^{J_y d},$$ 
-where ${\bf J}_{\psi\psi}=\int_{\mathcal{T}}{\bf \Psi}(t){\bf \Psi}(t)^Tdt$ is a positive definite matrix. Thus, with all the aforementioned structures and quantities, the estimation criterion that minimizing the mean integrated squared error with respect to ${\bf C}(s,t)$, i.e., 
+where ${\bf J}_{\psi\psi}=\int_{\mathcal{T}}{\bf \Psi}(t){\bf \Psi}(t)^Tdt$ is a positive definite matrix. Thus, with all the aforementioned structures and quantities, the estimation criterion that minimizes the mean integrated squared error with respect to ${\bf C}(s,t)$, i.e., 
 $$ \frac{1}{n} \sum_{i=1}^n \int_{\mathcal{T}} \|{\bf y}_i(t) - \int_{\mathcal{S}} {\bf C}(s,t){\bf x}_i(s)ds \|^2 dt $$ 
 can be written as 
-$$ \min_{{\bf U, V, A^*, B^*}} \{ \frac{1}{n}\sum_{i=1}^n \| {\bf y}_i - ({\bf I}_d\otimes {\bf J}_{\psi\psi}^{1/2})({\bf U}\otimes {\bf I}_{J_y}){\bf A^*B^*}^T ({\bf V}^T\otimes {\bf I}_{J_x}){\bf x}_i \|^2  \}. $$ With proper rearrangement, the problem finally boils down to 
+$$ \min_{{\bf U, V, A^*, B^*}} \{ \frac{1}{n}\sum_{i=1}^n \| {\bf y}_i - ({\bf I}_d\otimes {\bf J}_{\psi\psi}^{1/2})({\bf U}\otimes {\bf I}_{J_y}){\bf A^*B^*}^T ({\bf V}^T\otimes {\bf I}_{J_x}){\bf x}_i \|^2  \}. $$ By properly rearranging the columns and rows of the data matrices and coefficient matrices, the problem finally boils down to 
 $$\min_{{\bf C}} \| {\bf Y - XC}  \|_F^2, \ s.t.\ {\bf C}= ({\bf I}_{J_x} \otimes {\bf V}) {\bf BA}^T ({\bf I}_{J_y} \otimes {\bf U}^T),$$
-where ${\bf Y} = ({\bf Y}_{\cdot1}, \ldots, {\bf Y}_{\cdot J_y})$ with ${\bf Y}_{\cdot j} = (y_{ikj})_{n\times d}$ for $j=1, \dots,J_y$ and ${\bf X} = ({\bf X}_{\cdot1}, \ldots, {\bf X}_{\cdot J_x})$ with ${\bf X}_{\cdot j} = (x_{ilj})_{n\times p}$ for $j=1, \dots,J_x$. That is, each ${\bf Y}_{\cdot j}$ contains the integrated values of all the response components from all subjects based on $\psi_j(t)$ and ${\bf X}_{\cdot j}$ contains the integrated values of all the predictor components from all subjects based on $\phi_j(s)$. This matrix approximation representation provides a clear illustration of the nested reduced-rank structure, i.e., ${\bf U}$ and ${\bf V}$ are designed to capture the shared column and row spaces among the blockwise sub-matrices of ${\bf C}$, which, as a whole, is also of low-rank. The applicability of this structure goes beyond the functional setup. For example, it can be applied into the high-dimensional vector autoregressive modeling in multivariate time series analysis, surveillance video processing and also the rensor-on-tensor regression. 
+where ${\bf Y} = ({\bf Y}_{\cdot1}, \ldots, {\bf Y}_{\cdot J_y})$ with ${\bf Y}_{\cdot j} = (y_{ikj})_{n\times d}$ for $j=1, \dots,J_y$ and ${\bf X} = ({\bf X}_{\cdot1}, \ldots, {\bf X}_{\cdot J_x})$ with ${\bf X}_{\cdot j} = (x_{ilj})_{n\times p}$ for $j=1, \dots,J_x$. That is, each ${\bf Y}_{\cdot j}$ contains all the integrated values of the functional responses obtained based on $\psi_j(t)$ and ${\bf X}_{\cdot j}$ contains all the integrated values of the functional predictors obtained based on $\phi_j(s)$. This matrix approximation representation provides a clear illustration of the nested reduced-rank structure, i.e., ${\bf U}$ and ${\bf V}$ are designed to capture the shared column and row spaces among the blockwise sub-matrices of ${\bf C}$, which, as a whole, is also of low-rank. The applicability of this structure goes beyond the functional setup. For example, it can be applied in the high-dimensional vector autoregressive modeling in multivariate time series analysis, surveillance video processing and also the tensor-on-tensor regression. 
 
-This problem is non-convex and has no explicit solution. We proposed a blockwise coordinate descent algorithm to achieve a local solution efficiently, and this algorithm is implemented in package `NRRR`. For more details of NRRR, please read [Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization. arXiv: Methodology.](https://arxiv.org/abs/2003.04786)
+This optimization problem is non-convex and has no explicit solution. We proposed a blockwise coordinate descent algorithm to obtain a local solution, and this algorithm is implemented in the package `NRRR`. For more details of NRRR, please read [Liu, X., Ma, S., & Chen, K. (2020). Multivariate Functional Regression via Nested Reduced-Rank Regularization. arXiv: Methodology.](https://arxiv.org/abs/2003.04786)
 
-Next, we use the Adelaide electricity demand data as an example to show the usage of the package `NRRR` to investigate the functional association between weekly electricity demand trajectory and temperature trajectory. In the package `NRRR`, there is a function `NRRR.func` that takes functional observations as input and uses B-spline basis to conduct basis expansion and then fits a nested reduced-rank regression model. In the following, to give a clear illustration of how to deal with discrete functional observations, we have not used `NRRR.func`. For a practical application problem, the following introduction is helpful when other kinds of basis functions are preferred to conduct basis expansion.
+Next, we use the Adelaide electricity demand data as an example to show the usage of the package `NRRR` to investigate the functional association between weekly electricity demand trajectory and temperature trajectory. In the package `NRRR`, there is a function `NRRR.func` that takes functional observations as input and uses B-spline basis to conduct basis expansion and then fits a nested reduced-rank regression model. In the following, to provide more details about how to deal with discrete functional observations, we have not used `NRRR.func`. In practical application problems, the following introduction is helpful when other kinds of basis functions are preferred to conduct basis expansion.
 
 ## Application: Adelaide Electricity Demand analysis
 
 Adelaide is the capital city of the state of South Australia. In the summertime, the cooling in Adelaide mainly depends on air conditioning, which makes the electricity demand highly dependent on the weather conditions, and large volatility in temperature throughout the day could make stable electricity supply challenging. Therefore, for facilitating the supply management of electricity, it is important to understand the dependence and predictive association between the electricity demand and the temperature. Here we apply NRRR to perform a multivariate functional regression analysis between daily half-hour electricity demand profiles for the 7 days of a week and the corresponding temperature profiles for the 7 days of the same week. 
 
 
-Half-hourly temperature records at two locations, Adelaide Kent town and Adelaide airport, are available between 7/6/1997 and 3/31/2007. Also available are the half-hourly electricity demand records of Adelaide for the same period. The data is contained in an R packege `fds`, and let's first obtain the data.
+Half-hourly temperature records at two locations, Adelaide Kent town and Adelaide airport, are available between 7/6/1997 and 3/31/2007. Also available are the half-hourly electricity demand records of Adelaide for the same period. The data is extracted from the R package `fds`.
 ```{r setup}
 library(fds)
 # Electricity Demand Data
@@ -85,7 +85,7 @@ data(sundaytempairport)
 
 As such, for each day during the period, there are three observed functional curves, each with 48 half-hourly observations. Here we plot the temperature and electricity demand profiles of all the Mondays from 7/6/1997 to 3/31/2007 as an illustration. 
 
-```{r, echo = FALSE, fig.height = 4, fig.width = 6.6, fig.align = "center"}
+```{r, echo = FALSE, fig.height = 3, fig.width = 5, fig.align = "center"}
 time_index <- c("00:00","00:30",
                 "1:00","1:30",
                 "2:00","2:30",
@@ -140,8 +140,8 @@ ggplot(prgdata, aes(y = PRG1, x = b, group = day, colour = day)) +
   ylab("Electricity demand") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  theme(axis.text=element_text(size=12),axis.title=element_text(size=20),
-        plot.title = element_text(hjust = 0.5, size = 20))
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=15),
+        plot.title = element_text(hjust = 0.5, size = 15))
 
 # Temperature of Kent on Monday
 ggplot(prgdata, aes(y = PRG2, x = b, group = day, colour = day)) +
@@ -152,8 +152,8 @@ ggplot(prgdata, aes(y = PRG2, x = b, group = day, colour = day)) +
   ylab("Temperature") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  theme(axis.text=element_text(size=12),axis.title=element_text(size=20),
-        plot.title = element_text(hjust = 0.5, size = 20))
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=15),
+        plot.title = element_text(hjust = 0.5, size = 15))
 
 # Temperature of Airport on Monday
 ggplot(prgdata, aes(y = PRG3, x = b, group = day, colour = day)) +
@@ -164,8 +164,8 @@ ggplot(prgdata, aes(y = PRG3, x = b, group = day, colour = day)) +
   ylab("Temperature") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  theme(axis.text=element_text(size=12),axis.title=element_text(size=20),
-        plot.title = element_text(hjust = 0.5, size = 20))
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=15),
+        plot.title = element_text(hjust = 0.5, size = 15))
 
 ```
 
@@ -232,7 +232,7 @@ X <- oriX
 Y <- oriY
 ```
 
-Till now, we've obtained the discrete observations of response and predictor trajectories. Next, let's use B-spline with 30 degrees of freedom to convert the discrete observations to its integrated form as we introduced before.
+Till now, we've obtained the discrete observations of the response and the predictor trajectories. Next, let's use B-spline basis with 30 degrees of freedom to convert the discrete observations into its integrated form as we introduced before.
 
 ```{r}
 library(splines)
@@ -290,14 +290,14 @@ Here we use the daily half-hour electricity demand as the functional multivariat
 
 
 ### Estimation
-The package `NRRR` is available at [Github](https://github.com/xliu-stat/NRRR), and we first install it:
+The package `NRRR` is available at [Github](https://github.com/xliu-stat/NRRR), and we can install it with
 ```{r}
 #install.packages("devtools")
 #devtools::install_github("xliu-stat/NRRR")
 library(NRRR)
 set.seed(6)
 ```
-As fitting the NRRR with cross validation could be time-consuming, we set `eval=FALSE` in this code chunk and directly use the previous fitting results here. 
+As fitting the NRRR model with cross validation could be time-consuming, we set `eval=FALSE` in this code chunk and display some previously saved fitting results here. 
 ```{r, eval=FALSE}
 # set 'eval = TRUE' to reproduce the results
 fit.NRRR <- NRRR.cv(Yest, Xest,
@@ -321,24 +321,24 @@ fit.NRRR$Ag
 fit.NRRR$Bg
 ```
 
-The estimated rank values are $\hat r = 4$, $\hat r_x = 1$, and $\hat r_y = 5$. The estimated loading matrix for the predictors is ${\bf V} = (-0.22, -0.39, -0.46, -0.52, -0.43, -0.28, -0.25)^T$. This shows that there is only one latent functional predictor that is driving the patterns of the electronic demands, and this factor can be roughly explained as the averaged daily temperature proﬁle of the week. It appears that the days closer to the middle of the week load higher. On the response side, there is not much global reduction, as the estimated loading matrix ${\bf U}$ is of rank 5. To make sense of ${\bf U}$, it may be more convenient to examine the two  basis vectors of its orthogonal complement, i.e., the first two singular vectors of ${\bf I - \hat U\hat U^T}$, which give the latent response factors that are not related to the temperatures at all. While the first loading vector (-0.52, 0.36, 0.28, 0.25, −0.56, 0.34, −0.18$)^T$ is hard to interpret, the second loading vector (0.00, −0.68, 0.73, -0.01, −0.04, 0.04, −0.04)$)^T$ clearly indicates that the difference between the electronic demand profiles of Tuesday and Wednesday is mostly a noise process. In other words, the demand profiles of these two days are related to the temperature process in almost the same way.
+The estimated rank values are $\hat r = 4$, $\hat r_x = 1$, and $\hat r_y = 5$. The estimated loading matrix for the predictors is ${\bf V} = (-0.22, -0.39, -0.46, -0.52, -0.43, -0.28, -0.25)^T$. This shows that there is only one latent functional predictor that is driving the patterns of the electronic demands, and this factor can be roughly explained as the averaged daily temperature proﬁle of the week. It appears that the days closer to the middle of the week load higher. On the response side, there is not much global reduction, as the estimated loading matrix ${\bf U}$ is of rank 5. To make sense of ${\bf U}$, it may be more convenient to examine the two  basis vectors of its orthogonal complement, i.e., the first two singular vectors of ${\bf I - \hat U\hat U^T}$, which give the latent response factors that are not related to the temperatures at all. While the first loading vector $(-0.52, 0.36, 0.28, 0.25, −0.56, 0.34, −0.18)^T$ is hard to interpret, the second loading vector $(0.00, −0.68, 0.73, -0.01, −0.04, 0.04, −0.04))^T$ clearly indicates that the difference between the electronic demand profiles of Tuesday and Wednesday is mostly a noise process. In other words, the demand profiles of these two days are related to the temperature process in almost the same way.
 
 ### Visualization of regression surface
 
-The function `NRRR.plot.RegSurface` is designed to plot heatmap for each bivariate function in the functional coefficient matrix, e.g., $c_{k,l}(s,t),\ 1\leq k \leq d, 1 \leq l \leq p$ in ${\bf C}(s,t)$. Based on the fitting results from the nested reduced-rank regression, different kinds of regression surfaces can be visualized to give a clear illustration of the functional correlation between the user-specified predictor (or latent predictor) trajectory and response (or latent response) trajectory. With the nested reduced-rank structure, the functional regression becomes
+The function `NRRR.plot.reg` is designed to plot the heatmap for each bivariate function in the functional coefficient matrix, e.g., $c_{k,l}(s,t),\ 1\leq k \leq d, 1 \leq l \leq p$ in ${\bf C}(s,t)$. Based on the fitting results from the nested reduced-rank regression, different kinds of regression surfaces can be visualized to give a clear illustration of the functional correlation between a user-specified predictor (or latent predictor) trajectory and response (or latent response) trajectory. With the nested reduced-rank structure, the functional regression becomes
 $${\bf y}(t) \approx \int_{\mathcal{S}} {\bf U}({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)){\bf V}^T {\bf x}(s)ds + {\bf \epsilon}(t),$$
 based on which, we can visualize the bivariate function in:
 
-* ${\bf U}({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)){\bf V}^T \in \mathbb{R}^{d\times p}$ to see the effects of ${\bf x}_i(s)$ on ${\bf y}_j(t)$ with $1\leq i \leq p,\ 1\leq j \leq d$ by specifying `method = "original"`, `x_ind = i` and `y_ind = j`.
+* ${\bf U}({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)){\bf V}^T \in \mathbb{R}^{d\times p}$ to see the effects of $x_i(s)$ on $y_j(t)$ with $1\leq i \leq p,\ 1\leq j \leq d$ by specifying `method = "original"`, `x_ind = i` and `y_ind = j`.
 
-* ${\bf U}({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)) \in \mathbb{R}^{d\times r_x}$ to see the effects of the $i$-th element of ${\bf V}^T{\bf x}(s)$ on ${\bf y}_j(t)$ with $1\leq i \leq r_x,\ 1\leq j \leq d$ by specifying `method = "y_original"`, `x_ind = i` and `y_ind = j`.
+* ${\bf U}({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)) \in \mathbb{R}^{d\times r_x}$ to see the effects of the $i$-th element of ${\bf V}^T{\bf x}(s)$ on $y_j(t)$ with $1\leq i \leq r_x,\ 1\leq j \leq d$ by specifying `method = "y_original"`, `x_ind = i` and `y_ind = j`.
 
-* $({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)){\bf V}^T \in \mathbb{R}^{r_y \times p}$ to see the effects of ${\bf x}_i(s)$ on the $j$-th element of ${\bf U}^T{\bf y}(t)$ with $1\leq i \leq p,\ 1\leq j \leq r_y$ by specifying `method = "x_original"`, `x_ind = i` and `y_ind = j`.
+* $({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)){\bf V}^T \in \mathbb{R}^{r_y \times p}$ to see the effects of $x_i(s)$ on the $j$-th element of ${\bf U}^T{\bf y}(t)$ with $1\leq i \leq p,\ 1\leq j \leq r_y$ by specifying `method = "x_original"`, `x_ind = i` and `y_ind = j`.
 
 * $({\bf I}_{r_y}\otimes {\bf \Psi}^T(t)){\bf A^*B^*}^T({\bf I}_{r_x}\otimes {\bf \Phi}(s)) \in \mathbb{R}^{r_y \times r_x}$ to see the effects of the $i$-th element of ${\bf V}^T{\bf x}(s)$ on the $j$-th element of ${\bf U}^T{\bf y}(t)$ with $1\leq i \leq r_x,\ 1\leq j \leq r_y$ by specifying `method = "latent"`, `x_ind = i` and `y_ind = j`.
 
-From the fitting results we obtained above, we've get only one latent predictor and five latent responses. Thus, we visualize the effect of the latent predictor on the original functional response.
-```{r, fig.height = 4, fig.width = 6, fig.align = "center"}
+Based on the fitting results we obtained above, we've got only one latent predictor and five latent responses. Thus, next let's visualize the effect of the latent predictor on the original functional responses.
+```{r, fig.height = 4, fig.width = 5, fig.align = "center"}
 time_index <- c("00:00","00:30",
                 "1:00","1:30",
                 "2:00","2:30",
@@ -378,7 +378,7 @@ NRRR.plot.reg(-fit.NRRR$Ag, fit.NRRR$Bg, fit.NRRR$Al, fit.NRRR$Bl,
   method = "y_original"
 )
 ```
-One thing that needs attention is the sign of the estimated matrices. Since all the elements in the estimated ${\bf V}$ here is negative and we're plotting the relationship between ${\bf V^Tx}(s)$ and ${\bf y}(t)$, we need to specify the input `Ag` in function `NRRR.plot.RegSurface` as `-fit.NRRR$Ag` to avoid producing a heatmap of opposite values.
+One thing that needs attention is the sign of the estimated matrices. Since all the elements in the estimated ${\bf V}$ here is negative and we're visualizing the relationship between ${\bf V^Tx}(s)$ and the components of ${\bf y}(t)$, we need to specify the input `Ag` in function `NRRR.plot.reg` as `-fit.NRRR$Ag` to avoid producing a heatmap of opposite signs.
 
 ### Prediction
 Here we use both the reduced-rank regression (RRR) and nested reduced-rank regression (NRRR) to conduct a comparison in terms of the prediction power. We use the first 400 samples as the fitting set and use the remaining 108 samples as the testing set.
@@ -394,7 +394,7 @@ PXindex <- (1:508)[-TXindex]
 Xtest <- Xest[-TXindex, ]
 Ytest <- Yest[-TXindex, ]
 ```
-We do not run the code chunk of fitting the NRRR with cross validation for the same reason as before.
+For the same reason as before, we set `eval = FALSE` for this code chunk and directly show some previously saved results. 
 ```{r, eval=FALSE}
 # set 'eval = TRUE' to reproduce the results
 
@@ -458,8 +458,8 @@ for (iy in 1:108) {
 c(mean(err1), mean(err2))
 ```
 
-The averaged relative prediction error of RRR is 0.42, which is much larger than the one of NRRR. Finally, we use `NRRR.plot.Pred` to plot the predicted response trajectory obtained with NRRR fitting results. In the plot, the black line is the observed response trajectory and the red line is the predicted trajectory. 
-```{r, fig.height = 3, fig.width = 5, fig.align = "center"}
+The averaged relative prediction error of RRR is 0.42, which is much larger than the one of NRRR. Finally, we use `NRRR.plot.pred` to plot the predicted response trajectory. In this plot, the black line is the truly observed response trajectory and the red line is the predicted trajectory. 
+```{r, fig.height = 4, fig.width = 5, fig.align = "center"}
 NRRR.plot.pred(Ypred.NRRR$Ypred, Y = Y[PXindex, , ], i_ind = 1, yi_ind = 3,
                tseq, t_index = time_index, x_lab = "Time",
                y_lab = "Electricity demand")
